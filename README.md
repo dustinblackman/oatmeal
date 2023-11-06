@@ -81,9 +81,11 @@ yay -S oatmeal-bin
 **Chocolatey**
 
 <!-- choco-install start -->
+
 ```sh
 choco install oatmeal --version=0.1.0
 ```
+
 <!-- choco-install end -->
 
 **Scoop**
@@ -120,6 +122,7 @@ variables. By default, Ollama is the selected backend, `llama2:latest` as the de
 See `oatmeal --help`, `/help` in chat, or the output below to get all the details.
 
 <!-- command-help start -->
+
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editor!
 
@@ -167,6 +170,7 @@ The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to y
   - `2..5`- Selects an inclusive range of code blocks between 2 and 5.
   - None - Selects the last provided code block.
 ```
+
 <!-- command-help end -->
 
 ### Backends

@@ -38,7 +38,7 @@ While Oatmeal works great as a stand alone terminal application, it works even b
 
 See it in action with Neovim (click to restart):
 
-![oatmeal-demo](https://github.com/dustinblackman/oatmeal/assets/5246169/fd4d6c48-014d-4539-9e80-5f924b29a212)
+![oatmeal-demo](https://github.com/dustinblackman/oatmeal/assets/5246169/4fead112-5d37-497d-b270-a806fac41a17)
 
 ## Install
 

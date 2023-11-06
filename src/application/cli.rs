@@ -1,5 +1,12 @@
+use std::io;
+
+use clap::value_parser;
 use clap::Arg;
+use clap::ArgAction;
 use clap::Command;
+use clap_complete::generate;
+use clap_complete::Generator;
+use clap_complete::Shell;
 use owo_colors::OwoColorize;
 use owo_colors::Stream;
 
@@ -8,7 +15,12 @@ use crate::config::ConfigKey;
 use crate::domain::services::actions::help_text;
 use crate::domain::services::Themes;
 
-pub fn parse() {
+fn print_completions<G: Generator>(gen: G, cmd: &mut Command) {
+    generate(gen, cmd, cmd.get_name().to_string(), &mut io::stdout());
+    std::process::exit(0);
+}
+
+fn build() -> Command {
     let commands_text = help_text()
         .split('\n')
         .map(|line| {
@@ -38,12 +50,19 @@ pub fn parse() {
     );
     let themes = Themes::list().join(", ");
 
-    let app = Command::new("oatmeal")
+    return Command::new("oatmeal")
         .about(about)
         .author(env!("CARGO_PKG_AUTHORS"))
         .version(env!("CARGO_PKG_VERSION"))
         .after_help(commands_text)
         .arg_required_else_help(false)
+        .arg(
+           Arg::new("completions")
+               .long("completions")
+               .action(ArgAction::Set)
+               .hide(true)
+               .value_parser(value_parser!(Shell)),
+        )
         .arg(
             Arg::new("backend")
                 .short('b')
@@ -107,8 +126,16 @@ pub fn parse() {
                 .num_args(1)
                 .help("OpenAI API token when using the OpenAI backend."),
             );
+}
 
-    let matches = app.get_matches();
+pub fn parse() {
+    let matches = build().get_matches();
+
+    if let Some(completions) = matches.get_one::<Shell>("completions").copied() {
+        let mut app = build();
+        print_completions(completions, &mut app);
+    }
+
     Config::set(
         ConfigKey::Backend,
         matches.get_one::<String>("backend").unwrap(),

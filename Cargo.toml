@@ -23,6 +23,7 @@ async-trait = "=0.1.74"
 base64 = "=0.21.5"
 better-panic = "=0.3.0"
 clap = { version = "=4.4.7", features = ["env"] }
+clap_complete = "=4.4.4"
 crossterm = "=0.27.0"
 dashmap = "=5.5.3"
 futures = "=0.3.28"
@@ -82,9 +83,9 @@ goreleaser_goreleaser = { tag = "v1.21.2", owner_repo = "goreleaser/goreleaser",
 build-completions = '''set -e
   rm -rf completions
   mkdir completions
-  ./target/debug/oatmeal completion --shell zsh > completions/oatmeal.zsh
-  ./target/debug/oatmeal completion --shell bash > completions/oatmeal.bash
-  ./target/debug/oatmeal completion --shell fish > completions/oatmeal.fish
+  ./target/debug/oatmeal --completions zsh > completions/oatmeal.zsh
+  ./target/debug/oatmeal --completions bash > completions/oatmeal.bash
+  ./target/debug/oatmeal --completions fish > completions/oatmeal.fish
 '''
 
 dev = '''set -e

@@ -135,14 +135,14 @@ release = '''set -e
   cargo bin dprint fmt
 
   git add .
-  git commit -m "v$OM_VERSION"
+  git commit -m "feat: Release v$OM_VERSION"
   git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
 
   cargo build
   cargo xtask update-readme
   cargo bin dprint fmt
   git add .
-  git commit --amend -m "v$OM_VERSION"
+  git commit --amend -m "feat: Release v$OM_VERSION"
   git tag -d "v$OM_VERSION"
   git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
 

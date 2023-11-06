@@ -26,7 +26,7 @@
 - [Development](#Development)
   - [Setup](#setup)
   - [Adding a backend](#adding-a-backend)
-  - [Adding an editor](#adding-a-editor)
+  - [Adding an editor](#adding-an-editor)
 - [FAQ](#faq)
   - [Why Oatmeal?](#why-oatmeal)
 - [License](#license)

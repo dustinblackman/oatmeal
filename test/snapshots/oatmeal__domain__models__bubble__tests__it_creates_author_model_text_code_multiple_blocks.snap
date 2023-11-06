@@ -1,0 +1,44 @@
+---
+source: src/domain/models/bubble_test.rs
+expression: lines_str
+---
+'''
+╭codellama:latest──────────────────────────╮  
+│ Here's how to print in Rust.             │  
+│                                          │  
+│ ```rust (10)                             │  
+│ fn print_numbers() {                     │  
+│     for i in 0..=0 {                     │  
+│         println!("{i}");                 │  
+│     }                                    │  
+│ }                                        │  
+│ ```                                      │  
+│                                          │  
+│ And in Javascript.                       │  
+│                                          │  
+│ ```javascript (11)                       │  
+│ function printNumbers() {                │  
+│     let numbers = [];                    │  
+│     for (let i = 0; i <= 10; i++) {      │  
+│         numbers.push(i);                 │  
+│     }                                    │  
+│     return numbers.join('\n');           │  
+│ }                                        │  
+│ ```                                      │  
+│                                          │  
+│ This is a markdown codeblock that has no │  
+│ language, so it should not be included.  │  
+│                                          │  
+│ ```                                      │  
+│ abc123                                   │  
+│ ```                                      │  
+│                                          │  
+│ Let's do Python as well!                 │  
+│                                          │  
+│ ```python (12)                           │  
+│ for i in range(11):                      │  
+│     print(i)                             │  
+│ ```                                      │  
+│                                          │  
+│ That's it!                               │  
+╰──────────────────────────────────────────╯  '''

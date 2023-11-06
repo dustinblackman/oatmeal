@@ -1,0 +1,5 @@
+---
+source: src/infrastructure/backends/openai_test.rs
+expression: third_recv.context
+---
+'[{"role":"assistant","content":"How may I help you?"},{"role":"user","content":"Say hi to the world"},{"role":"assistant","content":"Hello World"}]'

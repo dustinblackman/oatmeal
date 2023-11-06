@@ -1,0 +1,202 @@
+[package]
+name = "oatmeal"
+version = "0.1.0"
+authors = ["Dustin Blackman"]
+build = "build.rs"
+edition = "2021"
+keywords = ["dev-experiance", "developer-experiance", "cli", "llm", "large-language-models", "chat", "tui", "terminal-ui"]
+license = "MIT"
+description = "Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+dev = []
+
+[workspace]
+members = ["tools/xtask"]
+
+[dependencies]
+anyhow = "=1.0.75"
+arboard = "=3.2.1"
+async-trait = "=0.1.74"
+base64 = "=0.21.5"
+better-panic = "=0.3.0"
+clap = { version = "=4.4.7", features = ["env"] }
+crossterm = "=0.27.0"
+dashmap = "=5.5.3"
+futures = "=0.3.28"
+once_cell = "=1.18.0"
+owo-colors = { version = "3.5.0", features = ["supports-colors"] }
+ratatui = "=0.23.0"
+reqwest = { version = "=0.11.22", default-features = false, features = ["stream", "json", "gzip", "native-tls-vendored"] }
+rust-embed = { version = "8.0.0" }
+serde = "=1.0.189"
+serde_derive = "=1.0.189"
+serde_json = "=1.0.107"
+syntect = { version = "=5.1.0", default-features = false, features = ["parsing", "default-syntaxes", "plist-load", "yaml-load", "regex-onig"] }
+tokio = { version = "=1.33.0", features = ["macros", "rt-multi-thread", "sync", "process"] }
+tokio-util = "=0.7.9"
+tui-textarea = { version = "=0.2.4", default-features = false, features = ["ratatui-crossterm"] }
+
+[dev-dependencies]
+cargo-husky = { version = "=1.5.0", default-features = false, features = ["user-hooks"] }
+insta = { version = "=1.34.0", features = ["toml", "yaml"] }
+mockito = "=1.2.0"
+test_utils = { path = "./test/utils" }
+
+[build-dependencies]
+anyhow = "=1.0.75"
+flate2 = "=1.0.28"
+reqwest = { version = "=0.11.22", default-features = false, features = ["blocking", "native-tls-vendored"] }
+tar = "=0.4.40"
+vergen = { version = "=8.2.5", features = ["build", "git", "gitcl"] }
+
+[package.metadata.bin]
+cargo-binstall = { version = "1.4.3" }
+cargo-bundle-licenses = { version = "1.3.0" }
+cargo-cmd = { version = "0.3.1" }
+cargo-deny = { version = "0.14.2" }
+cargo-gha = { version = "0.4.6" }
+cargo-insta = { version = "1.34.0" }
+cargo-llvm-cov = { version = "0.5.25" }
+cargo-nextest = { version = "0.9.59", locked = true }
+cargo-watch = { version = "8.4.0" }
+cargo-xwin = { version = "0.14.9" }
+cargo-zigbuild = { version = "0.17.3" }
+committed = { version = "1.0.20" }
+dprint = { version = "0.40.2" }
+git-cliff = { version = "1.3.1" }
+
+[profile.dev.package]
+insta.opt-level = 3
+similar.opt-level = 3
+
+[package.metadata.gha]
+targets = ["aarch64-apple-darwin"]
+
+[package.metadata.gha.assets]
+goreleaser_goreleaser = { tag = "v1.21.2", owner_repo = "goreleaser/goreleaser", binaries = ["goreleaser"], target_archives = { aarch64-apple-darwin = "goreleaser_Darwin_arm64.tar.gz" } }
+
+[package.metadata.commands]
+build-completions = '''set -e
+  rm -rf completions
+  mkdir completions
+  ./target/debug/oatmeal completion --shell zsh > completions/oatmeal.zsh
+  ./target/debug/oatmeal completion --shell bash > completions/oatmeal.bash
+  ./target/debug/oatmeal completion --shell fish > completions/oatmeal.fish
+'''
+
+dev = '''set -e
+  cargo watch -i .cargo -s 'cargo run --features dev'
+'''
+
+goreleaser = '''set -e
+  export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
+
+  cargo cmd build-completions
+  AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --rm-dist
+  cargo publish
+  tools/apt.sh "$OM_VERSION" "$(realpath dist)"
+  tools/nur.sh "$OM_VERSION" "$(realpath dist)"
+  tools/yum.sh "$OM_VERSION" "$(realpath dist)"
+  tools/choco.sh "$OM_VERSION" "$(realpath dist)"
+'''
+
+lint = '''set -e
+  cargo cmd setup-nightly
+  cargo +oatmeal-nightly fmt -- --check
+  cargo clippy
+  cargo bin dprint check
+  cargo deny check licenses -s
+'''
+
+lint-fix = '''set -e
+  cargo cmd setup-nightly
+  cargo clippy --fix --allow-dirty
+  cargo fix --allow-dirty
+  cargo +oatmeal-nightly fmt
+  cargo bin dprint fmt
+'''
+
+get-nightly-name = 'echo oatmeal-nightly'
+setup-nightly = '''
+  export NIGHTLY=nightly-2023-06-16
+  rustup toolchain list -v | grep -q "$NIGHTLY" || rustup toolchain install "$NIGHTLY" --force --component llvm-tools-preview rustfmt
+  rustup toolchain link oatmeal-nightly "$(rustup toolchain list -v | grep $NIGHTLY | grep '^nightly-' | awk '{print $2}')"
+'''
+
+release = '''set -e
+  cargo check
+  cargo cmd thirdparty
+
+  export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
+  cargo bin git-cliff -o CHANGELOG.md --tag "$OM_VERSION"
+  cargo bin dprint fmt
+
+  git add .
+  git commit -m "v$OM_VERSION"
+  git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
+
+  cargo build
+  cargo xtask update-readme
+  cargo bin dprint fmt
+  git add .
+  git commit --amend -m "v$OM_VERSION"
+  git tag -d "v$OM_VERSION"
+  git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
+
+  cargo zigbuild --release --target x86_64-apple-darwin
+  cargo zigbuild --release --target aarch64-apple-darwin
+  cargo zigbuild --release --target x86_64-unknown-linux-gnu
+  cargo zigbuild --release --target aarch64-unknown-linux-gnu
+  cargo xwin build --release --target x86_64-pc-windows-msvc --xwin-arch x86_64
+
+  git push
+  git push --tags
+  cargo cmd goreleaser
+'''
+
+insta = '''set -e
+  cargo insta test || cargo insta review
+'''
+
+setup = '''set -e
+  cargo bin --install
+  cargo cmd setup-nightly
+  cargo cmd test
+'''
+
+test = '''set -e
+  cargo nextest run
+'''
+
+test-coverage = '''set -e
+  cargo llvm-cov nextest --ignore-filename-regex='_test.rs'
+'''
+test-coverage-html = '''set -e
+  cargo llvm-cov nextest --open --ignore-filename-regex='_test.rs'
+'''
+test-coverage-lcov = '''set -e
+  rm -f lcov.info
+  cargo llvm-cov nextest --lcov --output-path lcov.info --ignore-filename-regex='_test.rs'
+'''
+test-coverage-ci = '''set -e
+  cargo llvm-cov nextest --html --output-dir ./coverage --ignore-filename-regex='_test.rs'
+'''
+test-watch = '''set -e
+  cargo watch -i .cargo -x 'cmd test'
+'''
+
+thirdparty = '''set -e
+  cargo bin cargo-deny check licenses
+  cargo bin cargo-bundle-licenses --format json --output THIRDPARTY.json
+  rm -f THIRDPARTY.md
+  cat THIRDPARTY.json | sed 's/NOT FOUND//g' | jq -rc '.third_party_libraries[]' | jq -rcs '.[] | "## \(.package_name) - \(.licenses[0].license)\n\n\(.licenses[0].text)\n\n---\n"' > THIRDPARTY.md
+  echo "## base16-textmate - MIT" >> THIRDPARTY.md
+  curl -L https://raw.githubusercontent.com/chriskempson/base16-textmate/0e51ddd568bdbe17189ac2a07eb1c5f55727513e/LICENSE.md | awk 'NR > 1' >> THIRDPARTY.md
+'''
+
+top = '''
+  top -pid $(ps aux | grep 'target\/debug\/oatmeal' | awk '{print $2}')
+'''

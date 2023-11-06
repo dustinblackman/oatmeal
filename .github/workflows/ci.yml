@@ -1,0 +1,36 @@
+on: [push, pull_request]
+
+name: ci
+
+jobs:
+  build_and_test:
+    name: oatmeal
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
+
+      - name: Install deps
+        run: |
+          git submodule update --init --recursive
+          cargo install cargo-run-bin
+          cargo binstall --help >/dev/null
+      - name: Setup nightly
+        run: cargo cmd setup-nightly
+      - name: Lint
+        run: cargo cmd lint
+      - name: Test
+        run: cargo cmd test-coverage-lcov
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./lcov.info

@@ -1,0 +1,7 @@
+target/
+.bin/
+.gha/
+completions/
+themes/
+THIRDPARTY.json
+THIRDPARTY.md

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -e
+
+cargo bin committed --fixup --wip --commit-file $1

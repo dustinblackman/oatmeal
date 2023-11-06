@@ -1,0 +1,7 @@
+edition = "2021"
+force_multiline_blocks = true
+group_imports = "StdExternalCrate"
+imports_granularity = "Item"
+imports_layout = "HorizontalVertical"
+normalize_comments = true
+wrap_comments = true

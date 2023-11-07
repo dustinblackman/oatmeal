@@ -95,7 +95,7 @@ scoop bucket add dustinblackman https://github.com/dustinblackman/scoop-bucket.g
 scoop install oatmeal
 ```
 
-## Cargo
+### Cargo
 
 ```sh
 cargo install oatmeal

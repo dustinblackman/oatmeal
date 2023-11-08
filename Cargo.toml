@@ -5,7 +5,7 @@ authors = ["Dustin Blackman"]
 build = "build.rs"
 edition = "2021"
 exclude = ["./tools", ".cargo-husky/", ".dprint.json", ".goreleaser.yml", ".insta.yml", ".rustfmt.toml", "cliff.toml", "committed.toml", "deny.toml"]
-keywords = ["dev-experiance", "developer-experiance", "cli", "llm", "large-language-models", "chat", "tui", "terminal-ui"]
+keywords = ["cli", "llm", "chat", "tui"]
 license = "MIT"
 description = "Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!"
 
@@ -98,7 +98,7 @@ goreleaser = '''set -e
 
   cargo cmd build-completions
   AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --rm-dist
-  cargo publish
+  cargo publish --no-verify
   tools/apt.sh "$OM_VERSION" "$(realpath dist)"
   tools/nur.sh "$OM_VERSION" "$(realpath dist)"
   tools/yum.sh "$OM_VERSION" "$(realpath dist)"

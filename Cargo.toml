@@ -4,7 +4,19 @@ version = "0.1.0"
 authors = ["Dustin Blackman"]
 build = "build.rs"
 edition = "2021"
-exclude = ["./tools", "./test", ".cargo-husky/", ".dprint.json", ".goreleaser.yml", ".insta.yml", ".rustfmt.toml", "cliff.toml", "committed.toml", "deny.toml", ""]
+exclude = [
+  "./tools",
+  "./test",
+  ".cargo-husky/",
+  ".dprint.json",
+  ".goreleaser.yml",
+  ".insta.yml",
+  ".rustfmt.toml",
+  "cliff.toml",
+  "committed.toml",
+  "deny.toml",
+  "",
+]
 keywords = ["cli", "llm", "chat", "tui"]
 license = "MIT"
 description = "Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!"

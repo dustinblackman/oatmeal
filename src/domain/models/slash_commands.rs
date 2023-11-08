@@ -10,6 +10,7 @@ pub struct SlashCommand {
 impl SlashCommand {
     pub fn parse(text: &str) -> Option<SlashCommand> {
         let mut args = text
+            .trim()
             .split(' ')
             .map(|e| return e.to_string())
             .collect::<Vec<String>>();

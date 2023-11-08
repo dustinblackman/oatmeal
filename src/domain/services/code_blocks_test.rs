@@ -1,3 +1,4 @@
+use anyhow::Result;
 use test_utils::codeblock_fixture;
 
 use super::CodeBlocks;
@@ -5,7 +6,7 @@ use crate::domain::models::Author;
 use crate::domain::models::Message;
 use crate::domain::models::SlashCommand;
 
-fn from_slash_command(cmd_str: &str) -> String {
+fn from_slash_command(cmd_str: &str) -> Result<String> {
     let messages = vec![
         Message::new(Author::Oatmeal, "Hi there!"),
         Message::new(Author::Oatmeal, codeblock_fixture()),
@@ -31,7 +32,7 @@ fn it_replaces_messages() {
 
 #[test]
 fn it_provides_first_codeblock() {
-    let res = from_slash_command("/a 1");
+    let res = from_slash_command("/a 1").unwrap();
     insta::assert_snapshot!(res, @r###"
     fn print_numbers() {
         for i in 0..=0 {
@@ -43,7 +44,7 @@ fn it_provides_first_codeblock() {
 
 #[test]
 fn it_provides_last_codeblock() {
-    let res = from_slash_command("/a");
+    let res = from_slash_command("/a").unwrap();
     insta::assert_snapshot!(res, @r###"
     for i in range(11):
         print(i)
@@ -52,7 +53,7 @@ fn it_provides_last_codeblock() {
 
 #[test]
 fn it_provides_first_second_codeblock() {
-    let res = from_slash_command("/a 1,2");
+    let res = from_slash_command("/a 1,2").unwrap();
     insta::assert_snapshot!(res, @r###"
     fn print_numbers() {
         for i in 0..=0 {
@@ -72,7 +73,7 @@ fn it_provides_first_second_codeblock() {
 
 #[test]
 fn it_provides_first_second_third_codeblock() {
-    let res = from_slash_command("/a 1..3");
+    let res = from_slash_command("/a 1..3").unwrap();
     insta::assert_snapshot!(res, @r###"
     fn print_numbers() {
         for i in 0..=0 {
@@ -91,4 +92,10 @@ fn it_provides_first_second_third_codeblock() {
     for i in range(11):
         print(i)
     "###);
+}
+
+#[test]
+fn it_throws_an_error_on_invalid_index() {
+    let res = from_slash_command("/a 1010101").unwrap_err().to_string();
+    insta::assert_snapshot!(res, @"1010100 is out of bounds.");
 }

@@ -8,14 +8,14 @@ exclude = [
   "./tools",
   "./test",
   ".cargo-husky/",
+  ".github/",
   ".dprint.json",
   ".goreleaser.yml",
-  ".insta.yml",
+  ".insta.yaml",
   ".rustfmt.toml",
   "cliff.toml",
   "committed.toml",
   "deny.toml",
-  "",
 ]
 keywords = ["cli", "llm", "chat", "tui"]
 license = "MIT"

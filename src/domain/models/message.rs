@@ -39,7 +39,7 @@ impl Message {
         return Message {
             author: author.clone(),
             author_formatted: formatted_author(author),
-            text: text.to_string(),
+            text: text.to_string().replace('\t', "  "),
             mtype: MessageType::Normal,
         };
     }
@@ -48,7 +48,7 @@ impl Message {
         return Message {
             author: author.clone(),
             author_formatted: formatted_author(author),
-            text: text.to_string(),
+            text: text.to_string().replace('\t', "  "),
             mtype,
         };
     }
@@ -58,7 +58,7 @@ impl Message {
     }
 
     pub fn append(&mut self, text: &str) {
-        self.text += text;
+        self.text += &text.replace('\t', "  ");
     }
 
     pub fn as_string_lines(&self, line_max_width: u16) -> Vec<String> {

@@ -105,6 +105,12 @@ dev = '''set -e
   cargo watch -i .cargo -s 'cargo run --features dev'
 '''
 
+dev-install = '''set -e
+  cargo build
+  sudo rm /usr/local/bin/oatmeal
+  sudo mv ./target/debug/oatmeal /usr/local/bin/
+'''
+
 goreleaser = '''set -e
   export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
 

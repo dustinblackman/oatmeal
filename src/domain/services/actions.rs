@@ -20,7 +20,7 @@ pub fn help_text() -> String {
 COMMANDS:
 - /modelist (/ml) - Lists all available models from the backend.
 - /model (/model) [MODEL_NAME] - Sets the specified model as the active model.
-- /accept (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
+- /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
 - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
 - /copy (/c) - Copies the entire chat history to your clipboard.
 - /quit (/q) - Exit Oatmeal.
@@ -36,7 +36,7 @@ HOTKEYS:
 CODE ACTIONS:
 When working with models that provide code, and using an editor integration, Oatmeal has the capabilities to read selected code from an editor, and submit model provided code back in to an editor. Each code block provided by a model is indexed with a (NUMBER) at the beginning of the block to make it easily identifiable.
 
-- /accept (/a) [CODE_BLOCK_NUMBER?] will append one-to-many model provided code blocks to the open file in your editior.
+- /append (/a) [CODE_BLOCK_NUMBER?] will append one-to-many model provided code blocks to the open file in your editior.
 - /replace (/r) [CODE_BLOCK_NUMBER?] - will replace selected code with one-to-many model provided code blocks to the open file in your editor.
 
 The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to your editor at once. The parameter can be set as follows:

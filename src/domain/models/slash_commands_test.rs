@@ -77,19 +77,19 @@ fn it_is_not_is_model_set() {
 }
 
 #[test]
-fn it_is_short_accept_code_block() {
+fn it_is_short_append_code_block() {
     let cmd = SlashCommand::parse("/a").unwrap();
-    assert!(cmd.is_accept_code_block());
+    assert!(cmd.is_append_code_block());
 }
 #[test]
-fn it_is_accept_code_block() {
-    let cmd = SlashCommand::parse("/accept").unwrap();
-    assert!(cmd.is_accept_code_block());
+fn it_is_append_code_block() {
+    let cmd = SlashCommand::parse("/append").unwrap();
+    assert!(cmd.is_append_code_block());
 }
 #[test]
-fn it_is_not_accept_code_block() {
+fn it_is_not_append_code_block() {
     let cmd = SlashCommand::parse("/ml").unwrap();
-    assert!(!cmd.is_accept_code_block());
+    assert!(!cmd.is_append_code_block());
 }
 
 #[test]

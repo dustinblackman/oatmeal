@@ -23,7 +23,7 @@ impl SlashCommand {
         if cmd.is_quit()
             || cmd.is_model_list()
             || cmd.is_model_set()
-            || cmd.is_accept_code_block()
+            || cmd.is_append_code_block()
             || cmd.is_replace_code_block()
             || cmd.is_copy()
             || cmd.is_help()
@@ -46,8 +46,8 @@ impl SlashCommand {
         return ["/m", "/model"].contains(&self.command.as_str());
     }
 
-    pub fn is_accept_code_block(&self) -> bool {
-        return ["/a", "/accept"].contains(&self.command.as_str());
+    pub fn is_append_code_block(&self) -> bool {
+        return ["/a", "/append"].contains(&self.command.as_str());
     }
 
     pub fn is_replace_code_block(&self) -> bool {

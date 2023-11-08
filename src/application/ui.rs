@@ -148,7 +148,7 @@ async fn start_loop<B: Backend>(
                         break;
                     }
 
-                    if command.is_accept_code_block() || command.is_replace_code_block() {
+                    if command.is_append_code_block() || command.is_replace_code_block() {
                         let mut accept_type = AcceptType::Append;
                         if command.is_replace_code_block() {
                             accept_type = AcceptType::Replace;

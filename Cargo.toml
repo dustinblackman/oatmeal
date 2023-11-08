@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Dustin Blackman"]
 build = "build.rs"
 edition = "2021"
+exclude = ["./tools", ".cargo-husky/", ".dprint.json", ".goreleaser.yml", ".insta.yml", ".rustfmt.toml", "cliff.toml", "committed.toml", "deny.toml"]
 keywords = ["dev-experiance", "developer-experiance", "cli", "llm", "large-language-models", "chat", "tui", "terminal-ui"]
 license = "MIT"
 description = "Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!"
@@ -54,8 +55,8 @@ tar = "=0.4.40"
 vergen = { version = "=8.2.5", features = ["build", "git", "gitcl"] }
 
 [package.metadata.bin]
+cargo-about = { version = "0.5.7" }
 cargo-binstall = { version = "1.4.3" }
-cargo-bundle-licenses = { version = "1.3.0" }
 cargo-cmd = { version = "0.3.1" }
 cargo-deny = { version = "0.14.2" }
 cargo-gha = { version = "0.4.6" }
@@ -190,12 +191,8 @@ test-watch = '''set -e
 '''
 
 thirdparty = '''set -e
-  cargo bin cargo-deny check licenses
-  cargo bin cargo-bundle-licenses --format json --output THIRDPARTY.json
-  rm -f THIRDPARTY.md
-  cat THIRDPARTY.json | sed 's/NOT FOUND//g' | jq -rc '.third_party_libraries[]' | jq -rcs '.[] | "## \(.package_name) - \(.licenses[0].license)\n\n\(.licenses[0].text)\n\n---\n"' > THIRDPARTY.md
-  echo "## base16-textmate - MIT" >> THIRDPARTY.md
-  curl -L https://raw.githubusercontent.com/chriskempson/base16-textmate/0e51ddd568bdbe17189ac2a07eb1c5f55727513e/LICENSE.md | awk 'NR > 1' >> THIRDPARTY.md
+  cargo deny check licenses
+  ./tools/thirdparty/run.sh
 '''
 
 top = '''

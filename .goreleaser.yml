@@ -24,7 +24,7 @@ archives:
     files:
       - completions/*
       - LICENSE
-      - THIRDPARTY.md
+      - THIRDPARTY.html
 
 signs:
   - artifacts: checksum
@@ -86,8 +86,8 @@ nfpms:
         dst: /usr/share/doc/oatmeal/copyright/LICENSE
         file_info:
           mode: 0644
-      - src: ./THIRDPARTY.md
-        dst: /usr/share/doc/oatmeal/copyright/THIRDPARTY.md
+      - src: ./THIRDPARTY.html
+        dst: /usr/share/doc/oatmeal/copyright/THIRDPARTY.html
         file_info:
           mode: 0644
 
@@ -108,7 +108,7 @@ aurs:
 
         # license
         install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/oatmeal/LICENSE"
-        install -Dm644 "./THIRDPARTY.md" "${pkgdir}/usr/share/licenses/oatmeal/THIRDPARTY.md"
+        install -Dm644 "./THIRDPARTY.html" "${pkgdir}/usr/share/licenses/oatmeal/THIRDPARTY.html"
 
         # completions
         mkdir -p "${pkgdir}/usr/share/bash-completion/completions/"

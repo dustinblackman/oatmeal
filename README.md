@@ -124,10 +124,10 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 <!-- command-help start -->
 
 ```
-Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editor!
+Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
 Version: 0.1.0
-Commit: 77c0605
+Commit: a9ef7f1
 
 Usage: oatmeal [OPTIONS]
 

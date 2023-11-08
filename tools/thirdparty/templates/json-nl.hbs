@@ -1,0 +1,6 @@
+{{#each licenses as | license |}}
+{{#each used_by as | pkg | }}
+{"package_name_version": "{{pkg.crate.name}}--{{pkg.crate.version}}", "license": "{{license.id}}", "text": {{json license.text}}, "link": "{{#if pkg.crate.repository}}{{pkg.crate.repository}}/tree/v{{pkg.crate.version}}{{/if}}"}
+
+{{/each}}
+{{/each}}

@@ -1,0 +1,116 @@
+accepted = [
+  # Prioritized
+  "MIT",
+  "Apache-2.0",
+
+  # Others
+  "BSL-1.0",
+  "ISC",
+  "Unicode-DFS-2016",
+  "BSD-3-Clause",
+]
+
+ignore-build-dependencies = true
+ignore-dev-dependencies = true
+
+targets = ["x86_64-apple-darwin", "aarch64-apple-darwin", "x86_64-unknown-linux-gnu", "aarch64-unknown-linux-gnu", "x86_64-pc-windows-msvc"]
+
+[x11rb.clarify]
+license = "MIT"
+
+[[x11rb.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "a72561f47c1f665535930f606739d9098a6186802d5e2e8ec491faf00f4add5b"
+
+[core-graphics-types.clarify]
+license = "MIT"
+
+[[core-graphics-types.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "62065228e42caebca7e7d7db1204cbb867033de5982ca4009928915e4095f3a3"
+
+[onig.clarify]
+license = "MIT"
+
+[[onig.clarify.git]]
+path = "LICENSE.md"
+checksum = "e9c1238c5beb73c6cc130160418968058b21d486a7a445f0ceff27d51fbfdc44"
+
+[onig_sys.clarify]
+license = "MIT"
+
+[[onig_sys.clarify.git]]
+path = "LICENSE.md"
+checksum = "e9c1238c5beb73c6cc130160418968058b21d486a7a445f0ceff27d51fbfdc44"
+
+[system-configuration.clarify]
+license = "MIT"
+
+[[system-configuration.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "35b228510156c3d7bf94b129c81b7e3cc72d347586e632be15686232b342562a"
+
+[system-configuration-sys.clarify]
+license = "MIT"
+override_git_commit = "8f82d7fd73cab9edd295ba23dcfdfdf376b27a01"
+
+[[system-configuration-sys.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "35b228510156c3d7bf94b129c81b7e3cc72d347586e632be15686232b342562a"
+
+[x11rb-protocol.clarify]
+license = "MIT"
+
+[[x11rb-protocol.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "a72561f47c1f665535930f606739d9098a6186802d5e2e8ec491faf00f4add5b"
+
+[winapi.clarify]
+license = "MIT"
+
+[[winapi.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "ce7bc3499fee93d5022ef430d5e4201e79a6d9154f3974e42f41349f0569e09b"
+
+[unicode-normalization.clarify]
+license = "MIT"
+
+[[unicode-normalization.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0"
+
+[unicode-segmentation.clarify]
+license = "MIT"
+
+[[unicode-segmentation.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0"
+
+[unicode-width.clarify]
+license = "MIT"
+
+[[unicode-width.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0"
+
+[malloc_buf.clarify]
+license = "MIT"
+override_git_commit = "d9a3e539642bd90e07df458d226b19cdfa606863"
+
+[[malloc_buf.clarify.git]]
+path = "LICENSE"
+checksum = "aced7b57e474a63edb5a724954222bf7659c01ceef0e648a03af799582991db7"
+
+[num_cpus.clarify]
+license = "MIT"
+
+[[num_cpus.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "0593d22d122d4bfec6407115e3907546312976f75473417aaa4c57ecd2095ae6"
+
+[typenum.clarify]
+license = "MIT"
+
+[[typenum.clarify.git]]
+path = "LICENSE-MIT"
+checksum = "a825bd853ab71619a4923d7b4311221427848070ff44d990da39b0b274c1683f"

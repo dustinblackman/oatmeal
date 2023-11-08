@@ -3,5 +3,4 @@ target/
 .gha/
 completions/
 themes/
-THIRDPARTY.json
-THIRDPARTY.md
+*.html

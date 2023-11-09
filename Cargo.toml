@@ -1,6 +1,6 @@
 [package]
 name = "oatmeal"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Dustin Blackman"]
 build = "build.rs"
 edition = "2021"

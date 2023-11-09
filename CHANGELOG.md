@@ -2,12 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.0] - 2023-11-08
+## [0.2.0] - 2023-11-09
 
-[..0.1.0](https://github.com/dustinblackman/oatmeal/compare/..0.1.0)
+[v0.1.0..0.2.0](https://github.com/dustinblackman/oatmeal/compare/v0.1.0..0.2.0)
 
 ### ⛰️ Features
 
+- Add arguments to copy command - ([bb8eecc](https://github.com/dustinblackman/oatmeal/commit/bb8eeccae3ca0398fe7a454f945dc96de3c1d3ca))
+
+### 🐛 Bug Fixes
+
+- Handle incorrect parameters to append and replace - ([0dcc72f](https://github.com/dustinblackman/oatmeal/commit/0dcc72f7b8068d8f57a4925166a59f1325b16a72))
+- Replace tabs with spaces - ([bf281a5](https://github.com/dustinblackman/oatmeal/commit/bf281a52d690614c60605a6a4641aed5392745e1))
+- Dependency pinning - ([3ab6fb6](https://github.com/dustinblackman/oatmeal/commit/3ab6fb61a4b447dd18d39cf569647349ccf53cce))
+- Ignore more folders when publishing to cargo - ([fad4238](https://github.com/dustinblackman/oatmeal/commit/fad4238703273f360ba7a7e266fac4835be8745c))
+- Rename command accept to append - ([379df00](https://github.com/dustinblackman/oatmeal/commit/379df006da27371bdd18b288d45abaf230eb89f9))
+- Docs - ([3bcfd22](https://github.com/dustinblackman/oatmeal/commit/3bcfd22585c4c90981f3749a83e1cea9b5d8316c))
+- Cargo publish - ([080f84e](https://github.com/dustinblackman/oatmeal/commit/080f84e25a141857f4c3bd467db6a57b28674512))
+- Gitignore - ([06900a9](https://github.com/dustinblackman/oatmeal/commit/06900a920eadb30d1c4e4996747243cb4287db32))
+
+### 📚 Documentation
+
+- Update demo - ([6217aef](https://github.com/dustinblackman/oatmeal/commit/6217aef13e140e01965efa6ba799d38558c77b4d))
+
+### ⚙️ Miscellaneous Tasks
+
+- Toml lint - ([8466a81](https://github.com/dustinblackman/oatmeal/commit/8466a815bdd9aebaae23d38de389d17d730e5292))
+
+## [0.1.0] - 2023-11-08
+
+[..v0.1.0](https://github.com/dustinblackman/oatmeal/compare/..v0.1.0)
+
+### ⛰️ Features
+
+- Release v0.1.0 - ([f1a38b2](https://github.com/dustinblackman/oatmeal/commit/f1a38b22c4768c894e506bcf66b39e30ec1d5afe))
 - Init - ([f2216d9](https://github.com/dustinblackman/oatmeal/commit/f2216d9aa15827f644c3991bfc6cac4bfcedcb91))
 
 ### 🐛 Bug Fixes

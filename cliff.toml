@@ -20,7 +20,7 @@ body = """
     ## [unreleased]
 {% endif %}\
 
-[{{ previous.version }}..{{ version }}](<REPO>/compare/{{ previous.version }}..{{ version }})
+[{{ previous.version }}...{{ version }}](<REPO>/compare/{{ previous.version }}...{{ version }})
 
 {% macro commit(commit) -%}
     - {% if commit.scope %}*({{ commit.scope }})* {% endif %}{% if commit.breaking %}[**breaking**] {% endif %}\

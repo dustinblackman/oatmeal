@@ -91,6 +91,7 @@ targets = ["aarch64-apple-darwin"]
 
 [package.metadata.gha.assets]
 goreleaser_goreleaser = { tag = "v1.21.2", owner_repo = "goreleaser/goreleaser", binaries = ["goreleaser"], target_archives = { aarch64-apple-darwin = "goreleaser_Darwin_arm64.tar.gz" } }
+cli_cli = { tag = "v2.38.0", owner_repo = "cli/cli", binaries = ["gh"], target_archives = { aarch64-apple-darwin = "gh_{NOVTAG}_macOS_arm64.zip" } }
 
 [package.metadata.commands]
 build-completions = '''set -e
@@ -116,6 +117,7 @@ goreleaser = '''set -e
 
   cargo cmd build-completions
   AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --rm-dist
+  cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | cargo gha gh release edit "v$OM_VERSION" --notes-file -
   cargo publish --no-verify
   tools/apt.sh "$OM_VERSION" "$(realpath dist)"
   tools/nur.sh "$OM_VERSION" "$(realpath dist)"
@@ -152,7 +154,7 @@ release = '''set -e
   cargo cmd thirdparty
 
   export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
-  cargo bin git-cliff -o CHANGELOG.md --tag "$OM_VERSION"
+  cargo bin git-cliff -o CHANGELOG.md --tag "v$OM_VERSION"
   cargo bin dprint fmt
 
   git add .

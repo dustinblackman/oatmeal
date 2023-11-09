@@ -67,7 +67,7 @@ mod handle_slash_commands {
             Action::AcceptCodeBlock(_context, codeblock, accept_type) => {
                 assert_eq!(accept_type, AcceptType::Append);
                 insta_snapshot(|| {
-                    insta::assert_yaml_snapshot!(codeblock);
+                    insta::assert_toml_snapshot!(codeblock);
                 })
             }
             _ => bail!("Wrong enum"),
@@ -95,7 +95,7 @@ mod handle_slash_commands {
             Action::AcceptCodeBlock(_context, codeblock, accept_type) => {
                 assert_eq!(accept_type, AcceptType::Replace);
                 insta_snapshot(|| {
-                    insta::assert_yaml_snapshot!(codeblock);
+                    insta::assert_toml_snapshot!(codeblock);
                 })
             }
             _ => bail!("Wrong enum"),
@@ -120,10 +120,10 @@ mod handle_slash_commands {
 
         let event = rx.blocking_recv().unwrap();
         match event {
-            Action::AcceptCodeBlock(_context, codeblock, accept_type) => {
-                assert_eq!(accept_type, AcceptType::Copy);
+            Action::CopyMessages(messages) => {
+                assert_eq!(messages[0].author, Author::Model);
                 insta_snapshot(|| {
-                    insta::assert_yaml_snapshot!(codeblock);
+                    insta::assert_toml_snapshot!(messages[0].text);
                 })
             }
             _ => bail!("Wrong enum"),

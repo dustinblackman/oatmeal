@@ -145,12 +145,7 @@ impl<'a> AppState<'a> {
                 || command.is_replace_code_block()
                 || command.is_copy_code_block()
             {
-                let mut accept_type = AcceptType::Append;
-                if command.is_replace_code_block() {
-                    accept_type = AcceptType::Replace;
-                } else if command.is_copy_code_block() {
-                    accept_type = AcceptType::Copy;
-                }
+                should_continue = true;
 
                 let codeblocks_res = self.codeblocks.blocks_from_slash_commands(&command);
                 if let Err(err) = codeblocks_res.as_ref() {
@@ -163,8 +158,21 @@ impl<'a> AppState<'a> {
                         ),
                     ));
 
-                    should_continue = true;
                     return Ok((should_break, should_continue));
+                }
+
+                if command.is_copy_code_block() {
+                    tx.send(Action::CopyMessages(vec![Message::new(
+                        Author::Model,
+                        &codeblocks_res.unwrap(),
+                    )]))?;
+                    self.waiting_for_backend = true;
+                    return Ok((should_break, should_continue));
+                }
+
+                let mut accept_type = AcceptType::Append;
+                if command.is_replace_code_block() {
+                    accept_type = AcceptType::Replace;
                 }
 
                 tx.send(Action::AcceptCodeBlock(
@@ -172,11 +180,6 @@ impl<'a> AppState<'a> {
                     codeblocks_res.unwrap(),
                     accept_type,
                 ))?;
-
-                should_continue = true;
-                if command.is_copy_code_block() {
-                    self.waiting_for_backend = true;
-                }
             }
 
             if command.is_copy_chat() {

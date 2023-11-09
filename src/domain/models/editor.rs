@@ -11,8 +11,6 @@ use async_trait::async_trait;
 pub enum AcceptType {
     /// Append in editor where the cursor was last.
     Append,
-    /// Copy to clipboard
-    Copy,
     /// Replace selected code in editor.
     Replace,
 }
@@ -20,8 +18,7 @@ pub enum AcceptType {
 impl fmt::Display for AcceptType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            AcceptType::Append => return write!(f, "copy"),
-            AcceptType::Copy => return write!(f, "replace"),
+            AcceptType::Append => return write!(f, "append"),
             AcceptType::Replace => return write!(f, "replace"),
         }
     }

@@ -3,10 +3,10 @@
 All notable changes to this project will be documented in this file.
 
 ## [0.2.0] - 2023-11-09
+
 [v0.1.0...v0.2.0](https://github.com/dustinblackman/oatmeal/compare/v0.1.0...v0.2.0)
 
-
-### ⛰️  Features
+### ⛰️ Features
 
 - Release v0.2.0 - ([ba865fc](https://github.com/dustinblackman/oatmeal/commit/ba865fcba3608b444b764dc6e76fb925b114666f))
 - Add arguments to copy command - ([bb8eecc](https://github.com/dustinblackman/oatmeal/commit/bb8eeccae3ca0398fe7a454f945dc96de3c1d3ca))
@@ -31,10 +31,10 @@ All notable changes to this project will be documented in this file.
 - Toml lint - ([8466a81](https://github.com/dustinblackman/oatmeal/commit/8466a815bdd9aebaae23d38de389d17d730e5292))
 
 ## [0.1.0] - 2023-11-08
+
 [...v0.1.0](https://github.com/dustinblackman/oatmeal/compare/...v0.1.0)
 
-
-### ⛰️  Features
+### ⛰️ Features
 
 - Release v0.1.0 - ([f1a38b2](https://github.com/dustinblackman/oatmeal/commit/f1a38b22c4768c894e506bcf66b39e30ec1d5afe))
 - Init - ([f2216d9](https://github.com/dustinblackman/oatmeal/commit/f2216d9aa15827f644c3991bfc6cac4bfcedcb91))

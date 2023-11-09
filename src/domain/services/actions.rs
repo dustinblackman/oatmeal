@@ -113,18 +113,7 @@ async fn accept_codeblock(
     context: Option<EditorContext>,
     codeblock: String,
     accept_type: AcceptType,
-    tx: &mpsc::UnboundedSender<Action>,
 ) -> Result<()> {
-    if accept_type == AcceptType::Copy {
-        ClipboardService::set(codeblock)?;
-
-        tx.send(Action::MessageEvent(Message::new(
-            Author::Oatmeal,
-            "Copied code block to clipboard.",
-        )))?;
-        return Ok(());
-    }
-
     let editor_name = Config::get(ConfigKey::Editor);
     let editor = EditorManager::get(&editor_name)?;
 
@@ -146,15 +135,19 @@ async fn accept_codeblock(
 }
 
 fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Action>) -> Result<()> {
-    let formatted = messages
-        .iter()
-        .map(|message| {
-            return format!("{}: {}", message.author_formatted, message.text);
-        })
-        .collect::<Vec<String>>()
-        .join("\n\n");
+    if messages.len() == 1 {
+        ClipboardService::set(messages[0].text.to_string())?;
+    } else {
+        let formatted = messages
+            .iter()
+            .map(|message| {
+                return format!("{}: {}", message.author_formatted, message.text);
+            })
+            .collect::<Vec<String>>()
+            .join("\n\n");
 
-    ClipboardService::set(formatted)?;
+        ClipboardService::set(formatted)?;
+    }
 
     tx.send(Action::MessageEvent(Message::new(
         Author::Oatmeal,
@@ -190,7 +183,7 @@ impl ActionsService {
 
             match event.unwrap() {
                 Action::AcceptCodeBlock(context, codeblock, accept_type) => {
-                    accept_codeblock(context, codeblock, accept_type, &tx).await?;
+                    accept_codeblock(context, codeblock, accept_type).await?;
                 }
                 Action::CopyMessages(messages) => {
                     copy_messages(messages, &tx)?;

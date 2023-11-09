@@ -6,7 +6,7 @@
 [![Release](https://img.shields.io/github/v/release/dustinblackman/oatmeal)](https://github.com/dustinblackman/oatmeal/releases)
 [![Coverage Status](https://coveralls.io/repos/github/dustinblackman/oatmeal/badge.svg?branch=main)](https://coveralls.io/github/dustinblackman/oatmeal?branch=main)
 
-> Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
+> Terminal UI to chat with large language models (LLM) using different model backends, and integrations with your favourite editors!
 
 - [Overview](#Overview)
 - [Install](#Install)

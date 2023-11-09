@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2023-11-09
+
+[v0.2.0...v0.2.1](https://github.com/dustinblackman/oatmeal/compare/v0.2.0...v0.2.1)
+
+### 🐛 Bug Fixes
+
+- Release notes - ([97af7bb](https://github.com/dustinblackman/oatmeal/commit/97af7bbfbd68f3907d1593ea11a13b52fc1d04c6))
+- Append enum bug - ([2047204](https://github.com/dustinblackman/oatmeal/commit/20472045cee427a6770570a5cfd23b1609434d2e))
+- Changelog generation - ([e466672](https://github.com/dustinblackman/oatmeal/commit/e466672fdcdd213cff9673840b81e558f71e8e04))
+- Add docker check before releasing - ([8669d0a](https://github.com/dustinblackman/oatmeal/commit/8669d0a7756130a929cf13c590d6e550422e5ae6))
+
 ## [0.2.0] - 2023-11-09
 
 [v0.1.0...v0.2.0](https://github.com/dustinblackman/oatmeal/compare/v0.1.0...v0.2.0)

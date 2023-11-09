@@ -147,6 +147,7 @@ setup-nightly = '''
 '''
 
 release = '''set -e
+  docker ps >/dev/null || (echo "Docker is not running" && exit 1)
   cargo check
   cargo cmd thirdparty
 

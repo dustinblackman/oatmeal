@@ -19,70 +19,15 @@ use tui_textarea::Key;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
-use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::BackendPrompt;
 use crate::domain::models::Loading;
 use crate::domain::models::Message;
-use crate::domain::models::MessageType;
 use crate::domain::models::SlashCommand;
 use crate::domain::models::TextArea;
 use crate::domain::services::AppState;
 use crate::infrastructure::editors::EditorManager;
-
-// TODO Too much business logic for the UI, refactor later.
-fn handle_slash_commands(
-    input_str: &str,
-    app_state: &mut AppState<'_>,
-    tx: &mpsc::UnboundedSender<Action>,
-) -> Result<(bool, bool)> {
-    let mut should_break = false;
-    let mut should_continue = false;
-
-    if let Some(command) = SlashCommand::parse(input_str) {
-        if command.is_quit() {
-            should_break = true;
-        }
-
-        if command.is_append_code_block() || command.is_replace_code_block() {
-            let mut accept_type = AcceptType::Append;
-            if command.is_replace_code_block() {
-                accept_type = AcceptType::Replace;
-            }
-
-            let codeblocks_res = app_state.codeblocks.blocks_from_slash_commands(&command);
-            if let Err(err) = codeblocks_res.as_ref() {
-                app_state.add_message(Message::new_with_type(
-                    Author::Oatmeal,
-                    MessageType::Error,
-                    &format!(
-                        "There was an error trying to parse your command:\n\n{:?}",
-                        err
-                    ),
-                ));
-
-                should_continue = true;
-                return Ok((should_break, should_continue));
-            }
-
-            tx.send(Action::AcceptCodeBlock(
-                app_state.editor_context.clone(),
-                codeblocks_res.unwrap(),
-                accept_type,
-            ))?;
-
-            should_continue = true;
-        }
-
-        if command.is_copy() {
-            tx.send(Action::CopyMessages(app_state.messages.clone()))?;
-            app_state.waiting_for_backend = true;
-        }
-    }
-
-    return Ok((should_break, should_continue));
-}
 
 async fn start_loop<B: Backend>(
     terminal: &mut Terminal<B>,
@@ -198,7 +143,7 @@ async fn start_loop<B: Backend>(
                 app_state.add_message(msg);
 
                 let (should_break, should_continue) =
-                    handle_slash_commands(input_str, app_state, &tx)?;
+                    app_state.handle_slash_commands(input_str, &tx)?;
                 if should_break {
                     break;
                 }

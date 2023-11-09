@@ -1,17 +1,25 @@
 use anyhow::Result;
 use ratatui::prelude::Rect;
+use tokio::sync::mpsc;
 
 use super::BubbleList;
 use super::CodeBlocks;
 use super::Scroll;
 use super::Themes;
+use crate::domain::models::AcceptType;
+use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::BackendResponse;
 use crate::domain::models::EditorContext;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
+use crate::domain::models::SlashCommand;
 use crate::infrastructure::backends::BackendManager;
 use crate::infrastructure::editors::EditorManager;
+
+#[cfg(test)]
+#[path = "app_state_test.rs"]
+mod tests;
 
 pub struct AppState<'a> {
     pub backend_context: String,
@@ -118,6 +126,66 @@ impl<'a> AppState<'a> {
 
             self.codeblocks.replace_from_messages(&self.messages);
         }
+    }
+
+    pub fn handle_slash_commands(
+        &mut self,
+        input_str: &str,
+        tx: &mpsc::UnboundedSender<Action>,
+    ) -> Result<(bool, bool)> {
+        let mut should_break = false;
+        let mut should_continue = false;
+
+        if let Some(command) = SlashCommand::parse(input_str) {
+            if command.is_quit() {
+                should_break = true;
+            }
+
+            if command.is_append_code_block()
+                || command.is_replace_code_block()
+                || command.is_copy_code_block()
+            {
+                let mut accept_type = AcceptType::Append;
+                if command.is_replace_code_block() {
+                    accept_type = AcceptType::Replace;
+                } else if command.is_copy_code_block() {
+                    accept_type = AcceptType::Copy;
+                }
+
+                let codeblocks_res = self.codeblocks.blocks_from_slash_commands(&command);
+                if let Err(err) = codeblocks_res.as_ref() {
+                    self.add_message(Message::new_with_type(
+                        Author::Oatmeal,
+                        MessageType::Error,
+                        &format!(
+                            "There was an error trying to parse your command:\n\n{:?}",
+                            err
+                        ),
+                    ));
+
+                    should_continue = true;
+                    return Ok((should_break, should_continue));
+                }
+
+                tx.send(Action::AcceptCodeBlock(
+                    self.editor_context.clone(),
+                    codeblocks_res.unwrap(),
+                    accept_type,
+                ))?;
+
+                should_continue = true;
+                if command.is_copy_code_block() {
+                    self.waiting_for_backend = true;
+                }
+            }
+
+            if command.is_copy_chat() {
+                tx.send(Action::CopyMessages(self.messages.clone()))?;
+                self.waiting_for_backend = true;
+            }
+        }
+
+        return Ok((should_break, should_continue));
     }
 
     pub fn set_rect(&mut self, rect: Rect) {

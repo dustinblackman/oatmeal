@@ -7,15 +7,21 @@ use std::fmt;
 use anyhow::Result;
 use async_trait::async_trait;
 
+#[derive(Debug, PartialEq)]
 pub enum AcceptType {
+    /// Append in editor where the cursor was last.
     Append,
+    /// Copy to clipboard
+    Copy,
+    /// Replace selected code in editor.
     Replace,
 }
 
 impl fmt::Display for AcceptType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            AcceptType::Append => return write!(f, "append"),
+            AcceptType::Append => return write!(f, "copy"),
+            AcceptType::Copy => return write!(f, "replace"),
             AcceptType::Replace => return write!(f, "replace"),
         }
     }

@@ -22,7 +22,7 @@ COMMANDS:
 - /model (/model) [MODEL_NAME] - Sets the specified model as the active model.
 - /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
 - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
-- /copy (/c) - Copies the entire chat history to your clipboard.
+- /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
 - /quit (/q) - Exit Oatmeal.
 - /help (/h) - Provides this help menu.
 
@@ -38,6 +38,7 @@ When working with models that provide code, and using an editor integration, Oat
 
 - /append (/a) [CODE_BLOCK_NUMBER?] will append one-to-many model provided code blocks to the open file in your editior.
 - /replace (/r) [CODE_BLOCK_NUMBER?] - will replace selected code with one-to-many model provided code blocks to the open file in your editor.
+- /copy (/c) [CODE_BLOCK_NUMBER?] - will append one-to-many model provided code blocks to your clipboard, no matter the editor integration being used.
 
 The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to your editor at once. The parameter can be set as follows:
 - `1` - Selects the first code block
@@ -112,7 +113,18 @@ async fn accept_codeblock(
     context: Option<EditorContext>,
     codeblock: String,
     accept_type: AcceptType,
+    tx: &mpsc::UnboundedSender<Action>,
 ) -> Result<()> {
+    if accept_type == AcceptType::Copy {
+        ClipboardService::set(codeblock)?;
+
+        tx.send(Action::MessageEvent(Message::new(
+            Author::Oatmeal,
+            "Copied code block to clipboard.",
+        )))?;
+        return Ok(());
+    }
+
     let editor_name = Config::get(ConfigKey::Editor);
     let editor = EditorManager::get(&editor_name)?;
 
@@ -178,7 +190,7 @@ impl ActionsService {
 
             match event.unwrap() {
                 Action::AcceptCodeBlock(context, codeblock, accept_type) => {
-                    accept_codeblock(context, codeblock, accept_type).await?;
+                    accept_codeblock(context, codeblock, accept_type, &tx).await?;
                 }
                 Action::CopyMessages(messages) => {
                     copy_messages(messages, &tx)?;

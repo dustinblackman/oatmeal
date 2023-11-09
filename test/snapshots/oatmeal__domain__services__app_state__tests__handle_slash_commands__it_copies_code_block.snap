@@ -1,0 +1,6 @@
+---
+source: src/domain/services/app_state_test.rs
+expression: codeblock
+---
+"fn print_numbers() {\n    for i in 0..=0 {\n        println!(\"{i}\");\n    }\n}"
+

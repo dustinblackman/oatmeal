@@ -125,17 +125,33 @@ fn it_is_not_help() {
 }
 
 #[test]
-fn it_is_short_copy() {
+fn it_is_short_copy_chat() {
     let cmd = SlashCommand::parse("/c").unwrap();
-    assert!(cmd.is_copy());
+    assert!(cmd.is_copy_chat());
 }
 #[test]
-fn it_is_copy() {
+fn it_is_copy_chat() {
     let cmd = SlashCommand::parse("/copy").unwrap();
-    assert!(cmd.is_copy());
+    assert!(cmd.is_copy_chat());
 }
 #[test]
 fn it_is_not_copy() {
-    let cmd = SlashCommand::parse("/ml").unwrap();
-    assert!(!cmd.is_copy());
+    let cmd = SlashCommand::parse("/copy 1").unwrap();
+    assert!(!cmd.is_copy_chat());
+}
+
+#[test]
+fn it_is_short_copy_code() {
+    let cmd = SlashCommand::parse("/c 1").unwrap();
+    assert!(cmd.is_copy_code_block());
+}
+#[test]
+fn it_is_copy_code() {
+    let cmd = SlashCommand::parse("/copy 1").unwrap();
+    assert!(cmd.is_copy_code_block());
+}
+#[test]
+fn it_is_not_copy_code() {
+    let cmd = SlashCommand::parse("/copy").unwrap();
+    assert!(!cmd.is_copy_code_block());
 }

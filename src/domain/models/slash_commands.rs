@@ -26,7 +26,8 @@ impl SlashCommand {
             || cmd.is_model_set()
             || cmd.is_append_code_block()
             || cmd.is_replace_code_block()
-            || cmd.is_copy()
+            || cmd.is_copy_code_block()
+            || cmd.is_copy_chat()
             || cmd.is_help()
         {
             return Some(cmd);
@@ -55,8 +56,12 @@ impl SlashCommand {
         return ["/r", "/replace"].contains(&self.command.as_str());
     }
 
-    pub fn is_copy(&self) -> bool {
-        return ["/c", "/copy"].contains(&self.command.as_str());
+    pub fn is_copy_code_block(&self) -> bool {
+        return ["/c", "/copy"].contains(&self.command.as_str()) && !self.args.is_empty();
+    }
+
+    pub fn is_copy_chat(&self) -> bool {
+        return ["/c", "/copy"].contains(&self.command.as_str()) && self.args.is_empty();
     }
 
     pub fn is_help(&self) -> bool {

@@ -100,7 +100,9 @@ impl Backend for OpenAI {
             bail!("OpenAI is not reachable");
         }
 
-        if res.unwrap().status() != 200 {
+        let status = res.unwrap().status().as_u16();
+        // OpenAPI's default endpoint returns a 418 with a cat picture...
+        if status > 200 && status != 418 {
             bail!("OpenAI health check failed");
         }
 

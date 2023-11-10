@@ -111,7 +111,8 @@ fn build() -> Command {
                 .help(
                     "Absolute path to a TextMate tmTheme to use for code syntax highlighting"
                 ),
-        ).arg(
+        )
+        .arg(
             Arg::new("openai-url")
                 .long("openai-url")
                 .env("OATMEAL_OPENAI_URL")
@@ -119,13 +120,13 @@ fn build() -> Command {
                 .help("OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy")
                 .default_value("https://api.openai.com"),
             )
-            .arg(
+        .arg(
             Arg::new("openai-token")
                 .long("openai-token")
                 .env("OATMEAL_OPENAI_TOKEN")
                 .num_args(1)
                 .help("OpenAI API token when using the OpenAI backend."),
-            );
+        );
 }
 
 pub fn parse() {

@@ -2,9 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2023-11-10
+
+[v0.2.1...v0.2.2](https://github.com/dustinblackman/oatmeal/compare/v0.2.1...v0.2.2)
+
+### 🐛 Bug Fixes
+
+- Better error handling for crashes - ([b5b19d1](https://github.com/dustinblackman/oatmeal/commit/b5b19d1b2fa6d1fa7528bd63dc0a331195a97271))
+- OpenAI healthcheck - ([ac5db6f](https://github.com/dustinblackman/oatmeal/commit/ac5db6f1804adfa70758a8e29743bd6ae6ae4c14))
+- Homebrew tap - ([77a8ded](https://github.com/dustinblackman/oatmeal/commit/77a8ded3a710f5d91e72645eca39146dd443cfdb))
+
+### ⚙️ Miscellaneous Tasks
+
+- Clean docs - ([b34a8ba](https://github.com/dustinblackman/oatmeal/commit/b34a8baea10d5ad7308ee6792213b248a01bda38))
+
 ## [0.2.1] - 2023-11-09
 
 [v0.2.0...v0.2.1](https://github.com/dustinblackman/oatmeal/compare/v0.2.0...v0.2.1)
+
+### ⛰️ Features
+
+- Release v0.2.1 - ([0e9d779](https://github.com/dustinblackman/oatmeal/commit/0e9d779340194b8da0c659b0f7d863266f1b29fb))
 
 ### 🐛 Bug Fixes
 

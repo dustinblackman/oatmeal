@@ -39,19 +39,10 @@ brews:
     description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
     test: |
       system "#{bin}/oatmeal --version"
-    install: |
-      # Install oatmeal
-      bin.install "oatmeal"
-
-      # Install shell completions
-      output = Utils.safe_popen_read("#{bin}/oatmeal", "completions", "-s", "bash")
-      (bash_completion/"oatmeal").write output
-
-      output = Utils.safe_popen_read("#{bin}/oatmeal", "completions", "-s", "zsh")
-      (zsh_completion/"_oatmeal").write output
-
-      output = Utils.safe_popen_read("#{bin}/oatmeal", "completions", "-s", "fish")
-      (fish_completion/"oatmeal.fish").write output
+    extra_install: |-
+      bash_completion.install "completions/oatmeal.bash" => "oatmeal"
+      zsh_completion.install "completions/oatmeal.zsh" => "_oatmeal"
+      fish_completion.install "completions/oatmeal.fish"
 
 scoop:
   bucket:

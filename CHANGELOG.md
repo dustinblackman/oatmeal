@@ -2,9 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.3] - 2023-11-10
+
+[v0.2.2...v0.2.3](https://github.com/dustinblackman/oatmeal/compare/v0.2.2...v0.2.3)
+
+### 🐛 Bug Fixes
+
+- Homebrew tap - ([c39b273](https://github.com/dustinblackman/oatmeal/commit/c39b273205a6147d453e390052df2e641208fb77))
+
 ## [0.2.2] - 2023-11-10
 
 [v0.2.1...v0.2.2](https://github.com/dustinblackman/oatmeal/compare/v0.2.1...v0.2.2)
+
+### ⛰️ Features
+
+- Release v0.2.2 - ([2c9afe1](https://github.com/dustinblackman/oatmeal/commit/2c9afe1b6decab4001f022a002203f5d941752c3))
 
 ### 🐛 Bug Fixes
 

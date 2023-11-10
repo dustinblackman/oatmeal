@@ -7,16 +7,29 @@ mod domain;
 mod infrastructure;
 
 use std::env;
+use std::process;
 
+use anyhow::anyhow;
+use anyhow::Result;
 use config::Config;
 use config::ConfigKey;
 use domain::models::Action;
 use domain::services::clipboard::ClipboardService;
+use owo_colors::OwoColorize;
 use tokio::sync::mpsc;
+use tokio::task;
 
 use crate::application::cli;
 use crate::application::ui;
 use crate::domain::services::actions::ActionsService;
+
+async fn flatten<T>(handle: task::JoinHandle<Result<T>>) -> Result<()> {
+    return match handle.await {
+        Ok(Ok(_result)) => Ok(()),
+        Ok(Err(err)) => Err(err),
+        Err(err) => Err(anyhow!(format!("Failed flatten handle: {:?}", err))),
+    };
+}
 
 #[tokio::main]
 async fn main() {
@@ -34,14 +47,48 @@ async fn main() {
     let (action_tx, mut ui_rx) = mpsc::unbounded_channel::<Action>();
     let (ui_tx, mut action_rx) = mpsc::unbounded_channel::<Action>();
 
-    tokio::spawn(async move {
-        ActionsService::start(action_tx, &mut action_rx)
-            .await
-            .unwrap();
+    let actions_future = tokio::spawn(async move {
+        return ActionsService::start(action_tx, &mut action_rx).await;
     });
-    tokio::spawn(async move {
-        ClipboardService::start().await.unwrap();
+    let clipboard_future = tokio::spawn(async move {
+        return ClipboardService::start().await;
     });
+    let ui_future = ui::start(ui_tx, &mut ui_rx);
 
-    ui::start(ui_tx, &mut ui_rx).await.unwrap();
+    let res = tokio::select!(
+        res = flatten(actions_future) => res,
+        res = flatten(clipboard_future) => res,
+        res = ui_future => res,
+    );
+
+    if res.is_err() {
+        ui::destruct_terminal_for_panic();
+
+        let err = res.unwrap_err();
+        eprintln!(
+            "{}",
+            format!(
+                "Oh no! Oatmeal has failed with the following app version and error.\n\nVersion: {}\nCommit: {}\nError: {}",
+                env!("CARGO_PKG_VERSION"),
+                env!("VERGEN_GIT_DESCRIBE"),
+                err
+            )
+            .red()
+        );
+
+        let backtrace = err.backtrace();
+        if backtrace.to_string() == "disabled backtrace" {
+            let args = env::args().collect::<Vec<String>>().join(" ");
+            eprintln!(
+                "\nTo report a bug, please rerun your command with the following to print stack traces:"
+            );
+            eprintln!("\nRUST_BACKTRACE=1 {args}");
+        } else {
+            eprintln!("\n{}", backtrace);
+        }
+
+        process::exit(1);
+    }
+
+    process::exit(0);
 }

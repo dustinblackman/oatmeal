@@ -30,7 +30,7 @@ dev = []
 members = ["tools/xtask"]
 
 [dependencies]
-anyhow = "=1.0.75"
+anyhow = { version = "=1.0.75", features = ["backtrace"] }
 arboard = "=3.2.1"
 async-trait = "=0.1.74"
 base64 = "=0.21.5"

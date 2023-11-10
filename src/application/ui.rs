@@ -6,6 +6,7 @@ use crossterm::event::DisableMouseCapture;
 use crossterm::event::EnableMouseCapture;
 use crossterm::terminal::disable_raw_mode;
 use crossterm::terminal::enable_raw_mode;
+use crossterm::terminal::is_raw_mode_enabled;
 use crossterm::terminal::EnterAlternateScreen;
 use crossterm::terminal::LeaveAlternateScreen;
 use ratatui::backend::CrosstermBackend;
@@ -179,9 +180,11 @@ async fn start_loop<B: Backend>(
 }
 
 pub fn destruct_terminal_for_panic() {
-    disable_raw_mode().unwrap();
-    crossterm::execute!(io::stdout(), LeaveAlternateScreen, DisableMouseCapture).unwrap();
-    crossterm::execute!(io::stdout(), cursor::Show).unwrap();
+    if is_raw_mode_enabled().unwrap() {
+        disable_raw_mode().unwrap();
+        crossterm::execute!(io::stdout(), LeaveAlternateScreen, DisableMouseCapture).unwrap();
+        crossterm::execute!(io::stdout(), cursor::Show).unwrap();
+    }
 }
 
 pub async fn start(

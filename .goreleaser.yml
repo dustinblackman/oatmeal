@@ -31,7 +31,7 @@ signs:
     args: ["-u", "6A34CFEE77FE8257C3BB92FE24C3FC5D6987904B", "--output", "${signature}", "--detach-sign", "${artifact}"]
 
 brews:
-  - tap:
+  - repository:
       owner: dustinblackman
       name: homebrew-tap
     folder: Formula
@@ -44,8 +44,8 @@ brews:
       zsh_completion.install "completions/oatmeal.zsh" => "_oatmeal"
       fish_completion.install "completions/oatmeal.fish"
 
-scoop:
-  bucket:
+scoops:
+- repository:
     owner: dustinblackman
     name: scoop-bucket
   homepage: https://github.com/dustinblackman/oatmeal

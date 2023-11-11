@@ -116,7 +116,7 @@ goreleaser = '''set -e
   export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
 
   cargo cmd build-completions
-  AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --rm-dist
+  AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --clean
   cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | cargo gha gh release edit "v$OM_VERSION" --notes-file -
   cargo publish --no-verify
   tools/apt.sh "$OM_VERSION" "$(realpath dist)"
@@ -150,7 +150,9 @@ setup-nightly = '''
 
 release = '''set -e
   docker ps >/dev/null || (echo "Docker is not running" && exit 1)
+  cargo gha goreleaser check
   cargo check
+  cargo cmd lint
   cargo cmd thirdparty
 
   export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')

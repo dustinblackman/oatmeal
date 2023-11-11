@@ -113,6 +113,7 @@ impl Backend for OpenAI {
     async fn list_models(&self) -> Result<Vec<String>> {
         let res = reqwest::Client::new()
             .get(format!("{url}/v1/models", url = self.url))
+            .header("Authorization", format!("Bearer {}", self.token))
             .send()
             .await?
             .json::<ModelListResponse>()
@@ -154,6 +155,7 @@ impl Backend for OpenAI {
 
         let res = reqwest::Client::new()
             .post(format!("{url}/v1/chat/completions", url = self.url))
+            .header("Authorization", format!("Bearer {}", self.token))
             .json(&req)
             .send()
             .await?;

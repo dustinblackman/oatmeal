@@ -86,15 +86,16 @@ async fn it_lists_models() -> Result<()> {
     let mut server = mockito::Server::new();
     let mock = server
         .mock("GET", "/v1/models")
+        .match_header("Authorization", "Bearer abc")
         .with_status(200)
         .with_body(body)
         .create();
 
     let backend = OpenAI::with_url(server.url());
     let res = backend.list_models().await?;
+    mock.assert();
 
     assert_eq!(res, vec!["first".to_string(), "second".to_string()]);
-    mock.assert();
 
     return Ok(());
 }
@@ -129,6 +130,7 @@ async fn it_gets_completions() -> Result<()> {
     let mut server = mockito::Server::new();
     let mock = server
         .mock("POST", "/v1/chat/completions")
+        .match_header("Authorization", "Bearer abc")
         .with_status(200)
         .with_body(body)
         .create();

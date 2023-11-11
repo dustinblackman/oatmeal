@@ -2,9 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.4] - 2023-11-11
+
+[v0.2.3...v0.2.4](https://github.com/dustinblackman/oatmeal/compare/v0.2.3...v0.2.4)
+
+### 🐛 Bug Fixes
+
+- OpenAI authorization - ([a71c3aa](https://github.com/dustinblackman/oatmeal/commit/a71c3aa2d45375c5cb8498b66a49a88ed08c9c3c))
+
+### ⚙️ Miscellaneous Tasks
+
+- Update banner - ([48c78b5](https://github.com/dustinblackman/oatmeal/commit/48c78b54387e9a95dab4a86e396a32885196ccee))
+
 ## [0.2.3] - 2023-11-10
 
 [v0.2.2...v0.2.3](https://github.com/dustinblackman/oatmeal/compare/v0.2.2...v0.2.3)
+
+### ⛰️ Features
+
+- Release v0.2.3 - ([b969b7c](https://github.com/dustinblackman/oatmeal/commit/b969b7c4e8dd3e5c78941f4594a2fbf1f6994c63))
 
 ### 🐛 Bug Fixes
 

@@ -67,7 +67,7 @@ pub trait Editor {
     /// selected lines, and full code blocks.
     async fn get_context(&self) -> Result<Option<EditorContext>>;
 
-    /// If required, clear_context is called when Oatmeal exists to do any
+    /// If required, clear_context is called when Oatmeal exits to do any
     /// necessary cleanup in the editor.
     async fn clear_context(&self) -> Result<()>;
 

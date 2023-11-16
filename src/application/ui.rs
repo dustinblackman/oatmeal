@@ -210,7 +210,10 @@ pub async fn start(
 
     start_loop(&mut terminal, &mut app_state, tx, rx).await?;
     if !editor_name.is_empty() {
-        EditorManager::get(&editor_name)?.clear_context().await?;
+        let editor = EditorManager::get(&editor_name)?;
+        if editor.health_check().await.is_ok() {
+            editor.clear_context().await?;
+        }
     }
 
     disable_raw_mode()?;

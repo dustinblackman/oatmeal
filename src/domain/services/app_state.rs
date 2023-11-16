@@ -1,3 +1,4 @@
+use anyhow::anyhow;
 use anyhow::Result;
 use ratatui::prelude::Rect;
 use tokio::sync::mpsc;
@@ -56,34 +57,6 @@ impl<'a> AppState<'a> {
         };
 
         let backend = BackendManager::get(backend_name)?;
-        let editor_res = EditorManager::get(editor_name);
-
-        if let Ok(editor) = editor_res {
-            let editor_context_op = editor.get_context().await?;
-            if let Some(editor_context) = editor_context_op {
-                let formatted = editor_context.format();
-                app_state.editor_context = Some(editor_context);
-
-                app_state.messages.push(Message::new(
-                    Author::Model,
-                    &format!(
-                        "Hey there! Let's talk about the following: \n\n{}",
-                        formatted
-                    ),
-                ));
-            } else {
-                app_state.messages.push(Message::new(
-                    Author::Model,
-                    "Hey there! What can I do for you?",
-                ));
-            }
-        } else {
-            app_state.messages.push(Message::new(
-                Author::Model,
-                "Hey there! What can I do for you?",
-            ));
-        }
-
         if let Err(err) = backend.health_check().await {
             app_state
                 .messages
@@ -105,7 +78,55 @@ impl<'a> AppState<'a> {
             }
         }
 
+        // Fallback to the default intro message when there's no editor context.
+        if app_state.add_editor_context(editor_name).await.is_err() {
+            app_state.messages.push(Message::new(
+                Author::Model,
+                "Hey there! What can I do for you?",
+            ));
+        }
+
         return Ok(app_state);
+    }
+
+    async fn add_editor_context(&mut self, editor_name: &str) -> Result<()> {
+        if editor_name.is_empty() {
+            return Err(anyhow!("Editor name not set."));
+        }
+
+        let editor_res = EditorManager::get(editor_name);
+        if editor_res.is_err() {
+            return Err(anyhow!("Failed to load editor from manager"));
+        }
+
+        let editor = editor_res.unwrap();
+        if let Err(err) = editor.health_check().await {
+            self
+                .messages
+                .push(Message::new_with_type(
+                    Author::Oatmeal,
+                    MessageType::Error,
+                    &format!("Whoops, it looks like editor {editor_name} isn't setup properly. You should double check that before we start talking, otherwise I may crash.\n\nError: {err}"),
+                ));
+
+            return Ok(());
+        }
+
+        if let Some(editor_context) = editor.get_context().await? {
+            let formatted = editor_context.format();
+            self.editor_context = Some(editor_context);
+            self.messages.push(Message::new(
+                Author::Model,
+                &format!(
+                    "Hey there! Let's talk about the following: \n\n{}",
+                    formatted
+                ),
+            ));
+
+            return Ok(());
+        } else {
+            return Err(anyhow!("No editor context"));
+        }
     }
 
     pub fn handle_backend_response(&mut self, msg: BackendResponse) {

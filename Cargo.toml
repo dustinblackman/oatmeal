@@ -108,7 +108,7 @@ dev = '''set -e
 
 dev-install = '''set -e
   cargo build
-  sudo rm /usr/local/bin/oatmeal
+  sudo rm -f /usr/local/bin/oatmeal
   sudo mv ./target/debug/oatmeal /usr/local/bin/
 '''
 

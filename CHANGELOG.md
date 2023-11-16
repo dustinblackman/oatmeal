@@ -2,9 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.5] - 2023-11-16
+
+[v0.2.4...v0.2.5](https://github.com/dustinblackman/oatmeal/compare/v0.2.4...v0.2.5)
+
+### 🐛 Bug Fixes
+
+- Editor healthcheck management - ([a32d7c8](https://github.com/dustinblackman/oatmeal/commit/a32d7c8a5c90e6a26ce551c7d818b38737a696d9))
+- Trait docs - ([2b2abe5](https://github.com/dustinblackman/oatmeal/commit/2b2abe5e8548fd43296d7b5453733b003d688036))
+- Goreleaser deprecations - ([d7cc1c3](https://github.com/dustinblackman/oatmeal/commit/d7cc1c3c373142921f409befc1f754456265893f))
+
 ## [0.2.4] - 2023-11-11
 
 [v0.2.3...v0.2.4](https://github.com/dustinblackman/oatmeal/compare/v0.2.3...v0.2.4)
+
+### ⛰️ Features
+
+- Release v0.2.4 - ([cd411c3](https://github.com/dustinblackman/oatmeal/commit/cd411c349e98920187ec49c45c451421ef2b5e5a))
 
 ### 🐛 Bug Fixes
 

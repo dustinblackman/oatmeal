@@ -176,7 +176,7 @@ async fn start_loop<B: Backend>(
                 let last_message = app_state
                     .messages
                     .iter()
-                    .filter(|message| message.author == Author::User)
+                    .filter(|message| return message.author == Author::User)
                     .last();
                 if let Some(message) = last_message.cloned() {
                     send_user_message!(&message.text);

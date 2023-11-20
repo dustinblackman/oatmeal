@@ -103,43 +103,11 @@ async fn start_loop<B: Backend>(
             continue;
         }
 
-        match crossterm::event::read()?.into() {
-            Input { key: Key::Down, .. } => {
-                app_state.scroll.down();
-            }
-            Input { key: Key::Up, .. } => {
-                app_state.scroll.up();
-            }
-            Input {
-                key: Key::Char('d'),
-                ctrl: true,
-                ..
-            } => {
-                app_state.scroll.down_page();
-            }
-            Input {
-                key: Key::Char('u'),
-                ctrl: true,
-                ..
-            } => {
-                app_state.scroll.up_page();
-            }
-            Input {
-                key: Key::Char('c'),
-                ctrl: true,
-                ..
-            } => {
-                break;
-            }
-            Input {
-                key: Key::Enter, ..
-            } => {
-                let input_str = &textarea.lines().join("\n");
-                if input_str.is_empty() {
-                    continue;
-                }
+        macro_rules! send_user_message {
+            ( $input_str:expr ) => {
+                let input_str = $input_str;
 
-                let msg = Message::new(Author::User, input_str);
+                let msg = Message::new(Author::User, &input_str);
                 textarea = TextArea::default();
                 app_state.add_message(msg);
 
@@ -169,6 +137,59 @@ async fn start_loop<B: Backend>(
                 }
 
                 tx.send(Action::BackendRequest(prompt))?;
+            };
+        }
+
+        match crossterm::event::read()?.into() {
+            Input { key: Key::Down, .. } => {
+                app_state.scroll.down();
+            }
+            Input { key: Key::Up, .. } => {
+                app_state.scroll.up();
+            }
+            Input {
+                key: Key::Char('d'),
+                ctrl: true,
+                ..
+            } => {
+                app_state.scroll.down_page();
+            }
+            Input {
+                key: Key::Char('u'),
+                ctrl: true,
+                ..
+            } => {
+                app_state.scroll.up_page();
+            }
+            Input {
+                key: Key::Char('c'),
+                ctrl: true,
+                ..
+            } => {
+                break;
+            }
+            Input {
+                key: Key::Char('r'),
+                ctrl: true,
+                ..
+            } => {
+                let last_message = app_state
+                    .messages
+                    .iter()
+                    .filter(|message| return message.author == Author::User)
+                    .last();
+                if let Some(message) = last_message.cloned() {
+                    send_user_message!(&message.text);
+                }
+            }
+            Input {
+                key: Key::Enter, ..
+            } => {
+                let input_str = &textarea.lines().join("\n");
+                if input_str.is_empty() {
+                    continue;
+                }
+                send_user_message!(input_str);
             }
             input => {
                 textarea.input(input);

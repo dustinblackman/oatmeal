@@ -103,6 +103,43 @@ async fn start_loop<B: Backend>(
             continue;
         }
 
+        macro_rules! send_user_message {
+            ( $input_str:expr ) => {
+                let input_str = $input_str;
+
+                let msg = Message::new(Author::User, &input_str);
+                textarea = TextArea::default();
+                app_state.add_message(msg);
+
+                let (should_break, should_continue) =
+                    app_state.handle_slash_commands(input_str, &tx)?;
+                if should_break {
+                    break;
+                }
+                if should_continue {
+                    continue;
+                }
+
+                app_state.waiting_for_backend = true;
+                let mut prompt =
+                    BackendPrompt::new(input_str.to_string(), app_state.backend_context.clone());
+
+                let user_messages_length = app_state
+                    .messages
+                    .iter()
+                    .filter(|m| {
+                        return m.author == Author::User && SlashCommand::parse(&m.text).is_none();
+                    })
+                    .collect::<Vec<_>>()
+                    .len();
+                if user_messages_length == 1 {
+                    prompt.append_system_prompt(&app_state.editor_context);
+                }
+
+                tx.send(Action::BackendRequest(prompt))?;
+            };
+        }
+
         match crossterm::event::read()?.into() {
             Input { key: Key::Down, .. } => {
                 app_state.scroll.down();
@@ -138,37 +175,7 @@ async fn start_loop<B: Backend>(
                 if input_str.is_empty() {
                     continue;
                 }
-
-                let msg = Message::new(Author::User, input_str);
-                textarea = TextArea::default();
-                app_state.add_message(msg);
-
-                let (should_break, should_continue) =
-                    app_state.handle_slash_commands(input_str, &tx)?;
-                if should_break {
-                    break;
-                }
-                if should_continue {
-                    continue;
-                }
-
-                app_state.waiting_for_backend = true;
-                let mut prompt =
-                    BackendPrompt::new(input_str.to_string(), app_state.backend_context.clone());
-
-                let user_messages_length = app_state
-                    .messages
-                    .iter()
-                    .filter(|m| {
-                        return m.author == Author::User && SlashCommand::parse(&m.text).is_none();
-                    })
-                    .collect::<Vec<_>>()
-                    .len();
-                if user_messages_length == 1 {
-                    prompt.append_system_prompt(&app_state.editor_context);
-                }
-
-                tx.send(Action::BackendRequest(prompt))?;
+                send_user_message!(input_str);
             }
             input => {
                 textarea.input(input);

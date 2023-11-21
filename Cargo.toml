@@ -153,6 +153,7 @@ release = '''set -e
   cargo gha goreleaser check
   cargo check
   cargo cmd lint
+  cargo cmd test
   cargo cmd thirdparty
 
   export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')

@@ -85,7 +85,7 @@ yay -S oatmeal-bin
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.2.5
+choco install oatmeal --version=0.3.0
 ```
 
 <!-- choco-install end -->
@@ -128,8 +128,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.2.5
-Commit: v0.2.5
+Version: 0.3.0
+Commit: v0.3.0
 
 Usage: oatmeal [OPTIONS]
 
@@ -150,7 +150,7 @@ CHAT COMMANDS:
   - /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
   - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
   - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
-  - /quit (/q) - Exit Oatmeal.
+  - /quit /exit (/q) - Exit Oatmeal.
   - /help (/h) - Provides this help menu.
 
 CHAT HOTKEYS:
@@ -158,6 +158,8 @@ CHAT HOTKEYS:
   - Down arrow - Scroll down
   - CTRL+U - Page up
   - CTRL+D - Page down
+  - CTRL+C - Interrupt waiting for prompt response if in progress, otherwise exit.
+  - CTRL+R - Resubmit your last message to the backend.
 
 CHAT CODE ACTIONS:
 When working with models that provide code, and using an editor integration, Oatmeal has the capabilities to read selected code from an editor, and submit model provided code back in to an editor. Each code block provided by a model is indexed with a (NUMBER) at the beginning of the block to make it easily identifiable.

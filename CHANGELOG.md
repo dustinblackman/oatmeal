@@ -2,9 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2023-11-21
+
+[v0.2.5...v0.3.0](https://github.com/dustinblackman/oatmeal/compare/v0.2.5...v0.3.0)
+
+### ⛰️ Features
+
+- Add /exit - ([6e9f019](https://github.com/dustinblackman/oatmeal/commit/6e9f019ea0e7c43b1a7e10e76f5d58bcb0489893))
+- Add aborting backend requests - ([0c75d7d](https://github.com/dustinblackman/oatmeal/commit/0c75d7d56c51cb083979f18de897deeb7a9cebdd))
+- Add keybind to resend last message - ([e49a87d](https://github.com/dustinblackman/oatmeal/commit/e49a87dcc2034aec84a765961ad52203e0c91de0))
+
+### 🐛 Bug Fixes
+
+- Lint - ([8abac94](https://github.com/dustinblackman/oatmeal/commit/8abac947224f170ebbbb81542f54ab5468e249a9))
+
+### 🚜 Refactor
+
+- Move sending user message to local macro - ([f971940](https://github.com/dustinblackman/oatmeal/commit/f9719403cb39411ae7f4ae8272493e6b1f0d665c))
+
+### 📚 Documentation
+
+- CTRL+R - ([b22c4dc](https://github.com/dustinblackman/oatmeal/commit/b22c4dcac9e35311bee900e469e04791594b1b9e))
+
+### ⚙️ Miscellaneous Tasks
+
+- Test before releasing - ([c143cba](https://github.com/dustinblackman/oatmeal/commit/c143cbac6c6711d19cfc54c4228d0d2c77c60c35))
+- Refactor events service - ([e9261f5](https://github.com/dustinblackman/oatmeal/commit/e9261f5ae41a3217626212efb0442dd370edabdb))
+
 ## [0.2.5] - 2023-11-16
 
 [v0.2.4...v0.2.5](https://github.com/dustinblackman/oatmeal/compare/v0.2.4...v0.2.5)
+
+### ⛰️ Features
+
+- Release v0.2.5 - ([dd5bafc](https://github.com/dustinblackman/oatmeal/commit/dd5bafc29b402b0052f641db63e2efdab2635d52))
 
 ### 🐛 Bug Fixes
 

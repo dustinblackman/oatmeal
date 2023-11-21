@@ -64,7 +64,7 @@ pub trait Backend {
     /// Upon receiving all results, a final `done` boolean
     /// is provided as the last message to the channel.
     ///
-    /// In order for a backend to maintain history, a context array is usually
+    /// In order for a backend to maintain history, a context array must be
     /// provided by the backend. This can be passed alongside the `done`
     /// boolean, and will be provided on the next prompt to the backend.
     async fn get_completion<'a>(

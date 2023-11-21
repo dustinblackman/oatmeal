@@ -8,6 +8,7 @@ use super::AppState;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
+use crate::domain::models::BackendResponse;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
 use crate::domain::services::BubbleList;
@@ -180,5 +181,47 @@ mod handle_slash_commands {
         "###);
 
         return Ok(());
+    }
+}
+
+mod handle_backend_response {
+    use super::*;
+
+    #[test]
+    fn it_handles_new_backend_response() {
+        let mut app_state = AppState::default();
+        app_state
+            .messages
+            .push(Message::new(Author::User, "Do something for me!"));
+        let backend_response = BackendResponse {
+            author: Author::Model,
+            text: "All done!".to_string(),
+            done: true,
+            context: Some("icanrememberthingsnow".to_string()),
+        };
+        app_state.handle_backend_response(backend_response);
+
+        assert_eq!(app_state.messages.len(), 2);
+    }
+
+    #[test]
+    fn it_handles_bad_backend_response() {
+        let mut app_state = AppState::default();
+        app_state
+            .messages
+            .push(Message::new(Author::User, "Do something for me!"));
+        let backend_response = BackendResponse {
+            author: Author::Model,
+            text: "All done!".to_string(),
+            done: true,
+            context: Some("".to_string()),
+        };
+        app_state.handle_backend_response(backend_response);
+
+        assert_eq!(app_state.messages.len(), 3);
+        assert_eq!(
+            app_state.messages.last().unwrap().message_type(),
+            MessageType::Error
+        );
     }
 }

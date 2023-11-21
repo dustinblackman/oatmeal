@@ -108,15 +108,8 @@ async fn start_loop<B: Backend>(
                 let mut prompt =
                     BackendPrompt::new(input_str.to_string(), app_state.backend_context.clone());
 
-                let user_messages_length = app_state
-                    .messages
-                    .iter()
-                    .filter(|m| {
-                        return m.author == Author::User && SlashCommand::parse(&m.text).is_none();
-                    })
-                    .collect::<Vec<_>>()
-                    .len();
-                if user_messages_length == 1 {
+                if app_state.backend_context.is_empty() && SlashCommand::parse(&input_str).is_none()
+                {
                     prompt.append_system_prompt(&app_state.editor_context);
                 }
 

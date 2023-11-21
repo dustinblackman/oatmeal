@@ -147,6 +147,15 @@ impl<'a> AppState<'a> {
                 self.backend_context = ctx;
             }
 
+            if self.backend_context.is_empty() {
+                self.add_message(Message::new_with_type(
+                    Author::Oatmeal,
+                    MessageType::Error,
+                    "Error: No context was provided by the backend upon completion. Please report this bug on Github."
+                ));
+                self.sync_dependants();
+            }
+
             self.codeblocks.replace_from_messages(&self.messages);
         }
     }
@@ -208,6 +217,11 @@ impl<'a> AppState<'a> {
             if command.is_copy_chat() {
                 tx.send(Action::CopyMessages(self.messages.clone()))?;
                 self.waiting_for_backend = true;
+            }
+
+            // Reset backend context on model switch.
+            if command.is_model_set() {
+                self.backend_context = "".to_string();
             }
         }
 

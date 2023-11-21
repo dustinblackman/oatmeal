@@ -37,7 +37,7 @@ base64 = "=0.21.5"
 better-panic = "=0.3.0"
 clap = { version = "=4.4.7", features = ["env"] }
 clap_complete = "=4.4.4"
-crossterm = "=0.27.0"
+crossterm = { version = "=0.27.0", features = ["event-stream"] }
 dashmap = "=5.5.3"
 futures = "=0.3.28"
 once_cell = "=1.18.0"

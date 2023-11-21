@@ -15,18 +15,18 @@ use ratatui::widgets::Scrollbar;
 use ratatui::widgets::ScrollbarOrientation;
 use ratatui::Terminal;
 use tokio::sync::mpsc;
-use tui_textarea::Input;
-use tui_textarea::Key;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::BackendPrompt;
+use crate::domain::models::Event;
 use crate::domain::models::Loading;
 use crate::domain::models::Message;
 use crate::domain::models::SlashCommand;
 use crate::domain::models::TextArea;
+use crate::domain::services::events::EventsService;
 use crate::domain::services::AppState;
 use crate::infrastructure::editors::EditorManager;
 
@@ -34,13 +34,17 @@ async fn start_loop<B: Backend>(
     terminal: &mut Terminal<B>,
     app_state: &mut AppState<'_>,
     tx: mpsc::UnboundedSender<Action>,
-    rx: &mut mpsc::UnboundedReceiver<Action>,
+    rx: mpsc::UnboundedReceiver<Event>,
 ) -> Result<()> {
+    let mut events = EventsService::new(rx);
     let mut textarea = TextArea::default();
     let loading = Loading::default();
 
     #[cfg(feature = "dev")]
     {
+        use tui_textarea::Input;
+        use tui_textarea::Key;
+
         let test_str = "Write a function in Java that prints from 0 to 10. Return in markdown, add language to code blocks, describe the example before and after.";
         for char in test_str.chars() {
             textarea.input(Input {
@@ -83,26 +87,6 @@ async fn start_loop<B: Backend>(
             }
         })?;
 
-        if app_state.waiting_for_backend {
-            let event = rx.recv().await;
-            if event.is_none() {
-                continue;
-            }
-
-            match event.unwrap() {
-                Action::BackendResponse(msg) => {
-                    app_state.handle_backend_response(msg);
-                }
-                Action::MessageEvent(msg) => {
-                    app_state.add_message(msg);
-                    app_state.waiting_for_backend = false;
-                }
-                _ => (),
-            }
-
-            continue;
-        }
-
         macro_rules! send_user_message {
             ( $input_str:expr ) => {
                 let input_str = $input_str;
@@ -140,39 +124,21 @@ async fn start_loop<B: Backend>(
             };
         }
 
-        match crossterm::event::read()?.into() {
-            Input { key: Key::Down, .. } => {
-                app_state.scroll.down();
+        match events.next().await? {
+            Event::BackendMessage(msg) => {
+                app_state.add_message(msg);
+                app_state.waiting_for_backend = false;
             }
-            Input { key: Key::Up, .. } => {
-                app_state.scroll.up();
+            Event::BackendPromptResponse(msg) => {
+                app_state.handle_backend_response(msg);
             }
-            Input {
-                key: Key::Char('d'),
-                ctrl: true,
-                ..
-            } => {
-                app_state.scroll.down_page();
+            Event::KeyboardCharInput(input) => {
+                textarea.input(input);
             }
-            Input {
-                key: Key::Char('u'),
-                ctrl: true,
-                ..
-            } => {
-                app_state.scroll.up_page();
-            }
-            Input {
-                key: Key::Char('c'),
-                ctrl: true,
-                ..
-            } => {
+            Event::KeyboardCTRLC() => {
                 break;
             }
-            Input {
-                key: Key::Char('r'),
-                ctrl: true,
-                ..
-            } => {
+            Event::KeyboardCTRLR() => {
                 let last_message = app_state
                     .messages
                     .iter()
@@ -182,17 +148,27 @@ async fn start_loop<B: Backend>(
                     send_user_message!(&message.text);
                 }
             }
-            Input {
-                key: Key::Enter, ..
-            } => {
+            Event::KeyboardEnter() => {
                 let input_str = &textarea.lines().join("\n");
                 if input_str.is_empty() {
                     continue;
                 }
                 send_user_message!(input_str);
             }
-            input => {
-                textarea.input(input);
+            Event::UIResize() => {
+                continue;
+            }
+            Event::UIScrollDown() => {
+                app_state.scroll.down();
+            }
+            Event::UIScrollUp() => {
+                app_state.scroll.up();
+            }
+            Event::UIScrollPageDown() => {
+                app_state.scroll.down_page();
+            }
+            Event::UIScrollPageUp() => {
+                app_state.scroll.up_page();
             }
         }
     }
@@ -210,7 +186,7 @@ pub fn destruct_terminal_for_panic() {
 
 pub async fn start(
     tx: mpsc::UnboundedSender<Action>,
-    rx: &mut mpsc::UnboundedReceiver<Action>,
+    rx: mpsc::UnboundedReceiver<Event>,
 ) -> Result<()> {
     let stdout = io::stdout();
     let mut stdout = stdout.lock();

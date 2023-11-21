@@ -6,11 +6,11 @@ use super::CompletionResponse;
 use super::Model;
 use super::ModelListResponse;
 use super::Ollama;
-use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
 use crate::domain::models::BackendPrompt;
 use crate::domain::models::BackendResponse;
+use crate::domain::models::Event;
 
 impl Ollama {
     fn with_url(url: String) -> Ollama {
@@ -18,9 +18,9 @@ impl Ollama {
     }
 }
 
-fn to_res(action: Option<Action>) -> Result<BackendResponse> {
+fn to_res(action: Option<Event>) -> Result<BackendResponse> {
     let act = match action.unwrap() {
-        Action::BackendResponse(res) => res,
+        Event::BackendPromptResponse(res) => res,
         _ => bail!("Wrong type from recv"),
     };
 
@@ -107,7 +107,7 @@ async fn it_gets_completions() -> Result<()> {
         .with_body(body)
         .create();
 
-    let (tx, mut rx) = mpsc::unbounded_channel::<Action>();
+    let (tx, mut rx) = mpsc::unbounded_channel::<Event>();
 
     let backend = Ollama::with_url(server.url());
     backend.get_completion(prompt, &tx).await?;

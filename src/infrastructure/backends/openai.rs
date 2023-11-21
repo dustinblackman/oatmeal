@@ -16,11 +16,11 @@ use tokio_util::io::StreamReader;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
-use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
 use crate::domain::models::BackendPrompt;
 use crate::domain::models::BackendResponse;
+use crate::domain::models::Event;
 
 fn convert_err(err: reqwest::Error) -> std::io::Error {
     let err_msg = err.to_string();
@@ -136,7 +136,7 @@ impl Backend for OpenAI {
     async fn get_completion<'a>(
         &self,
         prompt: BackendPrompt,
-        tx: &'a mpsc::UnboundedSender<Action>,
+        tx: &'a mpsc::UnboundedSender<Event>,
     ) -> Result<()> {
         let mut messages: Vec<MessageRequest> = vec![];
         if !prompt.backend_context.is_empty() {
@@ -191,7 +191,7 @@ impl Backend for OpenAI {
                 context: None,
             };
 
-            tx.send(Action::BackendResponse(msg))?;
+            tx.send(Event::BackendPromptResponse(msg))?;
         }
 
         messages.push(MessageRequest {
@@ -205,7 +205,7 @@ impl Backend for OpenAI {
             done: true,
             context: Some(serde_json::to_string(&messages)?),
         };
-        tx.send(Action::BackendResponse(msg))?;
+        tx.send(Event::BackendPromptResponse(msg))?;
 
         return Ok(());
     }

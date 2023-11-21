@@ -8,6 +8,7 @@ use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::EditorContext;
+use crate::domain::models::Event;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
 use crate::domain::models::SlashCommand;
@@ -49,7 +50,7 @@ The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to y
     return text.trim().to_string();
 }
 
-async fn model_list(backend: &BackendBox, tx: &mpsc::UnboundedSender<Action>) -> Result<()> {
+async fn model_list(backend: &BackendBox, tx: &mpsc::UnboundedSender<Event>) -> Result<()> {
     let res = backend
         .list_models()
         .await?
@@ -59,7 +60,7 @@ async fn model_list(backend: &BackendBox, tx: &mpsc::UnboundedSender<Action>) ->
         })
         .collect::<Vec<String>>();
 
-    tx.send(Action::MessageEvent(Message::new(
+    tx.send(Event::BackendMessage(Message::new(
         Author::Oatmeal,
         res.join("\n").as_str(),
     )))?;
@@ -69,7 +70,7 @@ async fn model_list(backend: &BackendBox, tx: &mpsc::UnboundedSender<Action>) ->
 
 async fn model_set(
     backend: &BackendBox,
-    tx: &mpsc::UnboundedSender<Action>,
+    tx: &mpsc::UnboundedSender<Event>,
     text: &str,
 ) -> Result<()> {
     let model_name = text.split(' ').last().unwrap().to_string();
@@ -79,7 +80,7 @@ async fn model_set(
             MessageType::Error,
             "You must specify a model name with `/model` or `/m`. Run `/help` more details.",
         );
-        tx.send(Action::MessageEvent(msg))?;
+        tx.send(Event::BackendMessage(msg))?;
         return Ok(());
     }
 
@@ -94,13 +95,13 @@ async fn model_set(
                 "No model named {model_name} found in backend {backend_name}. Did you mistype it?"
             ),
         );
-        tx.send(Action::MessageEvent(msg))?;
+        tx.send(Event::BackendMessage(msg))?;
         return Ok(());
     }
 
     Config::set(ConfigKey::Model, &model_name);
 
-    tx.send(Action::MessageEvent(Message::new(
+    tx.send(Event::BackendMessage(Message::new(
         Author::Model,
         &format!("{model_name} has entered the chat."),
     )))?;
@@ -133,7 +134,7 @@ async fn accept_codeblock(
     return Ok(());
 }
 
-fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Action>) -> Result<()> {
+fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Event>) -> Result<()> {
     if messages.len() == 1 {
         ClipboardService::set(messages[0].text.to_string())?;
     } else {
@@ -148,7 +149,7 @@ fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Action>) -> 
         ClipboardService::set(formatted)?;
     }
 
-    tx.send(Action::MessageEvent(Message::new(
+    tx.send(Event::BackendMessage(Message::new(
         Author::Oatmeal,
         "Copied chat log to clipboard.",
     )))?;
@@ -156,8 +157,8 @@ fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Action>) -> 
     return Ok(());
 }
 
-fn help(tx: &mpsc::UnboundedSender<Action>) -> Result<()> {
-    tx.send(Action::MessageEvent(Message::new(
+fn help(tx: &mpsc::UnboundedSender<Event>) -> Result<()> {
+    tx.send(Event::BackendMessage(Message::new(
         Author::Oatmeal,
         &help_text(),
     )))?;
@@ -169,7 +170,7 @@ pub struct ActionsService {}
 
 impl ActionsService {
     pub async fn start(
-        tx: mpsc::UnboundedSender<Action>,
+        tx: mpsc::UnboundedSender<Event>,
         rx: &mut mpsc::UnboundedReceiver<Action>,
     ) -> Result<()> {
         let backend = BackendManager::get(&Config::get(ConfigKey::Backend))?;
@@ -205,7 +206,6 @@ impl ActionsService {
 
                     backend.get_completion(prompt, &tx).await?;
                 }
-                _ => {}
             }
         }
     }

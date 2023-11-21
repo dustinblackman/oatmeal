@@ -3,6 +3,7 @@ mod app_state;
 mod bubble_list;
 pub mod clipboard;
 mod code_blocks;
+pub mod events;
 mod scroll;
 mod themes;
 

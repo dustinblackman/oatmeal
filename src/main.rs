@@ -14,6 +14,7 @@ use anyhow::Result;
 use config::Config;
 use config::ConfigKey;
 use domain::models::Action;
+use domain::models::Event;
 use domain::services::clipboard::ClipboardService;
 use owo_colors::OwoColorize;
 use tokio::sync::mpsc;
@@ -44,16 +45,16 @@ async fn main() {
     );
     cli::parse();
 
-    let (action_tx, mut ui_rx) = mpsc::unbounded_channel::<Action>();
-    let (ui_tx, mut action_rx) = mpsc::unbounded_channel::<Action>();
+    let (action_tx, mut action_rx) = mpsc::unbounded_channel::<Action>();
+    let (event_tx, event_rx) = mpsc::unbounded_channel::<Event>();
 
     let actions_future = tokio::spawn(async move {
-        return ActionsService::start(action_tx, &mut action_rx).await;
+        return ActionsService::start(event_tx, &mut action_rx).await;
     });
     let clipboard_future = tokio::spawn(async move {
         return ClipboardService::start().await;
     });
-    let ui_future = ui::start(ui_tx, &mut ui_rx);
+    let ui_future = ui::start(action_tx, event_rx);
 
     let res = tokio::select!(
         res = flatten(actions_future) => res,

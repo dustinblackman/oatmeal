@@ -6,9 +6,9 @@ use anyhow::Result;
 use async_trait::async_trait;
 use tokio::sync::mpsc;
 
-use super::Action;
 use super::Author;
 use super::EditorContext;
+use super::Event;
 
 pub struct BackendPrompt {
     pub text: String,
@@ -70,6 +70,6 @@ pub trait Backend {
     async fn get_completion<'a>(
         &self,
         prompt: BackendPrompt,
-        tx: &'a mpsc::UnboundedSender<Action>,
+        tx: &'a mpsc::UnboundedSender<Event>,
     ) -> Result<()>;
 }

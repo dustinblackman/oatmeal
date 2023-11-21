@@ -16,11 +16,11 @@ use tokio_util::io::StreamReader;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
-use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
 use crate::domain::models::BackendPrompt;
 use crate::domain::models::BackendResponse;
+use crate::domain::models::Event;
 
 fn convert_err(err: reqwest::Error) -> std::io::Error {
     let err_msg = err.to_string();
@@ -110,7 +110,7 @@ impl Backend for Ollama {
     async fn get_completion<'a>(
         &self,
         prompt: BackendPrompt,
-        tx: &'a mpsc::UnboundedSender<Action>,
+        tx: &'a mpsc::UnboundedSender<Event>,
     ) -> Result<()> {
         let mut req = CompletionRequest {
             model: Config::get(ConfigKey::Model),
@@ -151,7 +151,7 @@ impl Backend for Ollama {
                 msg.context = Some(serde_json::to_string(&ores.context)?);
             }
 
-            tx.send(Action::BackendResponse(msg))?;
+            tx.send(Event::BackendPromptResponse(msg))?;
         }
 
         return Ok(());

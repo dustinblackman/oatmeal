@@ -151,7 +151,10 @@ async fn start_loop<B: Backend>(
                 let last_message = app_state
                     .messages
                     .iter()
-                    .filter(|message| return message.author == Author::User)
+                    .filter(|msg| {
+                        return msg.author == Author::User
+                            && SlashCommand::parse(&msg.text).is_none();
+                    })
                     .last();
                 if let Some(message) = last_message.cloned() {
                     send_user_message!(&message.text);

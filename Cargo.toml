@@ -103,7 +103,7 @@ build-completions = '''set -e
 '''
 
 dev = '''set -e
-  cargo watch -i .cargo -s 'cargo run --features dev'
+  cargo watch -i .cargo -s 'cargo run --features dev -- --model=codellama:latest'
 '''
 
 dev-install = '''set -e

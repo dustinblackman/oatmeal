@@ -133,10 +133,26 @@ async fn start_loop<B: Backend>(
                 app_state.handle_backend_response(msg);
             }
             Event::KeyboardCharInput(input) => {
+                if app_state.waiting_for_backend {
+                    continue;
+                }
+
+                app_state.exit_warning = false;
                 textarea.input(input);
             }
             Event::KeyboardCTRLC() => {
-                break;
+                if app_state.waiting_for_backend {
+                    app_state.waiting_for_backend = false;
+                    tx.send(Action::BackendAbort())?;
+                } else if !app_state.exit_warning {
+                    app_state.add_message(Message::new(
+                        Author::Oatmeal,
+                        "If you wish to quit, hit CTRL+C one more time, or use /quit",
+                    ));
+                    app_state.exit_warning = true;
+                } else {
+                    break;
+                }
             }
             Event::KeyboardCTRLR() => {
                 let last_message = app_state
@@ -149,6 +165,9 @@ async fn start_loop<B: Backend>(
                 }
             }
             Event::KeyboardEnter() => {
+                if app_state.waiting_for_backend {
+                    continue;
+                }
                 let input_str = &textarea.lines().join("\n");
                 if input_str.is_empty() {
                     continue;

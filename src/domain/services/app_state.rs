@@ -32,6 +32,7 @@ pub struct AppState<'a> {
     pub messages: Vec<Message>,
     pub scroll: Scroll,
     pub waiting_for_backend: bool,
+    pub exit_warning: bool,
 }
 
 impl<'a> AppState<'a> {
@@ -52,6 +53,7 @@ impl<'a> AppState<'a> {
             waiting_for_backend: false,
             scroll: Scroll::default(),
             editor_context: None,
+            exit_warning: false,
             last_known_width: 0,
             last_known_height: 0,
         };

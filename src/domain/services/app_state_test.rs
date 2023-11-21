@@ -26,6 +26,7 @@ impl Default for AppState<'static> {
             waiting_for_backend: false,
             scroll: Scroll::default(),
             editor_context: None,
+            exit_warning: false,
             last_known_width: 100,
             last_known_height: 300,
         };

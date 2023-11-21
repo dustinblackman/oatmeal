@@ -1,5 +1,6 @@
 use anyhow::Result;
 use tokio::sync::mpsc;
+use tokio::task::JoinHandle;
 
 use super::clipboard::ClipboardService;
 use crate::config::Config;
@@ -32,6 +33,7 @@ HOTKEYS:
 - Down arrow - Scroll down
 - CTRL+U - Page up
 - CTRL+D - Page down
+- CTRL+C - Interrupt waiting for prompt response if in progress, otherwise exit.
 - CTRL+R - Resubmit your last message to the backend.
 
 CODE ACTIONS:
@@ -158,6 +160,16 @@ fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Event>) -> R
     return Ok(());
 }
 
+fn worker_error(err: anyhow::Error, tx: &mpsc::UnboundedSender<Event>) -> Result<()> {
+    tx.send(Event::BackendMessage(Message::new_with_type(
+        Author::Oatmeal,
+        MessageType::Error,
+        &format!("The backend failed with the following error: {:?}", err),
+    )))?;
+
+    return Ok(());
+}
+
 fn help(tx: &mpsc::UnboundedSender<Event>) -> Result<()> {
     tx.send(Event::BackendMessage(Message::new(
         Author::Oatmeal,
@@ -176,18 +188,27 @@ impl ActionsService {
     ) -> Result<()> {
         let backend = BackendManager::get(&Config::get(ConfigKey::Backend))?;
 
+        // Lazy default.
+        let mut worker: JoinHandle<Result<()>> = tokio::spawn(async {
+            return Ok(());
+        });
+
         loop {
             let event = rx.recv().await;
             if event.is_none() {
                 continue;
             }
 
+            let worker_tx = tx.clone();
             match event.unwrap() {
                 Action::AcceptCodeBlock(context, codeblock, accept_type) => {
                     accept_codeblock(context, codeblock, accept_type).await?;
                 }
                 Action::CopyMessages(messages) => {
                     copy_messages(messages, &tx)?;
+                }
+                Action::BackendAbort() => {
+                    worker.abort();
                 }
                 Action::BackendRequest(prompt) => {
                     if let Some(command) = SlashCommand::parse(&prompt.text) {
@@ -205,7 +226,17 @@ impl ActionsService {
                         }
                     }
 
-                    backend.get_completion(prompt, &tx).await?;
+                    worker = tokio::spawn(async move {
+                        let res = BackendManager::get(&Config::get(ConfigKey::Backend))?
+                            .get_completion(prompt, &worker_tx)
+                            .await;
+
+                        if let Err(err) = res {
+                            worker_error(err, &worker_tx)?;
+                        }
+
+                        return Ok(());
+                    });
                 }
             }
         }

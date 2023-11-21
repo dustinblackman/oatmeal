@@ -37,7 +37,7 @@ impl SlashCommand {
     }
 
     pub fn is_quit(&self) -> bool {
-        return ["/q", "/quit"].contains(&self.command.as_str());
+        return ["/q", "/quit", "/exit"].contains(&self.command.as_str());
     }
 
     pub fn is_model_list(&self) -> bool {

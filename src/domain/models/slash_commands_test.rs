@@ -39,6 +39,11 @@ fn it_is_quit() {
     assert!(cmd.is_quit());
 }
 #[test]
+fn it_is_exit() {
+    let cmd = SlashCommand::parse("/exit").unwrap();
+    assert!(cmd.is_quit());
+}
+#[test]
 fn it_is_not_is_quit() {
     let cmd = SlashCommand::parse("/ml").unwrap();
     assert!(!cmd.is_quit());

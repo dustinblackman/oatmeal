@@ -32,6 +32,7 @@ HOTKEYS:
 - Down arrow - Scroll down
 - CTRL+U - Page up
 - CTRL+D - Page down
+- CTRL+R - Resubmit your last message to the backend.
 
 CODE ACTIONS:
 When working with models that provide code, and using an editor integration, Oatmeal has the capabilities to read selected code from an editor, and submit model provided code back in to an editor. Each code block provided by a model is indexed with a (NUMBER) at the beginning of the block to make it easily identifiable.

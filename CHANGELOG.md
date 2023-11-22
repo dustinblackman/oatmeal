@@ -2,12 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2023-11-22
+
+[v0.3.0...v0.4.0](https://github.com/dustinblackman/oatmeal/compare/v0.3.0...v0.4.0)
+
+### ⛰️ Features
+
+- Add sessions ([#3](https://github.com/dustinblackman/oatmeal/issues/3)) - ([c7d4bed](https://github.com/dustinblackman/oatmeal/commit/c7d4bedbd471b913c73122ecf00359faef6c3c08))
+- Add syntaxes service, new languages - ([3fbe54d](https://github.com/dustinblackman/oatmeal/commit/3fbe54de5801f1149a11b442069fdf82858b6a4d))
+- Add aarch64-pc-windows-msvc releases - ([0f6558e](https://github.com/dustinblackman/oatmeal/commit/0f6558eca95e653fcbe0813bffa3380920a954ad))
+
+### 🐛 Bug Fixes
+
+- Exclude cache from lint - ([4ec6a4b](https://github.com/dustinblackman/oatmeal/commit/4ec6a4bdf8ea0998be716b302979925e2a442b93))
+- Slash commands being sent to backend by accident - ([93e9a4b](https://github.com/dustinblackman/oatmeal/commit/93e9a4b6b1a9427724453f9aaf4b1d9841ee76c3))
+- Ignore slash commands when using CTRL+R - ([64924d4](https://github.com/dustinblackman/oatmeal/commit/64924d47a4f77e61f81547b2893545971c094263))
+- Clear backend context when switching models - ([3b8f7c8](https://github.com/dustinblackman/oatmeal/commit/3b8f7c89df5349b30ecd6b9aace9c30f4c27195c))
+
+### 📚 Documentation
+
+- Fix typos - ([871edac](https://github.com/dustinblackman/oatmeal/commit/871edaca0b5822e35c0f340bcdb357f12df6cd68))
+
 ## [0.3.0] - 2023-11-21
 
 [v0.2.5...v0.3.0](https://github.com/dustinblackman/oatmeal/compare/v0.2.5...v0.3.0)
 
 ### ⛰️ Features
 
+- Release v0.3.0 - ([6785c53](https://github.com/dustinblackman/oatmeal/commit/6785c5347ac0690c651b2ec47a09d4c31482bee6))
 - Add /exit - ([6e9f019](https://github.com/dustinblackman/oatmeal/commit/6e9f019ea0e7c43b1a7e10e76f5d58bcb0489893))
 - Add aborting backend requests - ([0c75d7d](https://github.com/dustinblackman/oatmeal/commit/0c75d7d56c51cb083979f18de897deeb7a9cebdd))
 - Add keybind to resend last message - ([e49a87d](https://github.com/dustinblackman/oatmeal/commit/e49a87dcc2034aec84a765961ad52203e0c91de0))

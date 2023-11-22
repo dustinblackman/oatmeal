@@ -87,7 +87,7 @@ yay -S oatmeal-bin
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.3.0
+choco install oatmeal --version=0.4.0
 ```
 
 <!-- choco-install end -->
@@ -130,8 +130,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.3.0
-Commit: v0.3.0-4-gdeba39e
+Version: 0.4.0
+Commit: v0.4.0
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 
@@ -171,8 +171,8 @@ CHAT HOTKEYS:
 CHAT CODE ACTIONS:
 When working with models that provide code, and using an editor integration, Oatmeal has the capabilities to read selected code from an editor, and submit model provided code back in to an editor. Each code block provided by a model is indexed with a (NUMBER) at the beginning of the block to make it easily identifiable.
 
-  - /append (/a) [CODE_BLOCK_NUMBER?] will append one-to-many model provided code blocks to the open file in your editior.
-  - /replace (/r) [CODE_BLOCK_NUMBER?] - will replace selected code with one-to-many model provided code blocks to the open file in your editor.
+  - /append (/a) [CODE_BLOCK_NUMBER?] will append one-to-many model provided code blocks to the open file in your editor.
+  - /replace (/r) [CODE_BLOCK_NUMBER?] - will replace selected code in your editor with one-to-many model provided code blocks.
   - /copy (/c) [CODE_BLOCK_NUMBER?] - will append one-to-many model provided code blocks to your clipboard, no matter the editor integration being used.
 
 The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to your editor at once. The parameter can be set as follows:

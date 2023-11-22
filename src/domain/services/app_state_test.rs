@@ -143,7 +143,7 @@ mod handle_slash_commands {
         let (should_break, should_continue) = app_state.handle_slash_commands("/copy", &tx)?;
 
         assert!(!should_break);
-        assert!(!should_continue);
+        assert!(should_continue);
         assert!(app_state.waiting_for_backend);
 
         let event = rx.blocking_recv().unwrap();

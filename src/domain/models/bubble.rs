@@ -15,8 +15,10 @@ use syntect::parsing::SyntaxSet;
 use super::Author;
 use super::Message;
 use super::MessageType;
+use crate::domain::services::Syntaxes;
 
-static SYNTAX: Lazy<SyntaxSet> = Lazy::new(SyntaxSet::load_defaults_newlines);
+// TODO include this in refactors, it shouldn't be here.
+static SYNTAX: Lazy<SyntaxSet> = Lazy::new(Syntaxes::load);
 
 #[derive(PartialEq, Eq)]
 pub enum BubbleAlignment {
@@ -28,7 +30,7 @@ pub struct Bubble {
     message: Message,
 }
 
-// TODO this has gotten out of hand. Refactor.
+// TODO this entire model has gotten out of hand. Refactor.
 impl<'a> Bubble {
     pub fn new(message: Message) -> Bubble {
         return Bubble { message };
@@ -42,7 +44,7 @@ impl<'a> Bubble {
         total_codeblock_counter: usize,
     ) -> Vec<Line<'a>> {
         // Lazy defaults
-        let syntax = find_syntax("json").unwrap();
+        let syntax = get_syntax("text");
         let mut highlight = HighlightLines::new(syntax, theme);
 
         // Add a minimum 4% of padding on the side.
@@ -103,7 +105,8 @@ impl<'a> Bubble {
 
             if line.trim().starts_with("```") {
                 let lang = line.trim().replace("```", "");
-                if let Some(syntax) = SYNTAX.find_syntax_by_token(&lang) {
+                let syntax = get_syntax(&lang);
+                if syntax.name.to_lowercase() != "plain text" {
                     highlight = HighlightLines::new(syntax, theme);
                     in_codeblock = true;
 
@@ -231,9 +234,18 @@ fn translate_colour(syntect_color: syntect::highlighting::Color) -> Option<Color
     }
 }
 
-fn find_syntax(name: &str) -> Option<&SyntaxReference> {
-    if name == "typescript" {
-        return SYNTAX.find_syntax_by_extension("javascript");
+fn get_syntax(name: &str) -> &SyntaxReference {
+    if let Some(syntax) = SYNTAX.find_syntax_by_extension(name) {
+        return syntax;
     }
-    return SYNTAX.find_syntax_by_extension(name);
+
+    if let Some(syntax) = SYNTAX.find_syntax_by_name(name) {
+        return syntax;
+    }
+
+    if let Some(syntax) = SYNTAX.find_syntax_by_token(name) {
+        return syntax;
+    }
+
+    return SYNTAX.find_syntax_plain_text();
 }

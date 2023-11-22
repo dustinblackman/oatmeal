@@ -9,7 +9,8 @@ use syntect::highlighting::Theme;
 use syntect::highlighting::ThemeSet;
 
 #[derive(RustEmbed)]
-#[folder = "themes/"]
+#[folder = ".cache/themes/"]
+#[include = "*.tmTheme"]
 struct Assets;
 
 #[derive(Default)]

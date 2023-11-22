@@ -6,6 +6,7 @@ mod code_blocks;
 pub mod events;
 mod scroll;
 mod sessions;
+mod syntaxes;
 mod themes;
 
 pub use app_state::*;
@@ -13,4 +14,5 @@ pub use bubble_list::*;
 pub use code_blocks::*;
 pub use scroll::*;
 pub use sessions::*;
+pub use syntaxes::*;
 pub use themes::*;

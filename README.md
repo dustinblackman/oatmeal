@@ -28,6 +28,7 @@
   - [Setup](#setup)
   - [Adding a backend](#adding-a-backend)
   - [Adding an editor](#adding-an-editor)
+  - [Adding a syntax highlight for a language](#adding-a-syntax-highlight-for-a-language)
 - [FAQ](#faq)
   - [Why Oatmeal?](#why-oatmeal)
 - [License](#license)
@@ -283,6 +284,17 @@ The following steps should be completed to add an editor:
 2. Update the [EditorManager](./src/infrastructure/editors/mod.rs) to provide your new editor.
 3. Write tests
 4. Update the documentation for the [CLI](./src/application/cli.rs).
+
+### Adding a syntax highlight for a language
+
+Syntax highlighting language selection is a tad manual where several languages must be curated and then added to
+[`build.rs`](./build.rs).
+
+1. Google to find a `.sublime-syntax` project on Github for your language. [bat](https://github.com/sharkdp/bat/tree/master/assets/syntaxes/02_Extra) has many!
+2. Update the `get_syntaxes()` function in [`build.rs`](./build.rs) to include the new repo. Make sure to set the URL to
+   a commit locked `.tar.gz` file, and to include the license in the files vector.
+3. `rm -rf .caches && cargo build`
+4. Test to see highlighting works.
 
 ## FAQ
 

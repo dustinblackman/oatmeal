@@ -3,6 +3,6 @@ target/
 .bin/
 .gha/
 completions/
-themes/
+.cache/
 *.html
 .DS_Store

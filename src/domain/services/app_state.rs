@@ -233,12 +233,13 @@ impl<'a> AppState<'a> {
                 should_break = true;
             }
 
+            // Everything below here is expected to skip sending prompts to the backend.
+            should_continue = true;
+
             if command.is_append_code_block()
                 || command.is_replace_code_block()
                 || command.is_copy_code_block()
             {
-                should_continue = true;
-
                 let codeblocks_res = self.codeblocks.blocks_from_slash_commands(&command);
                 if let Err(err) = codeblocks_res.as_ref() {
                     self.add_message(Message::new_with_type(

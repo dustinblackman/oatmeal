@@ -8,11 +8,12 @@ pub enum ConfigKey {
     Backend,
     Editor,
     Model,
-    Username,
+    OpenAIToken,
+    OpenAIURL,
+    SessionID,
     Theme,
     ThemeFile,
-    OpenAIURL,
-    OpenAIToken,
+    Username,
 }
 
 impl ToString for ConfigKey {
@@ -21,11 +22,12 @@ impl ToString for ConfigKey {
             ConfigKey::Backend => return String::from("backend"),
             ConfigKey::Editor => return String::from("editor"),
             ConfigKey::Model => return String::from("model"),
+            ConfigKey::OpenAIToken => return String::from("openai-token"),
+            ConfigKey::OpenAIURL => return String::from("openai-url"),
+            ConfigKey::SessionID => return String::from("session-id"),
             ConfigKey::Theme => return String::from("theme"),
             ConfigKey::ThemeFile => return String::from("themefile"),
             ConfigKey::Username => return String::from("username"),
-            ConfigKey::OpenAIURL => return String::from("openai-url"),
-            ConfigKey::OpenAIToken => return String::from("openai-token"),
         }
     }
 }

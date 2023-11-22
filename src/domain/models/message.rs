@@ -1,24 +1,26 @@
 #[cfg(test)]
 #[path = "message_test.rs"]
 mod tests;
+use serde_derive::Deserialize;
+use serde_derive::Serialize;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Author {
     User,
     Oatmeal,
     Model,
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MessageType {
     Normal,
     Error,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Message {
     pub author: Author,
     pub text: String,

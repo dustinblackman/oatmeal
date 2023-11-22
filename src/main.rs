@@ -10,6 +10,7 @@ use std::env;
 use std::process;
 
 use anyhow::anyhow;
+use anyhow::Error;
 use anyhow::Result;
 use config::Config;
 use config::ConfigKey;
@@ -32,6 +33,32 @@ async fn flatten<T>(handle: task::JoinHandle<Result<T>>) -> Result<()> {
     };
 }
 
+fn handle_error(err: Error) {
+    eprintln!(
+            "{}",
+            format!(
+                "Oh no! Oatmeal has failed with the following app version and error.\n\nVersion: {}\nCommit: {}\nError: {}",
+                env!("CARGO_PKG_VERSION"),
+                env!("VERGEN_GIT_DESCRIBE"),
+                err
+            )
+            .red()
+        );
+
+    let backtrace = err.backtrace();
+    if backtrace.to_string() == "disabled backtrace" {
+        let args = env::args().collect::<Vec<String>>().join(" ");
+        eprintln!(
+                "\nTo report a bug, please rerun your command with the following to print stack traces:"
+            );
+        eprintln!("\nRUST_BACKTRACE=1 {args}");
+    } else {
+        eprintln!("\n{}", backtrace);
+    }
+
+    process::exit(1);
+}
+
 #[tokio::main]
 async fn main() {
     std::panic::set_hook(Box::new(|panic_info| {
@@ -43,7 +70,14 @@ async fn main() {
         ConfigKey::Username,
         &env::var("USER").unwrap_or_else(|_| return "User".to_string()),
     );
-    cli::parse();
+    let ready_res = cli::parse().await;
+    if let Err(ready_err) = ready_res {
+        handle_error(ready_err);
+        return;
+    }
+    if !ready_res.unwrap() {
+        process::exit(0);
+    }
 
     let (action_tx, mut action_rx) = mpsc::unbounded_channel::<Action>();
     let (event_tx, event_rx) = mpsc::unbounded_channel::<Event>();
@@ -64,31 +98,7 @@ async fn main() {
 
     if res.is_err() {
         ui::destruct_terminal_for_panic();
-
-        let err = res.unwrap_err();
-        eprintln!(
-            "{}",
-            format!(
-                "Oh no! Oatmeal has failed with the following app version and error.\n\nVersion: {}\nCommit: {}\nError: {}",
-                env!("CARGO_PKG_VERSION"),
-                env!("VERGEN_GIT_DESCRIBE"),
-                err
-            )
-            .red()
-        );
-
-        let backtrace = err.backtrace();
-        if backtrace.to_string() == "disabled backtrace" {
-            let args = env::args().collect::<Vec<String>>().join(" ");
-            eprintln!(
-                "\nTo report a bug, please rerun your command with the following to print stack traces:"
-            );
-            eprintln!("\nRUST_BACKTRACE=1 {args}");
-        } else {
-            eprintln!("\n{}", backtrace);
-        }
-
-        process::exit(1);
+        handle_error(res.unwrap_err());
     }
 
     process::exit(0);

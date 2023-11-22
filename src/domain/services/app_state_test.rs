@@ -20,16 +20,17 @@ impl Default for AppState<'static> {
     fn default() -> AppState<'static> {
         let theme = Themes::load("base16-onedark", "").unwrap();
         return AppState {
-            messages: vec![],
+            backend_context: "".to_string(),
             bubble_list: BubbleList::new(theme),
             codeblocks: CodeBlocks::default(),
-            backend_context: "".to_string(),
-            waiting_for_backend: false,
-            scroll: Scroll::default(),
             editor_context: None,
             exit_warning: false,
-            last_known_width: 100,
             last_known_height: 300,
+            last_known_width: 100,
+            messages: vec![],
+            session_id: "test".to_string(),
+            scroll: Scroll::default(),
+            waiting_for_backend: false,
         };
     }
 }

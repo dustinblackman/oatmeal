@@ -6,6 +6,7 @@ use tokio::sync::mpsc;
 use super::BubbleList;
 use super::CodeBlocks;
 use super::Scroll;
+use super::Sessions;
 use super::Themes;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
@@ -27,12 +28,13 @@ pub struct AppState<'a> {
     pub bubble_list: BubbleList<'a>,
     pub codeblocks: CodeBlocks,
     pub editor_context: Option<EditorContext>,
+    pub exit_warning: bool,
     pub last_known_height: u16,
     pub last_known_width: u16,
     pub messages: Vec<Message>,
     pub scroll: Scroll,
+    pub session_id: String,
     pub waiting_for_backend: bool,
-    pub exit_warning: bool,
 }
 
 impl<'a> AppState<'a> {
@@ -42,20 +44,42 @@ impl<'a> AppState<'a> {
         model_name: &str,
         theme_name: &str,
         theme_file: &str,
+        session_id: &str,
+    ) -> Result<AppState<'a>> {
+        if !session_id.is_empty() {
+            return AppState::from_session(editor_name, theme_name, theme_file, session_id).await;
+        }
+
+        return AppState::init(
+            backend_name,
+            editor_name,
+            model_name,
+            theme_name,
+            theme_file,
+        )
+        .await;
+    }
+
+    async fn init(
+        backend_name: &str,
+        editor_name: &str,
+        model_name: &str,
+        theme_name: &str,
+        theme_file: &str,
     ) -> Result<AppState<'a>> {
         let theme = Themes::load(theme_name, theme_file)?;
-
         let mut app_state = AppState {
-            messages: vec![],
+            backend_context: "".to_string(),
             bubble_list: BubbleList::new(theme),
             codeblocks: CodeBlocks::default(),
-            backend_context: "".to_string(),
-            waiting_for_backend: false,
-            scroll: Scroll::default(),
             editor_context: None,
             exit_warning: false,
-            last_known_width: 0,
             last_known_height: 0,
+            last_known_width: 0,
+            messages: vec![],
+            scroll: Scroll::default(),
+            session_id: Sessions::create_id(),
+            waiting_for_backend: false,
         };
 
         let backend = BackendManager::get(backend_name)?;
@@ -86,6 +110,42 @@ impl<'a> AppState<'a> {
                 Author::Model,
                 "Hey there! What can I do for you?",
             ));
+        }
+
+        return Ok(app_state);
+    }
+
+    async fn from_session(
+        editor_name: &str,
+        theme_name: &str,
+        theme_file: &str,
+        session_id: &str,
+    ) -> Result<AppState<'a>> {
+        let session = Sessions::default().load(session_id).await?;
+        let theme = Themes::load(theme_name, theme_file)?;
+
+        let mut app_state = AppState {
+            backend_context: session.state.backend_context,
+            bubble_list: BubbleList::new(theme),
+            codeblocks: CodeBlocks::default(),
+            editor_context: None,
+            exit_warning: false,
+            last_known_height: 0,
+            last_known_width: 0,
+            messages: session.state.messages,
+            scroll: Scroll::default(),
+            session_id: session_id.to_string(),
+            waiting_for_backend: false,
+        };
+
+        app_state
+            .codeblocks
+            .replace_from_messages(&app_state.messages);
+
+        if let Ok(editor) = EditorManager::get(editor_name) {
+            if editor.health_check().await.is_ok() {
+                app_state.editor_context = editor.get_context().await?;
+            }
         }
 
         return Ok(app_state);
@@ -251,5 +311,18 @@ impl<'a> AppState<'a> {
         if self.waiting_for_backend {
             self.scroll.last();
         }
+    }
+
+    pub async fn save_session(&self) -> Result<()> {
+        Sessions::default()
+            .save(
+                &self.session_id,
+                &self.backend_context,
+                &self.editor_context,
+                &self.messages,
+            )
+            .await?;
+
+        return Ok(());
     }
 }

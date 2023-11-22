@@ -8,9 +8,6 @@ builds:
     goarch:
       - amd64
       - arm64
-    ignore:
-      - goos: windows
-        goarch: arm64
     hooks:
       post: ./tools/goreleaser-dist.sh {{ .Target }}
 checksum:

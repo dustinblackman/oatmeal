@@ -14,6 +14,18 @@ pub fn update() {
     )
     .unwrap();
 
+    let output_help_sessions = String::from_utf8(
+        process::Command::new("./target/debug/oatmeal")
+            .arg("sessions")
+            .arg("--help")
+            .env("NO_COLOR", "1")
+            .env("OATMEAL_THEME", "")
+            .output()
+            .unwrap()
+            .stdout,
+    )
+    .unwrap();
+
     let version_res = String::from_utf8(
         process::Command::new("./target/debug/oatmeal")
             .arg("--version")
@@ -30,6 +42,13 @@ pub fn update() {
     readme.replace_range(
         start_help..end_help,
         &format!("<!-- command-help start -->\n```\n{output_help}```\n"),
+    );
+
+    let start_help_sessions = readme.find("<!-- command-help-sessions start -->").unwrap();
+    let end_help_sessions = readme.find("<!-- command-help-sessions end -->").unwrap();
+    readme.replace_range(
+        start_help_sessions..end_help_sessions,
+        &format!("<!-- command-help-sessions start -->\n```\n{output_help_sessions}```\n"),
     );
 
     let start_choco = readme.find("<!-- choco-install start -->").unwrap();

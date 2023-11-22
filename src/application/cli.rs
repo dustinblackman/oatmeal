@@ -54,7 +54,7 @@ async fn print_sessions_list() -> Result<()> {
     sessions.reverse();
 
     if sessions.is_empty() {
-        println!("There are no sessions available. You should start you first one!");
+        println!("There are no sessions available. You should start your first one!");
     } else {
         println!("{}", sessions.join("\n"));
     }
@@ -76,7 +76,7 @@ async fn load_config_from_session_interactive() -> Result<()> {
     sessions.reverse();
 
     if sessions.is_empty() {
-        println!("There are no sessions available. You should start you first one!");
+        println!("There are no sessions available. You should start your first one!");
         return Ok(());
     }
 
@@ -141,10 +141,10 @@ fn subcommand_sessions() -> Command {
         .about("Manage past chat sessions")
         .arg_required_else_help(true)
         .subcommand(Command::new("dir").about("Print the sessions cache directory path"))
-        .subcommand(Command::new("list").about("List all previous sessions"))
+        .subcommand(Command::new("list").about("List all previous sessions with their ids and models"))
         .subcommand(
             Command::new("open")
-                .about("Open a previous session by ID. Omit passing any session ID to load an interactive selection.")
+                .about("Open a previous session by ID. Omit passing any session ID to load an interactive selection")
                 .arg(
                     clap::Arg::new("session-id")
                         .short('i')
@@ -260,7 +260,7 @@ fn build() -> Command {
                 .long("openai-token")
                 .env("OATMEAL_OPENAI_TOKEN")
                 .num_args(1)
-                .help("OpenAI API token when using the OpenAI backend.")
+                .help("OpenAI API token when using the OpenAI backend")
                 .global(true),
         );
 }

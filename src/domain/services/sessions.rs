@@ -43,6 +43,10 @@ impl Sessions {
             .join("-");
     }
 
+    fn get_file_path(&self, id: &str) -> path::PathBuf {
+        return self.cache_dir.join(format!("{id}.yaml"));
+    }
+
     /// Returns a list of sessions, but with messages and context removed to
     /// save on memory.
     pub async fn list(&self) -> Result<Vec<Session>> {
@@ -54,7 +58,7 @@ impl Sessions {
         let mut dir = fs::read_dir(&self.cache_dir).await?;
         while let Some(file) = dir.next_entry().await? {
             let payload = fs::read_to_string(file.path()).await?;
-            let mut session: Session = serde_json::from_str(&payload)?;
+            let mut session: Session = serde_yaml::from_str(&payload)?;
             session.state.backend_context = "".to_string();
             session.state.messages = vec![];
             sessions.push(session);
@@ -67,13 +71,13 @@ impl Sessions {
     }
 
     pub async fn load(&self, id: &str) -> Result<Session> {
-        let file_path = self.cache_dir.join(format!("{id}.json"));
+        let file_path = self.get_file_path(id);
         if !file_path.exists() {
             bail!(format!("No session found for id {id}"));
         }
 
         let payload = fs::read_to_string(file_path).await?;
-        let session: Session = serde_json::from_str(&payload)?;
+        let session: Session = serde_yaml::from_str(&payload)?;
 
         return Ok(session);
     }
@@ -105,20 +109,20 @@ impl Sessions {
             state,
         };
 
-        let payload = serde_json::to_string(&session)?;
+        let payload = serde_yaml::to_string(&session)?;
 
         if !self.cache_dir.exists() {
             fs::create_dir_all(&self.cache_dir).await?;
         }
 
-        let mut file = fs::File::create(self.cache_dir.join(format!("{id}.json"))).await?;
+        let mut file = fs::File::create(self.get_file_path(id)).await?;
         file.write_all(payload.as_bytes()).await?;
 
         return Ok(());
     }
 
     pub async fn delete(&self, id: &str) -> Result<()> {
-        let file_path = self.cache_dir.join(format!("{id}.json"));
+        let file_path = self.get_file_path(id);
         if !file_path.exists() {
             return Ok(());
         }

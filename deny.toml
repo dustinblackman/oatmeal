@@ -15,6 +15,7 @@ exceptions = [
   { allow = ["BSL-1.0"], name = "clipboard-win" },
   { allow = ["BSL-1.0"], name = "error-code" },
   { allow = ["BSL-1.0"], name = "str-buf" },
+  { allow = ["MPL-2.0"], name = "option-ext" },
 ]
 
 [[licenses.clarify]]

@@ -114,6 +114,7 @@ async fn start_loop<B: Backend>(
                 }
 
                 tx.send(Action::BackendRequest(prompt))?;
+                app_state.save_session().await?;
             };
         }
 
@@ -123,7 +124,10 @@ async fn start_loop<B: Backend>(
                 app_state.waiting_for_backend = false;
             }
             Event::BackendPromptResponse(msg) => {
-                app_state.handle_backend_response(msg);
+                app_state.handle_backend_response(msg.clone());
+                if msg.done {
+                    app_state.save_session().await?;
+                }
             }
             Event::KeyboardCharInput(input) => {
                 if app_state.waiting_for_backend {
@@ -217,6 +221,7 @@ pub async fn start(
         &Config::get(ConfigKey::Model),
         &Config::get(ConfigKey::Theme),
         &Config::get(ConfigKey::ThemeFile),
+        &Config::get(ConfigKey::SessionID),
     )
     .await?;
 

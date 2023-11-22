@@ -41,6 +41,7 @@ impl BackendPrompt {
     }
 }
 
+#[derive(Clone)]
 pub struct BackendResponse {
     pub author: Author,
     pub text: String,

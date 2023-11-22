@@ -5,8 +5,8 @@ authors = ["Dustin Blackman"]
 build = "build.rs"
 edition = "2021"
 exclude = [
-  "./tools",
-  "./test",
+  "tools",
+  "test",
   ".cargo-husky/",
   ".github/",
   ".dprint.json",

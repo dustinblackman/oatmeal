@@ -177,6 +177,7 @@ release = '''set -e
   cargo zigbuild --release --target x86_64-unknown-linux-gnu
   cargo zigbuild --release --target aarch64-unknown-linux-gnu
   cargo xwin build --release --target x86_64-pc-windows-msvc --xwin-arch x86_64
+  cargo xwin build --release --target aarch64-pc-windows-msvc --xwin-arch aarch64
 
   git push
   git push --tags

@@ -2,12 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2023-11-23
+
+[v0.4.0...v0.5.0](https://github.com/dustinblackman/oatmeal/compare/v0.4.0...v0.5.0)
+
+### ⛰️ Features
+
+- Add indexes to model list and model selection - ([de7ef33](https://github.com/dustinblackman/oatmeal/commit/de7ef33ddd1bee5df83967bde720357c3f11b1ee))
+
+### 🐛 Bug Fixes
+
+- Model set not working - ([861ecd4](https://github.com/dustinblackman/oatmeal/commit/861ecd482b30e5b2cbc2f23f9ebdc2e31640d5cf))
+- Code system prompt - ([1865818](https://github.com/dustinblackman/oatmeal/commit/1865818fba1cd30f72fa8cb97c227672c8b3864c))
+- Update README.md - ([50e573b](https://github.com/dustinblackman/oatmeal/commit/50e573b355727f4f58ff95eb0a24288f0271b7fe))
+- Update README.md - ([12478e7](https://github.com/dustinblackman/oatmeal/commit/12478e7397d1171ca9921d7c7ba4825099526531))
+- Cache windows build dependencies - ([5b0e1da](https://github.com/dustinblackman/oatmeal/commit/5b0e1da27ecbc2ebe2d55b2bb069b210b69af090))
+- Cargo publish folder exclude - ([ae32a0a](https://github.com/dustinblackman/oatmeal/commit/ae32a0a4db4bf6b904a1dd071230c5b527ac24a1))
+
+### 🚜 Refactor
+
+- Bubble in to service - ([145abb6](https://github.com/dustinblackman/oatmeal/commit/145abb60a67be6df92e28fac8212523514fa595b))
+
+### ⚙️ Miscellaneous Tasks
+
+- Lock deps - ([5403868](https://github.com/dustinblackman/oatmeal/commit/54038688481b7487d70f12c0e4fbb4a8bd353b6c))
+
 ## [0.4.0] - 2023-11-22
 
 [v0.3.0...v0.4.0](https://github.com/dustinblackman/oatmeal/compare/v0.3.0...v0.4.0)
 
 ### ⛰️ Features
 
+- Release v0.4.0 - ([e15ea73](https://github.com/dustinblackman/oatmeal/commit/e15ea73da2c3ebedc1b746dc5320070b9e0ee3d2))
 - Add sessions ([#3](https://github.com/dustinblackman/oatmeal/issues/3)) - ([c7d4bed](https://github.com/dustinblackman/oatmeal/commit/c7d4bedbd471b913c73122ecf00359faef6c3c08))
 - Add syntaxes service, new languages - ([3fbe54d](https://github.com/dustinblackman/oatmeal/commit/3fbe54de5801f1149a11b442069fdf82858b6a4d))
 - Add aarch64-pc-windows-msvc releases - ([0f6558e](https://github.com/dustinblackman/oatmeal/commit/0f6558eca95e653fcbe0813bffa3380920a954ad))

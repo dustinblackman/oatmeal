@@ -87,7 +87,7 @@ yay -S oatmeal-bin
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.4.0
+choco install oatmeal --version=0.5.0
 ```
 
 <!-- choco-install end -->
@@ -130,8 +130,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.4.0
-Commit: v0.4.0
+Version: 0.5.0
+Commit: v0.5.0
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 
@@ -152,8 +152,8 @@ Options:
   -V, --version                      Print version
 
 CHAT COMMANDS:
-  - /modelist (/ml) - Lists all available models from the backend.
-  - /model (/model) [MODEL_NAME] - Sets the specified model as the active model.
+  - /modellist (/ml) - Lists all available models from the backend.
+  - /model (/model) [MODEL_NAME,MODEL_INDEX] - Sets the specified model as the active model. You can pass either the model name, or the index from /modellist
   - /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
   - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
   - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.

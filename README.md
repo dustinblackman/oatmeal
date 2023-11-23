@@ -28,7 +28,7 @@
   - [Setup](#setup)
   - [Adding a backend](#adding-a-backend)
   - [Adding an editor](#adding-an-editor)
-  - [Adding a syntax highlight for a language](#adding-a-syntax-highlight-for-a-language)
+  - [Adding a syntax highlighting for a language](#adding-a-syntax-highlighting-for-a-language)
 - [FAQ](#faq)
   - [Why Oatmeal?](#why-oatmeal)
 - [License](#license)

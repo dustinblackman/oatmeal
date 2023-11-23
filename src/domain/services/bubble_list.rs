@@ -8,9 +8,9 @@ use ratatui::widgets::Paragraph;
 use ratatui::Frame;
 use syntect::highlighting::Theme;
 
+use super::Bubble;
+use super::BubbleAlignment;
 use crate::domain::models::Author;
-use crate::domain::models::Bubble;
-use crate::domain::models::BubbleAlignment;
 use crate::domain::models::Message;
 
 #[cfg(test)]
@@ -67,12 +67,9 @@ impl<'a> BubbleList<'a> {
                     align = BubbleAlignment::Right;
                 }
 
-                let bubble_lines = Bubble::new(message.clone()).as_lines(
-                    align,
-                    &self.theme,
-                    line_width,
-                    total_codeblock_counter,
-                );
+                let bubble_lines =
+                    Bubble::new(message.clone(), align, line_width, total_codeblock_counter)
+                        .as_lines(&self.theme);
 
                 let codeblocks_count = message.codeblocks().len();
                 total_codeblock_counter += codeblocks_count;

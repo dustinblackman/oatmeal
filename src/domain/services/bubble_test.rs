@@ -20,9 +20,8 @@ fn create_lines(
     Config::set(ConfigKey::Model, "codellama:latest");
 
     let message = Message::new(author, text);
-    let bubble = Bubble::new(message);
     let theme = Themes::load("base16-seti", "")?;
-    let lines = bubble.as_lines(alignment, &theme, 50, codeblock_count);
+    let lines = Bubble::new(message, alignment, 50, codeblock_count).as_lines(&theme);
     let lines_str = lines
         .iter()
         .map(|line| {

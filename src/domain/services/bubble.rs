@@ -2,23 +2,18 @@
 #[path = "bubble_test.rs"]
 mod tests;
 
-use once_cell::sync::Lazy;
 use ratatui::style::Color;
 use ratatui::style::Style;
 use ratatui::text::Line;
 use ratatui::text::Span;
 use syntect::easy::HighlightLines;
 use syntect::highlighting::Theme;
-use syntect::parsing::SyntaxReference;
-use syntect::parsing::SyntaxSet;
 
-use super::Author;
-use super::Message;
-use super::MessageType;
-use crate::domain::services::Syntaxes;
-
-// TODO include this in refactors, it shouldn't be here.
-static SYNTAX: Lazy<SyntaxSet> = Lazy::new(Syntaxes::load);
+use super::Syntaxes;
+use super::SYNTAX_SET;
+use crate::domain::models::Author;
+use crate::domain::models::Message;
+use crate::domain::models::MessageType;
 
 #[derive(PartialEq, Eq)]
 pub enum BubbleAlignment {
@@ -27,62 +22,41 @@ pub enum BubbleAlignment {
 }
 
 pub struct Bubble {
+    alignment: BubbleAlignment,
     message: Message,
+    window_max_width: u16,
+    codeblock_counter: usize,
 }
 
-// TODO this entire model has gotten out of hand. Refactor.
 impl<'a> Bubble {
-    pub fn new(message: Message) -> Bubble {
-        return Bubble { message };
+    pub fn new(
+        message: Message,
+        alignment: BubbleAlignment,
+        window_max_width: u16,
+        codeblock_counter: usize,
+    ) -> Bubble {
+        return Bubble {
+            alignment,
+            message,
+            window_max_width,
+            codeblock_counter,
+        };
     }
 
-    pub fn as_lines(
-        &self,
-        alignment: BubbleAlignment,
-        theme: &Theme,
-        window_max_width: u16,
-        total_codeblock_counter: usize,
-    ) -> Vec<Line<'a>> {
-        // Lazy defaults
-        let syntax = get_syntax("text");
-        let mut highlight = HighlightLines::new(syntax, theme);
-
-        // Add a minimum 4% of padding on the side.
-        let min_bubble_padding_length = ((window_max_width as f32 * 0.04).ceil()) as usize;
-
-        // left border + left padding + (text, not counted) + right padding + right
-        // border + scrollbar. And then minimum bubble padding.
-        let line_border_width = 5 + min_bubble_padding_length;
-
-        let message_lines = self
-            .message
-            .as_string_lines(window_max_width - line_border_width as u16);
-
-        let username = &self.message.author_formatted;
-        let mut max_line_length = message_lines
-            .iter()
-            .map(|line| {
-                return line.len();
-            })
-            .max()
-            .unwrap();
-        if max_line_length < username.len() {
-            max_line_length = username.len();
-        }
-
+    pub fn as_lines(&mut self, theme: &Theme) -> Vec<Line<'a>> {
+        // Lazy default
+        let mut highlight = HighlightLines::new(Syntaxes::get("text"), theme);
         let mut in_codeblock = false;
-        let mut codeblock_count = 0;
         let mut lines: Vec<Line> = vec![];
 
+        let (message_lines, max_line_length) = self.get_message_lines();
+
         for line in message_lines {
-            let (formatted_line, mut spans) = self.format_line(line.to_string(), max_line_length);
-            let bubble_padding = [" "]
-                .repeat(window_max_width as usize - formatted_line.len())
-                .join("");
+            let (mut spans, line_length) = self.format_line(line.to_string(), max_line_length);
 
             if in_codeblock {
                 let highlighted_spans: Vec<Span> = highlight
-                    .highlight_line(&line, &SYNTAX)
+                    .highlight_line(&line, &SYNTAX_SET)
                     .unwrap()
                     .iter()
                     .map(|segment| {
@@ -91,7 +65,7 @@ impl<'a> Bubble {
                         return Span::styled(
                             content.to_string(),
                             Style {
-                                fg: translate_colour(style.foreground),
+                                fg: Syntaxes::translate_colour(style.foreground),
                                 ..Style::default()
                             },
                         );
@@ -100,25 +74,25 @@ impl<'a> Bubble {
 
                 spans = self
                     .format_spans(line.to_string(), max_line_length, highlighted_spans)
-                    .1;
+                    .0;
             }
 
             if line.trim().starts_with("```") {
                 let lang = line.trim().replace("```", "");
-                let syntax = get_syntax(&lang);
+                let syntax = Syntaxes::get(&lang);
                 if syntax.name.to_lowercase() != "plain text" {
                     highlight = HighlightLines::new(syntax, theme);
                     in_codeblock = true;
 
-                    codeblock_count += 1;
+                    self.codeblock_counter += 1;
                     spans = self
                         .format_spans(
-                            format!("{line} ({})", total_codeblock_counter + codeblock_count),
+                            format!("{line} ({})", self.codeblock_counter),
                             max_line_length,
                             vec![
                                 Span::from(line),
                                 Span::styled(
-                                    format!(" ({})", total_codeblock_counter + codeblock_count),
+                                    format!(" ({})", self.codeblock_counter),
                                     Style {
                                         fg: Some(Color::White),
                                         ..Style::default()
@@ -126,22 +100,58 @@ impl<'a> Bubble {
                                 ),
                             ],
                         )
-                        .1;
+                        .0;
                 } else {
                     in_codeblock = false;
                 }
             }
 
-            if alignment == BubbleAlignment::Left {
+            let bubble_padding = [" "]
+                .repeat(self.window_max_width as usize - line_length)
+                .join("");
+
+            if self.alignment == BubbleAlignment::Left {
                 spans.push(Span::from(bubble_padding));
                 lines.push(Line::from(spans));
             } else {
-                let mut res = vec![Span::from(bubble_padding)];
-                res.extend(spans);
-                lines.push(Line::from(res));
+                let mut line_spans = vec![Span::from(bubble_padding)];
+                line_spans.extend(spans);
+                lines.push(Line::from(line_spans));
             }
         }
 
+        return self.wrap_lines_in_buddle(lines, max_line_length);
+    }
+
+    fn get_message_lines(&self) -> (Vec<String>, usize) {
+        // Add a minimum 4% of padding on the side.
+        let min_bubble_padding_length = ((self.window_max_width as f32 * 0.04).ceil()) as usize;
+
+        // left border + left padding + (text, not counted) + right padding + right
+        // border + scrollbar. And then minimum bubble padding.
+        let line_border_width = 5 + min_bubble_padding_length;
+
+        let message_lines = self
+            .message
+            .as_string_lines(self.window_max_width - line_border_width as u16);
+
+        let mut max_line_length = message_lines
+            .iter()
+            .map(|line| {
+                return line.len();
+            })
+            .max()
+            .unwrap();
+
+        let username = &self.message.author_formatted;
+        if max_line_length < username.len() {
+            max_line_length = username.len();
+        }
+
+        return (message_lines, max_line_length);
+    }
+
+    fn wrap_lines_in_buddle(&self, lines: Vec<Line<'a>>, max_line_length: usize) -> Vec<Line<'a>> {
         // Add 2 for the vertical bars.
         let inner_bar = ["─"].repeat(max_line_length + 2).join("");
         let top_left_border = "╭";
@@ -149,10 +159,12 @@ impl<'a> Bubble {
         let bottom_bar = format!("╰{inner_bar}╯");
         let bar_bubble_padding = [" "]
             // TODO WTF is 8?
-            .repeat(window_max_width as usize - max_line_length - 8)
+            .repeat(self.window_max_width as usize - max_line_length - 8)
             .join("");
 
-        if alignment == BubbleAlignment::Left {
+        let username = &self.message.author_formatted;
+
+        if self.alignment == BubbleAlignment::Left {
             let top_replace = ["─"].repeat(username.len()).join("");
             top_bar = top_bar.replace(
                 format!("{top_left_border}{top_replace}").as_str(),
@@ -179,20 +191,20 @@ impl<'a> Bubble {
 
     fn format_spans(
         &self,
-        line: String,
+        line_str: String,
         max_line_length: usize,
         mut spans: Vec<Span<'a>>,
-    ) -> (String, Vec<Span<'a>>) {
-        let fill = [" "].repeat(max_line_length - line.len()).join("");
-        let formatted_line = format!("│ {line}{fill} │");
+    ) -> (Vec<Span<'a>>, usize) {
+        let fill = [" "].repeat(max_line_length - line_str.len()).join("");
+        let line_length = format!("│ {line_str}{fill} │").len();
 
         let mut spans_res = vec![self.highlight_span("│ ".to_string())];
         spans_res.append(&mut spans);
         spans_res.push(self.highlight_span(format!("{fill} │").to_string()));
-        return (formatted_line, spans_res);
+        return (spans_res, line_length);
     }
 
-    fn format_line(&self, line: String, max_line_length: usize) -> (String, Vec<Span<'a>>) {
+    fn format_line(&self, line: String, max_line_length: usize) -> (Vec<Span<'a>>, usize) {
         return self.format_spans(
             line.to_string(),
             max_line_length,
@@ -225,27 +237,4 @@ impl<'a> Bubble {
     fn highlight_line(&self, text: String) -> Line<'a> {
         return Line::from(self.highlight_span(text));
     }
-}
-
-fn translate_colour(syntect_color: syntect::highlighting::Color) -> Option<Color> {
-    match syntect_color {
-        syntect::highlighting::Color { r, g, b, a } if a > 0 => return Some(Color::Rgb(r, g, b)),
-        _ => return None,
-    }
-}
-
-fn get_syntax(name: &str) -> &SyntaxReference {
-    if let Some(syntax) = SYNTAX.find_syntax_by_extension(name) {
-        return syntax;
-    }
-
-    if let Some(syntax) = SYNTAX.find_syntax_by_name(name) {
-        return syntax;
-    }
-
-    if let Some(syntax) = SYNTAX.find_syntax_by_token(name) {
-        return syntax;
-    }
-
-    return SYNTAX.find_syntax_plain_text();
 }

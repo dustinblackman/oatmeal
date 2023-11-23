@@ -20,8 +20,8 @@ use crate::infrastructure::editors::EditorManager;
 pub fn help_text() -> String {
     let text = r#"
 COMMANDS:
-- /modelist (/ml) - Lists all available models from the backend.
-- /model (/model) [MODEL_NAME] - Sets the specified model as the active model.
+- /modellist (/ml) - Lists all available models from the backend.
+- /model (/model) [MODEL_NAME,MODEL_INDEX] - Sets the specified model as the active model. You can pass either the model name, or the index from /modellist
 - /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
 - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
 - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
@@ -54,12 +54,15 @@ The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to y
 }
 
 async fn model_list(backend: &BackendBox, tx: &mpsc::UnboundedSender<Event>) -> Result<()> {
-    let res = backend
-        .list_models()
-        .await?
+    let mut models = backend.list_models().await?;
+    models.sort();
+
+    let res = models
         .iter()
-        .map(|model| {
-            return format!("- {model}");
+        .enumerate()
+        .map(|(idx, model)| {
+            let n = idx + 1;
+            return format!("- ({n}) {model}");
         })
         .collect::<Vec<String>>();
 
@@ -76,7 +79,7 @@ async fn model_set(
     tx: &mpsc::UnboundedSender<Event>,
     text: &str,
 ) -> Result<()> {
-    let model_name = text.split(' ').last().unwrap().to_string();
+    let mut model_name = text.split(' ').last().unwrap().to_string();
     if SlashCommand::parse(&model_name).is_some() {
         let msg = Message::new_with_type(
             Author::Oatmeal,
@@ -87,7 +90,21 @@ async fn model_set(
         return Ok(());
     }
 
-    let models = backend.list_models().await?;
+    let mut models = backend.list_models().await?;
+    models.sort();
+
+    if let Ok(idx) = model_name.parse::<usize>() {
+        if idx < 1 || idx > models.len() {
+            let msg = Message::new_with_type(
+                Author::Oatmeal,
+                MessageType::Error,
+                &format!("{idx} is not a valid index from the model list."),
+            );
+            tx.send(Event::BackendMessage(msg))?;
+            return Ok(());
+        }
+        model_name = models[idx - 1].to_string();
+    }
 
     if !models.contains(&model_name) {
         let backend_name = Config::get(ConfigKey::Backend);

@@ -41,7 +41,7 @@ impl SlashCommand {
     }
 
     pub fn is_model_list(&self) -> bool {
-        return ["/ml", "/modellist"].contains(&self.command.as_str());
+        return ["/ml", "/modellist", "/modelist"].contains(&self.command.as_str());
     }
 
     pub fn is_model_set(&self) -> bool {

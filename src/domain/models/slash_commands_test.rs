@@ -60,6 +60,11 @@ fn it_is_model_list() {
     assert!(cmd.is_model_list());
 }
 #[test]
+fn it_is_model_list_typo() {
+    let cmd = SlashCommand::parse("/modelist").unwrap();
+    assert!(cmd.is_model_list());
+}
+#[test]
 fn it_is_not_model_list() {
     let cmd = SlashCommand::parse("/m").unwrap();
     assert!(!cmd.is_model_list());

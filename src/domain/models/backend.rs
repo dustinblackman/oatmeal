@@ -32,7 +32,7 @@ impl BackendPrompt {
             self.text += &system_prompt;
 
             if !code.is_empty() {
-                let code_prompt = format!("The code is the following: {code}");
+                let code_prompt = format!(" The code is the following:\n{code}");
                 self.text += &code_prompt;
             }
         } else {

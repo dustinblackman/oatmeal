@@ -34,5 +34,8 @@ fn it_adds_language_and_code_system_prompt() {
         end_line: None,
     }));
 
-    insta::assert_snapshot!(prompt.text, @r###"Hello world. The coding language is rust. Return results in markdown, add language to code blocks.The code is the following: println!("Test!")"###);
+    insta::assert_snapshot!(prompt.text, @r###"
+    Hello world. The coding language is rust. Return results in markdown, add language to code blocks. The code is the following:
+    println!("Test!")
+    "###);
 }

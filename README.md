@@ -28,7 +28,7 @@
   - [Setup](#setup)
   - [Adding a backend](#adding-a-backend)
   - [Adding an editor](#adding-an-editor)
-  - [Adding a syntax highlighting for a language](#adding-a-syntax-highlighting-for-a-language)
+  - [Adding syntax highlighting for a language](#adding-syntax-highlighting-for-a-language)
 - [FAQ](#faq)
   - [Why Oatmeal?](#why-oatmeal)
 - [License](#license)
@@ -285,7 +285,7 @@ The following steps should be completed to add an editor:
 3. Write tests
 4. Update the documentation for the [CLI](./src/application/cli.rs).
 
-### Adding a syntax highlighting for a language
+### Adding syntax highlighting for a language
 
 Syntax highlighting language selection is a tad manual where several languages must be curated and then added to
 [`build.rs`](./build.rs).

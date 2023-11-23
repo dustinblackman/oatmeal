@@ -281,7 +281,6 @@ impl<'a> AppState<'a> {
 
             // Reset backend context on model switch.
             if command.is_model_set() {
-                should_continue = true;
                 self.backend_context = "".to_string();
             }
         }

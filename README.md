@@ -243,7 +243,7 @@ function oatmeal-sessions() {
     current=$(pwd)
 
     cd "$(oatmeal sessions dir)"
-    id=$(rg --color always -n "$oatmealdir" | fzf --ansi | awk -F ':' '{print $1}' | head -n1 | awk -F '.' '{print $1}')
+    id=$(rg --color always -n . | fzf --ansi | awk -F ':' '{print $1}' | head -n1 | awk -F '.' '{print $1}')
     oatmeal sessions open --id "$id"
 
     cd $current

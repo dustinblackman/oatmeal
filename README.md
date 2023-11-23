@@ -285,7 +285,7 @@ The following steps should be completed to add an editor:
 3. Write tests
 4. Update the documentation for the [CLI](./src/application/cli.rs).
 
-### Adding a syntax highlight for a language
+### Adding a syntax highlighting for a language
 
 Syntax highlighting language selection is a tad manual where several languages must be curated and then added to
 [`build.rs`](./build.rs).

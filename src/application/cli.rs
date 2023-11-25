@@ -136,6 +136,35 @@ fn subcommand_sessions_delete() -> Command {
         );
 }
 
+fn arg_backend() -> Arg {
+    return Arg::new("backend")
+        .short('b')
+        .long("backend")
+        .env("OATMEAL_BACKEND")
+        .num_args(1)
+        .help(
+            "The initial backend hosting a model to connect to. [Possible values: ollama, openai]",
+        )
+        .default_value("ollama");
+}
+
+fn arg_model() -> Arg {
+    return Arg::new("model")
+        .short('m')
+        .long("model")
+        .env("OATMEAL_MODEL")
+        .num_args(1)
+        .help("The initial model on a backend to consume")
+        .default_value("llama2:latest");
+}
+
+fn subcommand_chat() -> Command {
+    return Command::new("chat")
+        .about("Start a new chat session")
+        .arg(arg_backend())
+        .arg(arg_model());
+}
+
 fn subcommand_sessions() -> Command {
     return Command::new("sessions")
         .about("Manage past chat sessions")
@@ -192,28 +221,11 @@ fn build() -> Command {
         .version(env!("CARGO_PKG_VERSION"))
         .after_help(commands_text)
         .arg_required_else_help(false)
+        .subcommand(subcommand_chat())
         .subcommand(subcommand_completions())
         .subcommand(subcommand_sessions())
-        .arg(
-            Arg::new("backend")
-                .short('b')
-                .long("backend")
-                .env("OATMEAL_BACKEND")
-                .num_args(1)
-                .help(
-                    "The initial backend hosting a model to connect to. [Possible values: ollama, openai]",
-                )
-                .default_value("ollama"),
-        )
-        .arg(
-            Arg::new("model")
-                .short('m')
-                .long("model")
-                .env("OATMEAL_MODEL")
-                .num_args(1)
-                .help("The initial model on a backend to consume")
-                .default_value("llama2:latest"),
-        )
+        .arg(arg_backend())
+        .arg(arg_model())
         .arg(
             Arg::new("editor")
                 .short('e')
@@ -269,6 +281,16 @@ pub async fn parse() -> Result<bool> {
     let matches = build().get_matches();
 
     match matches.subcommand() {
+        Some(("chat", subcmd_matches)) => {
+            Config::set(
+                ConfigKey::Backend,
+                subcmd_matches.get_one::<String>("backend").unwrap(),
+            );
+            Config::set(
+                ConfigKey::Model,
+                subcmd_matches.get_one::<String>("model").unwrap(),
+            );
+        }
         Some(("completions", subcmd_matches)) => {
             if let Some(completions) = subcmd_matches.get_one::<Shell>("shell").copied() {
                 let mut app = build();

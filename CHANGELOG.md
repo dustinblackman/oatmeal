@@ -2,12 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2023-11-25
+
+[v0.5.0...v0.5.1](https://github.com/dustinblackman/oatmeal/compare/v0.5.0...v0.5.1)
+
+### 🐛 Bug Fixes
+
+- Add chat subcommand to clarify docs - ([c3085e0](https://github.com/dustinblackman/oatmeal/commit/c3085e0412d1d7c0c571711975cd6443c84ae221))
+
+### 📚 Documentation
+
+- Update README.md - ([a596daa](https://github.com/dustinblackman/oatmeal/commit/a596daa1afd3deaa536a016b1f5043b39182fa8c))
+- Update README.md - ([6c147d0](https://github.com/dustinblackman/oatmeal/commit/6c147d0860404ccc69bf381d010f349eff05b83d))
+- Update README.md - ([d629f1e](https://github.com/dustinblackman/oatmeal/commit/d629f1e711b01f9bfdf9373aa24ab2cb40124e63))
+
 ## [0.5.0] - 2023-11-23
 
 [v0.4.0...v0.5.0](https://github.com/dustinblackman/oatmeal/compare/v0.4.0...v0.5.0)
 
 ### ⛰️ Features
 
+- Release v0.5.0 - ([b269ebd](https://github.com/dustinblackman/oatmeal/commit/b269ebdd7af908aa9f4dece0db7ab9231d4de181))
 - Add indexes to model list and model selection - ([de7ef33](https://github.com/dustinblackman/oatmeal/commit/de7ef33ddd1bee5df83967bde720357c3f11b1ee))
 
 ### 🐛 Bug Fixes

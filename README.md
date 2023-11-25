@@ -35,7 +35,7 @@
 
 ## Overview
 
-Oatmeal is a terminal UI chat application that speaks with LLMs, complete with slash commands for familiar usage. It features agnostic backends to allow switching between the powerhouse of ChatGPT, or keeping things private with Ollama.
+Oatmeal is a terminal UI chat application that speaks with LLMs, complete with slash commands and fancy chat bubbles. It features agnostic backends to allow switching between the powerhouse of ChatGPT, or keeping things private with Ollama.
 While Oatmeal works great as a stand alone terminal application, it works even better paired with an editor like Neovim!
 
 See it in action with Neovim (click to restart):

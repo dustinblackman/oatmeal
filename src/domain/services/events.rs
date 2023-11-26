@@ -35,6 +35,28 @@ impl EventsService {
                         return Some(Event::UIScrollUp());
                     }
                     Input {
+                        key: Key::MouseScrollDown,
+                        ..
+                    } => {
+                        return Some(Event::UIScrollDown());
+                    }
+                    Input {
+                        key: Key::MouseScrollUp,
+                        ..
+                    } => {
+                        return Some(Event::UIScrollUp());
+                    }
+                    Input {
+                        key: Key::PageDown, ..
+                    } => {
+                        return Some(Event::UIScrollPageDown());
+                    }
+                    Input {
+                        key: Key::PageUp, ..
+                    } => {
+                        return Some(Event::UIScrollPageUp());
+                    }
+                    Input {
                         key: Key::Char('d'),
                         ctrl: true,
                         ..

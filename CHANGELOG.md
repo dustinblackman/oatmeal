@@ -2,9 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.2] - 2023-11-26
+
+[v0.5.1...v0.5.2](https://github.com/dustinblackman/oatmeal/compare/v0.5.1...v0.5.2)
+
+### 🐛 Bug Fixes
+
+- Release pipeline - ([be9d9ca](https://github.com/dustinblackman/oatmeal/commit/be9d9ca3b4cbaec47ada550ecfb3b3b897723d76))
+
 ## [0.5.1] - 2023-11-25
 
 [v0.5.0...v0.5.1](https://github.com/dustinblackman/oatmeal/compare/v0.5.0...v0.5.1)
+
+### ⛰️ Features
+
+- Release v0.5.1 - ([2b9e141](https://github.com/dustinblackman/oatmeal/commit/2b9e141e1c53c8a8ecd57c7083f7bb868cfc862c))
 
 ### 🐛 Bug Fixes
 

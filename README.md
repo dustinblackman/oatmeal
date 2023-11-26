@@ -87,7 +87,7 @@ yay -S oatmeal-bin
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.5.2
+choco install oatmeal --version=0.5.3
 ```
 
 <!-- choco-install end -->
@@ -130,8 +130,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.5.2
-Commit: v0.5.2
+Version: 0.5.3
+Commit: v0.5.3
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 

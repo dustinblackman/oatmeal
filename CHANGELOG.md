@@ -2,9 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.3] - 2023-11-26
+
+[v0.5.2...v0.5.3](https://github.com/dustinblackman/oatmeal/compare/v0.5.2...v0.5.3)
+
+### 🐛 Bug Fixes
+
+- Session sorting - ([d987e56](https://github.com/dustinblackman/oatmeal/commit/d987e568f96939e2def09d94860f2da6041e9278))
+
+### 🧪 Testing
+
+- AppState business logic - ([f3c223e](https://github.com/dustinblackman/oatmeal/commit/f3c223eadaac158c5ed9b2b2c9db520c39416435))
+
 ## [0.5.2] - 2023-11-26
 
 [v0.5.1...v0.5.2](https://github.com/dustinblackman/oatmeal/compare/v0.5.1...v0.5.2)
+
+### ⛰️ Features
+
+- Release v0.5.2 - ([351cccd](https://github.com/dustinblackman/oatmeal/commit/351cccdbea11f9d06a549b69740b9a1759f8a535))
 
 ### 🐛 Bug Fixes
 

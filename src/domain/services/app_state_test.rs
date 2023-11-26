@@ -14,6 +14,7 @@ use crate::domain::models::MessageType;
 use crate::domain::services::BubbleList;
 use crate::domain::services::CodeBlocks;
 use crate::domain::services::Scroll;
+use crate::domain::services::Sessions;
 use crate::domain::services::Themes;
 
 impl Default for AppState<'static> {
@@ -183,6 +184,22 @@ mod handle_slash_commands {
 
         return Ok(());
     }
+
+    #[test]
+    fn it_handles_model_set() -> Result<()> {
+        let (tx, _rx) = mpsc::unbounded_channel::<Action>();
+        let mut app_state = AppState::default();
+        app_state.add_message(Message::new(Author::User, "Hello world"));
+
+        let (should_break, should_continue) = app_state.handle_slash_commands("/model 1", &tx)?;
+
+        assert!(!should_break);
+        assert!(!should_continue);
+        assert!(!app_state.waiting_for_backend);
+        assert!(app_state.backend_context.is_empty());
+
+        return Ok(());
+    }
 }
 
 mod handle_backend_response {
@@ -224,5 +241,37 @@ mod handle_backend_response {
             app_state.messages.last().unwrap().message_type(),
             MessageType::Error
         );
+    }
+}
+
+mod init {
+
+    use super::*;
+
+    #[tokio::test]
+    async fn it_inits_and_reloads_from_session() -> Result<()> {
+        let app_state = AppState::new(
+            "ollama",
+            "clipboard",
+            "codellama:latest",
+            "base16-onedark",
+            "",
+            "",
+        )
+        .await?;
+        app_state.save_session().await?;
+        let session_id = app_state.session_id;
+        AppState::new(
+            "ollama",
+            "clipboard",
+            "codellama:latest",
+            "base16-onedark",
+            "",
+            &session_id,
+        )
+        .await?;
+        Sessions::default().delete(&session_id).await?;
+
+        return Ok(());
     }
 }

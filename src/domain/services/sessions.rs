@@ -2,6 +2,7 @@ use std::path;
 
 use anyhow::bail;
 use anyhow::Result;
+use chrono::DateTime;
 use chrono::Local;
 use chrono::SecondsFormat;
 use tokio::fs;
@@ -64,8 +65,9 @@ impl Sessions {
             sessions.push(session);
         }
 
-        // TODO actually compare timestamps.
-        sessions.sort_by_key(|session| return session.timestamp.clone());
+        sessions.sort_by_cached_key(|session| {
+            return DateTime::parse_from_rfc3339(&session.timestamp).unwrap();
+        });
 
         return Ok(sessions);
     }

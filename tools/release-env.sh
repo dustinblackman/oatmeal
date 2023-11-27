@@ -8,6 +8,6 @@ mkdir -p "$HOMETMP"
 ln -s "$HOME/.cargo" "$HOMETMP/.cargo"
 ln -s "$HOME/.rustup" "$HOMETMP/.rustup"
 
-env -i PATH="$PATHTMP:$HOMETMP/.cargo/bin" HOME="$HOMETMP" bash --noprofile --norc -c "cargo $*"
+env -i PATH="$HOMETMP/.cargo/bin:$PATHTMP" HOME="$HOMETMP" bash --noprofile --norc -c "cargo $*"
 
 rm -rf "$HOMETMP"

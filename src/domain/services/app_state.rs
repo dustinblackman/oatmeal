@@ -29,8 +29,8 @@ pub struct AppState<'a> {
     pub codeblocks: CodeBlocks,
     pub editor_context: Option<EditorContext>,
     pub exit_warning: bool,
-    pub last_known_height: u16,
-    pub last_known_width: u16,
+    pub last_known_height: usize,
+    pub last_known_width: usize,
     pub messages: Vec<Message>,
     pub scroll: Scroll,
     pub session_id: String,
@@ -289,8 +289,8 @@ impl<'a> AppState<'a> {
     }
 
     pub fn set_rect(&mut self, rect: Rect) {
-        self.last_known_width = rect.width;
-        self.last_known_height = rect.height;
+        self.last_known_width = rect.width.into();
+        self.last_known_height = rect.height.into();
         self.sync_dependants();
     }
 
@@ -305,7 +305,7 @@ impl<'a> AppState<'a> {
             .set_messages(&self.messages, self.last_known_width);
 
         self.scroll
-            .set_state(self.bubble_list.len() as u16, self.last_known_height);
+            .set_state(self.bubble_list.len(), self.last_known_height);
 
         if self.waiting_for_backend {
             self.scroll.last();

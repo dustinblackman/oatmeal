@@ -63,7 +63,7 @@ impl Message {
         self.text += &text.replace('\t', "  ");
     }
 
-    pub fn as_string_lines(&self, line_max_width: u16) -> Vec<String> {
+    pub fn as_string_lines(&self, line_max_width: usize) -> Vec<String> {
         let mut lines: Vec<String> = Vec::new();
 
         for full_line in self.text.split('\n') {
@@ -77,7 +77,7 @@ impl Message {
             let mut current_lines: Vec<&str> = vec![];
 
             for word in full_line.split(' ') {
-                if word.len() + char_count + 1 > line_max_width.into() {
+                if word.len() + char_count + 1 > line_max_width {
                     lines.push(current_lines.join(" ").trim_end().to_string());
                     current_lines = vec![word];
                     char_count = word.len() + 1;

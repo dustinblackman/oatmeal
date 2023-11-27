@@ -46,7 +46,7 @@ dirs = "=5.0.1"
 futures = "=0.3.28"
 once_cell = "=1.18.0"
 owo-colors = { version = "3.5.0", features = ["supports-colors"] }
-ratatui = "=0.23.0"
+ratatui = "=0.24.0"
 reqwest = { version = "=0.11.22", default-features = false, features = ["stream", "json", "gzip", "native-tls-vendored"] }
 rust-embed = { version = "=8.0.0", features = ["include-exclude"] }
 serde = "=1.0.193"
@@ -56,7 +56,7 @@ serde_yaml = "=0.9.27"
 syntect = { version = "=5.1.0", default-features = false, features = ["parsing", "default-syntaxes", "plist-load", "yaml-load", "regex-onig"] }
 tokio = { version = "=1.33.0", features = ["fs", "macros", "rt-multi-thread", "sync", "process"] }
 tokio-util = "=0.7.9"
-tui-textarea = { version = "=0.2.4", default-features = false, features = ["ratatui-crossterm"] }
+tui-textarea = { version = "=0.4.0", default-features = false, features = ["crossterm", "ratatui"] }
 uuid = { version = "=1.6.1", features = ["v4"] }
 
 [dev-dependencies]

@@ -1,5 +1,4 @@
 use ratatui::prelude::Alignment;
-use ratatui::prelude::Backend;
 use ratatui::prelude::Rect;
 use ratatui::widgets::Block;
 use ratatui::widgets::BorderType;
@@ -12,7 +11,7 @@ use ratatui::Frame;
 pub struct Loading {}
 
 impl Loading {
-    pub fn render<B: Backend>(&self, frame: &mut Frame<B>, rect: Rect) {
+    pub fn render(&self, frame: &mut Frame, rect: Rect) {
         frame.render_widget(
             Paragraph::new("Loading...")
                 .block(

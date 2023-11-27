@@ -24,7 +24,7 @@ pub enum BubbleAlignment {
 pub struct Bubble {
     alignment: BubbleAlignment,
     message: Message,
-    window_max_width: u16,
+    window_max_width: usize,
     codeblock_counter: usize,
 }
 
@@ -32,7 +32,7 @@ impl<'a> Bubble {
     pub fn new(
         message: Message,
         alignment: BubbleAlignment,
-        window_max_width: u16,
+        window_max_width: usize,
         codeblock_counter: usize,
     ) -> Bubble {
         return Bubble {
@@ -106,9 +106,7 @@ impl<'a> Bubble {
                 }
             }
 
-            let bubble_padding = [" "]
-                .repeat(self.window_max_width as usize - line_length)
-                .join("");
+            let bubble_padding = [" "].repeat(self.window_max_width - line_length).join("");
 
             if self.alignment == BubbleAlignment::Left {
                 spans.push(Span::from(bubble_padding));
@@ -133,7 +131,7 @@ impl<'a> Bubble {
 
         let message_lines = self
             .message
-            .as_string_lines(self.window_max_width - line_border_width as u16);
+            .as_string_lines(self.window_max_width - line_border_width);
 
         let mut max_line_length = message_lines
             .iter()
@@ -159,7 +157,7 @@ impl<'a> Bubble {
         let bottom_bar = format!("╰{inner_bar}╯");
         let bar_bubble_padding = [" "]
             // TODO WTF is 8?
-            .repeat(self.window_max_width as usize - max_line_length - 8)
+            .repeat(self.window_max_width - max_line_length - 8)
             .join("");
 
         let username = &self.message.author_formatted;

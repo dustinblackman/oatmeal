@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-use ratatui::prelude::Backend;
 use ratatui::prelude::Rect;
 use ratatui::text::Line;
 use ratatui::widgets::Block;
@@ -25,7 +24,7 @@ struct BubbleCacheEntry<'a> {
 
 pub struct BubbleList<'a> {
     cache: HashMap<usize, BubbleCacheEntry<'a>>,
-    line_width: u16,
+    line_width: usize,
     lines: Vec<Line<'a>>,
     theme: Theme,
 }
@@ -40,7 +39,7 @@ impl<'a> BubbleList<'a> {
         };
     }
 
-    pub fn set_messages(&mut self, messages: &[Message], line_width: u16) {
+    pub fn set_messages(&mut self, messages: &[Message], line_width: usize) {
         if self.line_width != line_width {
             self.cache.clear();
             self.line_width = line_width;
@@ -92,11 +91,11 @@ impl<'a> BubbleList<'a> {
         return self.lines.len();
     }
 
-    pub fn render<B: Backend>(&mut self, frame: &mut Frame<B>, rect: Rect, scroll: u16) {
+    pub fn render(&mut self, frame: &mut Frame, rect: Rect, scroll: usize) {
         frame.render_widget(
             Paragraph::new(self.lines.to_owned())
                 .block(Block::default())
-                .scroll((scroll, 0)),
+                .scroll((scroll.try_into().unwrap(), 0)),
             rect,
         );
     }

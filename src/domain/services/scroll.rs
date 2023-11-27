@@ -2,9 +2,9 @@ use ratatui::widgets::ScrollbarState;
 
 #[derive(Default)]
 pub struct Scroll {
-    list_length: u16,
-    viewport_length: u16,
-    pub position: u16,
+    list_length: usize,
+    viewport_length: usize,
+    pub position: usize,
     pub scrollbar_state: ScrollbarState,
 }
 
@@ -21,7 +21,7 @@ impl Scroll {
     }
 
     pub fn down(&mut self) {
-        let mut clamp: u16 = 0;
+        let mut clamp: usize = 0;
         if self.list_length > self.viewport_length {
             clamp = self.list_length - self.viewport_length + 1;
         }
@@ -48,7 +48,7 @@ impl Scroll {
         self.scrollbar_state.last();
     }
 
-    pub fn set_state(&mut self, list_length: u16, viewport_length: u16) {
+    pub fn set_state(&mut self, list_length: usize, viewport_length: usize) {
         self.list_length = list_length;
         self.viewport_length = viewport_length;
         self.scrollbar_state = self

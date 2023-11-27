@@ -51,6 +51,7 @@ async fn start_loop<B: Backend>(
                 key: Key::Char(char),
                 ctrl: false,
                 alt: false,
+                shift: false,
             });
         }
     }
@@ -62,8 +63,8 @@ async fn start_loop<B: Backend>(
                 .constraints(vec![Constraint::Min(1), Constraint::Max(4)])
                 .split(frame.size());
 
-            if layout[0].width != app_state.last_known_width
-                || layout[0].height != app_state.last_known_height
+            if layout[0].width as usize != app_state.last_known_width
+                || layout[0].height as usize != app_state.last_known_height
             {
                 app_state.set_rect(layout[0]);
             }

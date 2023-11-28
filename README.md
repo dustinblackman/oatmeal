@@ -84,6 +84,8 @@ yay -S oatmeal-bin
 
 **Chocolatey**
 
+Note: Version may be outdated as I wait for Chocolately to approve the first release of Oatmeal.
+
 <!-- choco-install start -->
 
 ```sh

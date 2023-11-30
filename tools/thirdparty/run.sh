@@ -36,6 +36,9 @@ fi
 # Cargo packages
 cargo about generate -c "$PROGDIR/about.toml" "$PROGDIR/templates/html.hbs" >"$PROGDIR/../../THIRDPARTY.html"
 
+# Additional Third Party
+sd '__OPENSSL_LICENSE__' "$(curl -s -L https://raw.githubusercontent.com/sfackler/rust-openssl/48b8e81e807b6f589ae66fed9567084c3d833b83/THIRD_PARTY)" "$PROGDIR/../../THIRDPARTY.html"
+
 # Themes
 sd '__BASE16_TEXTMATE__' "$(cat "$PROGDIR"/../../.cache/themes/LICENSE.md | awk 'NR > 1')" "$PROGDIR/../../THIRDPARTY.html"
 

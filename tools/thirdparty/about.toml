@@ -122,3 +122,10 @@ license = "MIT"
 [[typenum.clarify.git]]
 path = "LICENSE-MIT"
 checksum = "a825bd853ab71619a4923d7b4311221427848070ff44d990da39b0b274c1683f"
+
+[openssl.clarify]
+license = "Apache-2.0"
+
+[[openssl.clarify.git]]
+path = "openssl/LICENSE"
+checksum = "f3d4287b4a21c5176fea2f9bd4ae800696004e2fb8e05cbc818be513f188a941"

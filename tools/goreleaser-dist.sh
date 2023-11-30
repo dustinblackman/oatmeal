@@ -26,7 +26,7 @@ goTargetToRust() {
 rm -rf "./dist/oatmeal_${target}"
 mkdir -p "./dist/oatmeal_${target}"
 
-rustbin="./target/$(goTargetToRust)/release/oatmeal"
+rustbin="./gh-dist/$(goTargetToRust)/oatmeal"
 if [[ "$target" == "windows_amd64_v1" ]] || [[ "$target" == "windows_arm64" ]]; then
 	rustbin="${rustbin}.exe"
 fi

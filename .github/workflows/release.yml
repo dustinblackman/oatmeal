@@ -1,0 +1,114 @@
+name: build
+jobs:
+  linux-amd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+      - name: Build
+        run: cargo build --release --target x86_64-unknown-linux-gnu
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: x86_64-unknown-linux-gnu
+          path: target/x86_64-unknown-linux-gnu/release/oatmeal
+
+  linux-arm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: goto-bus-stop/setup-zig@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: aarch64-unknown-linux-gnu
+      - name: Build
+        run: |
+          sudo apt-get install gcc-aarch64-linux-gnu
+          cargo install cargo-zigbuild
+          rustup target add aarch64-unknown-linux-gnu
+          cargo zigbuild --release --target aarch64-unknown-linux-gnu
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: aarch64-unknown-linux-gnu
+          path: target/aarch64-unknown-linux-gnu/release/oatmeal
+
+  macos-amd:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          target: x86_64-apple-darwin
+          toolchain: stable
+      - name: Build
+        run: cargo build --release --target x86_64-apple-darwin
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: x86_64-apple-darwin
+          path: target/x86_64-apple-darwin/release/oatmeal
+
+  macos-arm:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: goto-bus-stop/setup-zig@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: aarch64-apple-darwin
+      - name: Build
+        run: |
+          cargo install cargo-zigbuild
+          rustup target add aarch64-apple-darwin
+          cargo zigbuild --release --target aarch64-apple-darwin
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: aarch64-apple-darwin
+          path: target/aarch64-apple-darwin/release/oatmeal
+
+  windows-amd:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: x86_64-pc-windows-msvc
+      - name: Build
+        run: cargo build --release --target x86_64-pc-windows-msvc
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: x86_64-pc-windows-msvc
+          path: target/x86_64-pc-windows-msvc/release/oatmeal.exe
+
+  windows-arm:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: aarch64-pc-windows-msvc
+      - name: Build
+        run: |
+          rustup target add aarch64-pc-windows-msvc
+          cargo build --release --target aarch64-pc-windows-msvc
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: aarch64-pc-windows-msvc
+          path: target/aarch64-pc-windows-msvc/release/oatmeal.exe

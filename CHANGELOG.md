@@ -2,9 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.5] - 2023-11-30
+
+[v0.5.4...v0.5.5](https://github.com/dustinblackman/oatmeal/compare/v0.5.4...v0.5.5)
+
+### 🐛 Bug Fixes
+
+- CI - ([67f5df6](https://github.com/dustinblackman/oatmeal/commit/67f5df60e81df96246c41607f8b02371fe2bf84c))
+
+### ⚙️ Miscellaneous Tasks
+
+- Move to faster builds - ([fff0c59](https://github.com/dustinblackman/oatmeal/commit/fff0c59bba82f002b51b7a7bab58ce209accf259))
+
 ## [0.5.4] - 2023-11-30
 
 [v0.5.3...v0.5.4](https://github.com/dustinblackman/oatmeal/compare/v0.5.3...v0.5.4)
+
+### ⛰️ Features
+
+- Release v0.5.4 - ([feda265](https://github.com/dustinblackman/oatmeal/commit/feda265998449bc535d863fad5ddefdda4f9331b))
 
 ### 🐛 Bug Fixes
 

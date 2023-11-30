@@ -1,6 +1,6 @@
 [package]
 name = "oatmeal"
-version = "0.5.4"
+version = "0.5.5"
 authors = ["Dustin Blackman"]
 build = "build.rs"
 edition = "2021"
@@ -160,7 +160,6 @@ setup-nightly = '''
 
 release = '''set -e
   cargo gha goreleaser check
-  rm -rf .cache
   cargo check
   cargo cmd lint
   cargo cmd test

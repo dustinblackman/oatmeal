@@ -2,9 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.4] - 2023-11-30
+
+[v0.5.3...v0.5.4](https://github.com/dustinblackman/oatmeal/compare/v0.5.3...v0.5.4)
+
+### 🐛 Bug Fixes
+
+- Exit warning on Windows - ([7cce417](https://github.com/dustinblackman/oatmeal/commit/7cce417de57c319f9f92fd6c470c2afff0cc091a))
+- Cargo path - ([a123857](https://github.com/dustinblackman/oatmeal/commit/a12385747bc6a5129aa0708c9f1cebd557de4216))
+- Add missing scroll events - ([1aab870](https://github.com/dustinblackman/oatmeal/commit/1aab87085c2390307465954daad900a61b4fbe90))
+
+### 📚 Documentation
+
+- Add note for chocolatey - ([e698b85](https://github.com/dustinblackman/oatmeal/commit/e698b85cad01ce59dd2db2c4f90575deff522686))
+
+### ⚙️ Miscellaneous Tasks
+
+- Approve new licenses - ([4af72e4](https://github.com/dustinblackman/oatmeal/commit/4af72e4bfe564ae6a214f724182375f55f0ec2cf))
+- Ratatui 0.24.0 - ([cdcdd22](https://github.com/dustinblackman/oatmeal/commit/cdcdd220318f9ed84dd5e11811ec06f625190c63))
+
 ## [0.5.3] - 2023-11-26
 
 [v0.5.2...v0.5.3](https://github.com/dustinblackman/oatmeal/compare/v0.5.2...v0.5.3)
+
+### ⛰️ Features
+
+- Release v0.5.3 - ([d9f90cd](https://github.com/dustinblackman/oatmeal/commit/d9f90cd8e13e9343147d31fc502905bc22f2385f))
 
 ### 🐛 Bug Fixes
 

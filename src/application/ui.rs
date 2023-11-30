@@ -135,7 +135,11 @@ async fn start_loop<B: Backend>(
                     continue;
                 }
 
-                app_state.exit_warning = false;
+                // Windows submits a null event right after CTRL+C. Ignore it.
+                if input.key != tui_textarea::Key::Null {
+                    app_state.exit_warning = false;
+                }
+
                 textarea.input(input);
             }
             Event::KeyboardCTRLC() => {

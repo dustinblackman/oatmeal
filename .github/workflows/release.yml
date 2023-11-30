@@ -11,7 +11,8 @@ jobs:
           toolchain: stable
           target: x86_64-unknown-linux-gnu
       - name: Build
-        run: cargo build --release --target x86_64-unknown-linux-gnu
+        run: |
+          cargo build --release --target x86_64-unknown-linux-gnu
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
@@ -23,6 +24,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.11.0
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -31,8 +34,8 @@ jobs:
       - name: Build
         run: |
           sudo apt-get install gcc-aarch64-linux-gnu
-          cargo install cargo-zigbuild
           rustup target add aarch64-unknown-linux-gnu
+          cargo install cargo-zigbuild --version 0.18.0
           cargo zigbuild --release --target aarch64-unknown-linux-gnu
       - name: Upload
         uses: actions/upload-artifact@v2
@@ -62,6 +65,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.11.0
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -69,8 +74,8 @@ jobs:
           target: aarch64-apple-darwin
       - name: Build
         run: |
-          cargo install cargo-zigbuild
           rustup target add aarch64-apple-darwin
+          cargo install cargo-zigbuild --version 0.18.0
           cargo zigbuild --release --target aarch64-apple-darwin
       - name: Upload
         uses: actions/upload-artifact@v2
@@ -88,7 +93,8 @@ jobs:
           toolchain: stable
           target: x86_64-pc-windows-msvc
       - name: Build
-        run: cargo build --release --target x86_64-pc-windows-msvc
+        run: |
+          cargo build --release --target x86_64-pc-windows-msvc
       - name: Upload
         uses: actions/upload-artifact@v2
         with:

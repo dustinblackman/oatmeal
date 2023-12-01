@@ -164,7 +164,6 @@ fn arg_model() -> Arg {
         .short('m')
         .long("model")
         .env("OATMEAL_MODEL")
-        .env("OPENAI_MODEL")
         .num_args(1)
         .help("The initial model on a backend to consume")
         .default_value("llama2:latest");
@@ -283,8 +282,6 @@ fn build() -> Command {
             Arg::new("openai-token")
                 .long("openai-token")
                 .env("OATMEAL_OPENAI_TOKEN")
-                .env("OPENAI_API_KEY")
-                .env("OPENAI_KEY")
                 .num_args(1)
                 .help("OpenAI API token when using the OpenAI backend")
                 .global(true),

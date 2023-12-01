@@ -166,6 +166,16 @@ release = '''set -e
   cargo cmd test
   cargo cmd thirdparty
 
+  gh workflow run release.yml --ref main
+  while true; do
+    res=$(cargo gha gh run list -R dustinblackman/oatmeal -w build --json conclusion,databaseId | jq -rc '.[0]')
+    echo "Status: $res"
+    if (echo "$res" | grep -q "success"); then
+      break
+    fi
+    sleep 30
+  done;
+
   rm -rf dist-gh
   mkdir dist-gh
   export GH_RUN_ID=$(cargo gha gh run list -R dustinblackman/oatmeal -w build --json databaseId | jq -rc '.[0].databaseId')

@@ -11,6 +11,7 @@ use uuid::Uuid;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
+use crate::domain::models::Author;
 use crate::domain::models::EditorContext;
 use crate::domain::models::Message;
 use crate::domain::models::Session;
@@ -48,8 +49,8 @@ impl Sessions {
         return self.cache_dir.join(format!("{id}.yaml"));
     }
 
-    /// Returns a list of sessions, but with messages and context removed to
-    /// save on memory.
+    /// Returns a list of sessions, but with only the first author message and
+    /// context removed to save on memory.
     pub async fn list(&self) -> Result<Vec<Session>> {
         let mut sessions: Vec<Session> = vec![];
         if !self.cache_dir.exists() {
@@ -60,8 +61,19 @@ impl Sessions {
         while let Some(file) = dir.next_entry().await? {
             let payload = fs::read_to_string(file.path()).await?;
             let mut session: Session = serde_yaml::from_str(&payload)?;
+            let author_messages = session
+                .state
+                .messages
+                .iter()
+                .filter(|e| return e.author == Author::User)
+                .collect::<Vec<&Message>>();
+            if !author_messages.is_empty() {
+                session.state.messages = vec![author_messages[0].clone()];
+            } else {
+                session.state.messages = vec![];
+            }
+
             session.state.backend_context = "".to_string();
-            session.state.messages = vec![];
             sessions.push(session);
         }
 

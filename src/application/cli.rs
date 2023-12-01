@@ -29,13 +29,24 @@ fn print_completions<G: Generator>(gen: G, cmd: &mut Command) {
 fn format_session(session: &Session) -> String {
     let mut res = format!(
         "- (ID: {}) {}, Model: {}",
-        session.id.bold(),
-        session.timestamp,
-        session.state.backend_model,
+        session.id, session.timestamp, session.state.backend_model,
     );
 
     if !session.state.editor_language.is_empty() {
         res = format!("{res}, Lang: {}", session.state.editor_language)
+    }
+
+    if !session.state.messages.is_empty() {
+        let mut line = session.state.messages[0]
+            .text
+            .split('\n')
+            .collect::<Vec<_>>()[0]
+            .to_string();
+
+        if line.len() >= 70 {
+            line = format!("{}...", &line[..67]);
+        }
+        res = format!("{res}, {line}");
     }
 
     return res;

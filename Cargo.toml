@@ -1,6 +1,6 @@
 [package]
 name = "oatmeal"
-version = "0.5.5"
+version = "0.6.0"
 authors = ["Dustin Blackman"]
 build = "build.rs"
 edition = "2021"
@@ -167,6 +167,7 @@ release = '''set -e
   cargo cmd thirdparty
 
   gh workflow run release.yml --ref main
+  sleep 5
   while true; do
     res=$(cargo gha gh run list -R dustinblackman/oatmeal -w build --json conclusion,databaseId | jq -rc '.[0]')
     echo "Status: $res"

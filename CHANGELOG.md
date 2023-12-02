@@ -2,9 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2023-12-02
+
+[v0.5.5...v0.6.0](https://github.com/dustinblackman/oatmeal/compare/v0.5.5...v0.6.0)
+
+### ⛰️ Features
+
+- Add preview to session list - ([6f73626](https://github.com/dustinblackman/oatmeal/commit/6f73626d0b3e8f2f5fd337dd92ce785cc2c7cd4e))
+
+### 🐛 Bug Fixes
+
+- File permissions in releases - ([b4e7070](https://github.com/dustinblackman/oatmeal/commit/b4e7070761f601ca8f622a2c2610d5467fab66b8))
+- Check that docker is running on release - ([ddb93dd](https://github.com/dustinblackman/oatmeal/commit/ddb93ddb326ed02651df1abd4caaa57084419cc1))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add automated release triggers - ([48517d4](https://github.com/dustinblackman/oatmeal/commit/48517d4519f2800764cb337f8f804d45b555199e))
+- Lock zig version - ([852590c](https://github.com/dustinblackman/oatmeal/commit/852590c25e0db5ec9d0b0c292e3d3eae37c53789))
+
 ## [0.5.5] - 2023-11-30
 
 [v0.5.4...v0.5.5](https://github.com/dustinblackman/oatmeal/compare/v0.5.4...v0.5.5)
+
+### ⛰️ Features
+
+- Release v0.5.5 - ([060e418](https://github.com/dustinblackman/oatmeal/commit/060e418f0d243a55f655422db4a80dc6ce1f558d))
 
 ### 🐛 Bug Fixes
 

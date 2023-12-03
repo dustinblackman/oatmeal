@@ -168,6 +168,26 @@ release = '''set -e
   cargo cmd test
   cargo cmd thirdparty
 
+  export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
+  cargo bin git-cliff -o CHANGELOG.md --tag "v$OM_VERSION"
+  cargo bin dprint fmt
+
+  git add .
+  git commit -m "feat: Release v$OM_VERSION"
+  git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
+
+  cargo build
+  cargo xtask update-readme
+  cargo bin dprint fmt
+
+  git add .
+  git commit --amend -m "feat: Release v$OM_VERSION"
+  git tag -d "v$OM_VERSION"
+  git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
+
+  git push
+  git push --tags
+
   gh workflow run release.yml --ref main
   sleep 5
   while true; do
@@ -185,24 +205,6 @@ release = '''set -e
   cargo gha gh run download -D dist-gh $GH_RUN_ID
   fd -t f . './dist-gh' | xargs -L1 chmod +x
 
-  export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
-  cargo bin git-cliff -o CHANGELOG.md --tag "v$OM_VERSION"
-  cargo bin dprint fmt
-
-  git add .
-  git commit -m "feat: Release v$OM_VERSION"
-  git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
-
-  cargo build
-  cargo xtask update-readme
-  cargo bin dprint fmt
-  git add .
-  git commit --amend -m "feat: Release v$OM_VERSION"
-  git tag -d "v$OM_VERSION"
-  git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
-
-  git push
-  git push --tags
   cargo cmd goreleaser
 '''
 

@@ -10,6 +10,9 @@ jobs:
           profile: minimal
           toolchain: stable
           target: x86_64-unknown-linux-gnu
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
       - name: Build
         run: |
           cargo build --release --target x86_64-unknown-linux-gnu
@@ -26,6 +29,9 @@ jobs:
       - uses: goto-bus-stop/setup-zig@v2
         with:
           version: 0.11.0
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -35,7 +41,7 @@ jobs:
         run: |
           sudo apt-get install gcc-aarch64-linux-gnu
           rustup target add aarch64-unknown-linux-gnu
-          cargo install cargo-zigbuild --version 0.18.0
+          cargo install cargo-run-bin
           cargo zigbuild --release --target aarch64-unknown-linux-gnu
       - name: Upload
         uses: actions/upload-artifact@v2
@@ -52,6 +58,9 @@ jobs:
           profile: minimal
           target: x86_64-apple-darwin
           toolchain: stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
       - name: Build
         run: cargo build --release --target x86_64-apple-darwin
       - name: Upload
@@ -67,6 +76,9 @@ jobs:
       - uses: goto-bus-stop/setup-zig@v2
         with:
           version: 0.11.0
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -75,7 +87,7 @@ jobs:
       - name: Build
         run: |
           rustup target add aarch64-apple-darwin
-          cargo install cargo-zigbuild --version 0.18.0
+          cargo install cargo-run-bin
           cargo zigbuild --release --target aarch64-apple-darwin
       - name: Upload
         uses: actions/upload-artifact@v2
@@ -92,6 +104,9 @@ jobs:
           profile: minimal
           toolchain: stable
           target: x86_64-pc-windows-msvc
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
       - name: Build
         run: |
           cargo build --release --target x86_64-pc-windows-msvc
@@ -110,6 +125,9 @@ jobs:
           profile: minimal
           toolchain: stable
           target: aarch64-pc-windows-msvc
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
       - name: Build
         run: |
           rustup target add aarch64-pc-windows-msvc

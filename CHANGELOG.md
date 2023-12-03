@@ -2,12 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.1] - 2023-12-03
+
+[v0.6.0...v0.6.1](https://github.com/dustinblackman/oatmeal/compare/v0.6.0...v0.6.1)
+
+### 🐛 Bug Fixes
+
+- Version number in releases - ([8ade883](https://github.com/dustinblackman/oatmeal/commit/8ade88319ae444a8f9a01db689e882ea1862884d))
+- Improve panic teardown - ([5e0e73c](https://github.com/dustinblackman/oatmeal/commit/5e0e73c6844740f95864738c1c2694f6c227e7f5))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add debug release symbols in releases - ([c8bb275](https://github.com/dustinblackman/oatmeal/commit/c8bb275cc8ebd7cb854f88d4cacd69b5be66730e))
+- Use cargo-run-bin on ci - ([5687058](https://github.com/dustinblackman/oatmeal/commit/568705814b0c6d121b07a519a9e3b5f445514ddb))
+- Remove choco until first version is approved - ([b610af8](https://github.com/dustinblackman/oatmeal/commit/b610af8e37a4594bf77e045fa04f66179c1f5d34))
+
 ## [0.6.0] - 2023-12-02
 
 [v0.5.5...v0.6.0](https://github.com/dustinblackman/oatmeal/compare/v0.5.5...v0.6.0)
 
 ### ⛰️ Features
 
+- Release v0.6.0 - ([9919dd2](https://github.com/dustinblackman/oatmeal/commit/9919dd287bf311dd91cdaf21bd0e4227c1a05741))
 - Add preview to session list - ([6f73626](https://github.com/dustinblackman/oatmeal/commit/6f73626d0b3e8f2f5fd337dd92ce785cc2c7cd4e))
 
 ### 🐛 Bug Fixes

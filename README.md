@@ -125,8 +125,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.6.0
-Commit: v0.6.0
+Version: 0.6.1
+Commit: v0.6.1
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 

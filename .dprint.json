@@ -1,7 +1,7 @@
 {
   "indentWidth": 2,
   "lineWidth": 160,
-  "includes": ["**/*.{md,toml,yaml,json}"],
+  "includes": ["**/*.{md,toml,yaml,yml,json}", ".github/*/*.yml"],
   "excludes": [".bin/**", ".git/**", "target/**", "dist/**", ".cache/**"],
   "plugins": [
     "https://github.com/dprint/dprint-plugin-markdown/releases/download/0.14.0/plugin.wasm",

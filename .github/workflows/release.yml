@@ -20,7 +20,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: x86_64-unknown-linux-gnu
-          path: target/x86_64-unknown-linux-gnu/release/oatmeal
+          path: |
+            target/x86_64-unknown-linux-gnu/release/oatmeal
+            target/x86_64-unknown-linux-gnu/release/oatmeal.dwp
 
   linux-arm:
     runs-on: ubuntu-latest
@@ -47,7 +49,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: aarch64-unknown-linux-gnu
-          path: target/aarch64-unknown-linux-gnu/release/oatmeal
+          path: |
+            target/aarch64-unknown-linux-gnu/release/oatmeal
+            target/aarch64-unknown-linux-gnu/release/oatmeal.dwp
 
   macos-amd:
     runs-on: macos-latest
@@ -62,12 +66,19 @@ jobs:
         with:
           cache-directories: ".bin"
       - name: Build
-        run: cargo build --release --target x86_64-apple-darwin
+        run: |
+          cargo build --release --target x86_64-apple-darwin
+          cd target/x86_64-apple-darwin/release/
+          cp -r "$(readlink oatmeal.dSYM)" symbols
+          rm oatmeal.dSYM
+          mv symbols oatmeal.dSYM
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           name: x86_64-apple-darwin
-          path: target/x86_64-apple-darwin/release/oatmeal
+          path: |
+            target/x86_64-apple-darwin/release/oatmeal
+            target/x86_64-apple-darwin/release/oatmeal.dSYM
 
   macos-arm:
     runs-on: macos-latest
@@ -89,11 +100,17 @@ jobs:
           rustup target add aarch64-apple-darwin
           cargo install cargo-run-bin
           cargo zigbuild --release --target aarch64-apple-darwin
+          cd target/aarch64-apple-darwin/release
+          cp -r "$(readlink oatmeal.dSYM)" symbols
+          rm oatmeal.dSYM
+          mv symbols oatmeal.dSYM
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           name: aarch64-apple-darwin
-          path: target/aarch64-apple-darwin/release/oatmeal
+          path: |
+            target/aarch64-apple-darwin/release/oatmeal
+            target/aarch64-apple-darwin/release/oatmeal.dSYM
 
   windows-amd:
     runs-on: windows-latest
@@ -114,7 +131,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: x86_64-pc-windows-msvc
-          path: target/x86_64-pc-windows-msvc/release/oatmeal.exe
+          path: |
+            target/x86_64-pc-windows-msvc/release/oatmeal.exe
+            target/x86_64-pc-windows-msvc/release/oatmeal.pdb
 
   windows-arm:
     runs-on: windows-latest
@@ -136,4 +155,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: aarch64-pc-windows-msvc
-          path: target/aarch64-pc-windows-msvc/release/oatmeal.exe
+          path: |
+            target/aarch64-pc-windows-msvc/release/oatmeal.exe
+            target/aarch64-pc-windows-msvc/release/oatmeal.pdb

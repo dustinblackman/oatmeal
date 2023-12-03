@@ -31,6 +31,7 @@
   - [Adding syntax highlighting for a language](#adding-syntax-highlighting-for-a-language)
 - [FAQ](#faq)
   - [Why Oatmeal?](#why-oatmeal)
+  - [Report an issue](#report-an-issue)
 - [License](#license)
 
 ## Overview
@@ -296,6 +297,18 @@ Syntax highlighting language selection is a tad manual where several languages m
 ### Why Oatmeal?
 
 I was eating a bowl of oatmeal when I wrote the first commit :shrug:. (They don't let me name things at work anymore...)
+
+### Report an issue
+
+On each Oatmeal release there is a separate download to helps in reporting issues to really drill down in to what the
+problem is! If you've run in to a problem, I'd really help appreciate solving it.
+
+1. Head over to [releases](https://github.com/dustinblackman/oatmeal/releases) and download the DEBUG package for your
+   system and version of Oatmeal you're using.
+2. Extract the contents of the archive next to your oatmeal binary. You can find it on your system by running something
+   equivalent to `which oatmeal`.
+3. Run your command with the arguments provided in the error message.
+4. Copy/paste the output and [open an issue](https://github.com/dustinblackman/oatmeal/issues/new).
 
 ## License
 

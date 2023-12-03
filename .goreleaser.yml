@@ -16,8 +16,8 @@ snapshot:
   name_template: "{{ .Tag }}-next"
 archives:
   - format_overrides:
-    - goos: windows
-      format: zip
+      - goos: windows
+        format: zip
     files:
       - completions/*
       - LICENSE
@@ -42,12 +42,12 @@ brews:
       fish_completion.install "completions/oatmeal.fish"
 
 scoops:
-- repository:
-    owner: dustinblackman
-    name: scoop-bucket
-  homepage: https://github.com/dustinblackman/oatmeal
-  description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
-  license: MIT
+  - repository:
+      owner: dustinblackman
+      name: scoop-bucket
+    homepage: https://github.com/dustinblackman/oatmeal
+    description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
+    license: MIT
 
 nfpms:
   - homepage: https://github.com/dustinblackman/oatmeal
@@ -67,7 +67,7 @@ nfpms:
         file_info:
           mode: 0644
       - src: ./completions/oatmeal.zsh
-        dst:  /usr/share/zsh/vendor-completions/_oatmeal
+        dst: /usr/share/zsh/vendor-completions/_oatmeal
         file_info:
           mode: 0644
       - src: ./LICENSE
@@ -91,20 +91,20 @@ aurs:
     private_key: "{{ .Env.AUR_KEY }}"
     git_url: "ssh://aur@aur.archlinux.org/oatmeal-bin.git"
     package: |-
-        # bin
-        install -Dm755 "./oatmeal" "${pkgdir}/usr/bin/oatmeal"
+      # bin
+      install -Dm755 "./oatmeal" "${pkgdir}/usr/bin/oatmeal"
 
-        # license
-        install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/oatmeal/LICENSE"
-        install -Dm644 "./THIRDPARTY.html" "${pkgdir}/usr/share/licenses/oatmeal/THIRDPARTY.html"
+      # license
+      install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/oatmeal/LICENSE"
+      install -Dm644 "./THIRDPARTY.html" "${pkgdir}/usr/share/licenses/oatmeal/THIRDPARTY.html"
 
-        # completions
-        mkdir -p "${pkgdir}/usr/share/bash-completion/completions/"
-        mkdir -p "${pkgdir}/usr/share/zsh/site-functions/"
-        mkdir -p "${pkgdir}/usr/share/fish/vendor_completions.d/"
-        install -Dm644 "./completions/oatmeal.bash" "${pkgdir}/usr/share/bash-completion/completions/oatmeal"
-        install -Dm644 "./completions/oatmeal.zsh" "${pkgdir}/usr/share/zsh/site-functions/_oatmeal"
-        install -Dm644 "./completions/oatmeal.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/oatmeal.fish"
+      # completions
+      mkdir -p "${pkgdir}/usr/share/bash-completion/completions/"
+      mkdir -p "${pkgdir}/usr/share/zsh/site-functions/"
+      mkdir -p "${pkgdir}/usr/share/fish/vendor_completions.d/"
+      install -Dm644 "./completions/oatmeal.bash" "${pkgdir}/usr/share/bash-completion/completions/oatmeal"
+      install -Dm644 "./completions/oatmeal.zsh" "${pkgdir}/usr/share/zsh/site-functions/_oatmeal"
+      install -Dm644 "./completions/oatmeal.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/oatmeal.fish"
 
 changelog:
   use: github-native

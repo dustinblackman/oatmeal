@@ -1,5 +1,5 @@
 [build]
-rustflags = ["--remap-path-prefix", "$HOME=/home", "--remap-path-prefix", "$PWD=/app"]
+rustflags = ["--remap-path-prefix=$HOME=/home", "--remap-path-prefix=$PWD=/app"]
 
 [alias]
 xtask = ["run", "-p", "xtask", "--"]

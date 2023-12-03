@@ -93,6 +93,8 @@ git-cliff = { version = "1.3.1" }
 
 [profile.release]
 lto = true
+debug = "limited"
+split-debuginfo = "packed"
 
 [profile.dev.package]
 insta.opt-level = 3
@@ -124,19 +126,6 @@ dev-install = '''set -e
   sudo mv ./target/release/oatmeal /usr/local/bin/
 '''
 
-goreleaser = '''set -e
-  export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
-
-  cargo cmd build-completions
-  AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --clean
-  cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | cargo gha gh release edit "v$OM_VERSION" --notes-file -
-  cargo publish --no-verify
-  tools/apt.sh "$OM_VERSION" "$(realpath dist)"
-  tools/nur.sh "$OM_VERSION" "$(realpath dist)"
-  tools/yum.sh "$OM_VERSION" "$(realpath dist)"
-  tools/choco.sh "$OM_VERSION" "$(realpath dist)"
-'''
-
 lint = '''set -e
   cargo cmd setup-nightly
   cargo +oatmeal-nightly fmt -- --check
@@ -160,52 +149,8 @@ setup-nightly = '''
   rustup toolchain link oatmeal-nightly "$(rustup toolchain list -v | grep $NIGHTLY | grep '^nightly-' | awk '{print $2}')"
 '''
 
-release = '''set -e
-  docker ps >/dev/null || (echo "Docker is not running" && exit 1)
-  cargo gha goreleaser check
-  cargo check
-  cargo cmd lint
-  cargo cmd test
-  cargo cmd thirdparty
-
-  export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
-  cargo bin git-cliff -o CHANGELOG.md --tag "v$OM_VERSION"
-  cargo bin dprint fmt
-
-  git add .
-  git commit -m "feat: Release v$OM_VERSION"
-  git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
-
-  cargo build
-  cargo xtask update-readme
-  cargo bin dprint fmt
-
-  git add .
-  git commit --amend -m "feat: Release v$OM_VERSION"
-  git tag -d "v$OM_VERSION"
-  git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
-
-  git push
-  git push --tags
-
-  gh workflow run release.yml --ref main
-  sleep 5
-  while true; do
-    res=$(cargo gha gh run list -R dustinblackman/oatmeal -w build --json conclusion,databaseId | jq -rc '.[0]')
-    echo "Status: $res"
-    if (echo "$res" | grep -q "success"); then
-      break
-    fi
-    sleep 30
-  done;
-
-  rm -rf dist-gh
-  mkdir dist-gh
-  export GH_RUN_ID=$(cargo gha gh run list -R dustinblackman/oatmeal -w build --json databaseId | jq -rc '.[0].databaseId')
-  cargo gha gh run download -D dist-gh $GH_RUN_ID
-  fd -t f . './dist-gh' | xargs -L1 chmod +x
-
-  cargo cmd goreleaser
+release = '''
+  ./tools/release.sh
 '''
 
 insta = '''set -e

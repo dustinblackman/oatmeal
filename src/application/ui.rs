@@ -201,10 +201,12 @@ async fn start_loop<B: Backend>(
 }
 
 pub fn destruct_terminal_for_panic() {
-    if is_raw_mode_enabled().unwrap() {
-        disable_raw_mode().unwrap();
-        crossterm::execute!(io::stdout(), LeaveAlternateScreen, DisableMouseCapture).unwrap();
-        crossterm::execute!(io::stdout(), cursor::Show).unwrap();
+    if let Ok(enabled) = is_raw_mode_enabled() {
+        if enabled {
+            let _ = disable_raw_mode();
+            let _ = crossterm::execute!(io::stdout(), LeaveAlternateScreen, DisableMouseCapture);
+            let _ = crossterm::execute!(io::stdout(), cursor::Show);
+        }
     }
 }
 

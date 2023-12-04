@@ -24,14 +24,15 @@
   - [Editors](#editors)
   - [Themes](#themes)
   - [Sessions](#sessions)
-- [Development](#Development)
-  - [Setup](#setup)
-  - [Adding a backend](#adding-a-backend)
-  - [Adding an editor](#adding-an-editor)
-  - [Adding syntax highlighting for a language](#adding-syntax-highlighting-for-a-language)
+- [Contributing](#contributing)
+  - [Report an issue](#report-an-issue)
+  - [Development](#Development)
+    - [Setup](#setup)
+    - [Adding a backend](#adding-a-backend)
+    - [Adding an editor](#adding-an-editor)
+    - [Adding syntax highlighting for a language](#adding-syntax-highlighting-for-a-language)
 - [FAQ](#faq)
   - [Why Oatmeal?](#why-oatmeal)
-  - [Report an issue](#report-an-issue)
 - [License](#license)
 
 ## Overview
@@ -246,9 +247,23 @@ function oatmeal-sessions() {
 }
 ```
 
-## Development
+## Contributing
 
-### Setup
+### Report an issue
+
+On each Oatmeal release there is a separate download to helps in reporting issues to really drill down in to what the
+problem is! If you've run in to a problem, I'd really help appreciate solving it.
+
+1. Head over to [releases](https://github.com/dustinblackman/oatmeal/releases) and download the DEBUG package for your
+   system and version of Oatmeal you're using.
+2. Extract the contents of the archive next to your oatmeal binary. You can find it on your system by running something
+   equivalent to `which oatmeal`.
+3. Run your command with the arguments provided in the error message.
+4. Copy/paste the output and [open an issue](https://github.com/dustinblackman/oatmeal/issues/new).
+
+### Development
+
+#### Setup
 
 The following will get you set up with all the necessary tooling to work on Oatmeal.
 
@@ -259,7 +274,7 @@ cd oatmeal
 cargo cmd setup
 ```
 
-### Adding a backend
+#### Adding a backend
 
 Each backend implements the [Backend trait](./src/domain/models/backend.rs) in its own infrastructure file. The trait has documentation on what is expected of each method. You can checkout [Ollama](./src/infrastructure/backends/ollama.rs) as an example.
 
@@ -270,7 +285,7 @@ The following steps should be completed to add a backend:
 3. Write tests
 4. Update the documentation for the [CLI](./src/application/cli.rs).
 
-### Adding an editor
+#### Adding an editor
 
 Each editor implements the [Editor trait](./src/domain/models/editor.rs) in its own infrastructure file. The trait has documentation on what is expected of each method. You can checkout [Neovim](./src/infrastructure/editors/neovim.rs) as an example.
 
@@ -281,7 +296,7 @@ The following steps should be completed to add an editor:
 3. Write tests
 4. Update the documentation for the [CLI](./src/application/cli.rs).
 
-### Adding syntax highlighting for a language
+#### Adding syntax highlighting for a language
 
 Syntax highlighting language selection is a tad manual where several languages must be curated and then added to
 [`build.rs`](./build.rs).
@@ -297,18 +312,6 @@ Syntax highlighting language selection is a tad manual where several languages m
 ### Why Oatmeal?
 
 I was eating a bowl of oatmeal when I wrote the first commit :shrug:. (They don't let me name things at work anymore...)
-
-### Report an issue
-
-On each Oatmeal release there is a separate download to helps in reporting issues to really drill down in to what the
-problem is! If you've run in to a problem, I'd really help appreciate solving it.
-
-1. Head over to [releases](https://github.com/dustinblackman/oatmeal/releases) and download the DEBUG package for your
-   system and version of Oatmeal you're using.
-2. Extract the contents of the archive next to your oatmeal binary. You can find it on your system by running something
-   equivalent to `which oatmeal`.
-3. Run your command with the arguments provided in the error message.
-4. Copy/paste the output and [open an issue](https://github.com/dustinblackman/oatmeal/issues/new).
 
 ## License
 

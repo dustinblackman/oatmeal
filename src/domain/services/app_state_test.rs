@@ -19,7 +19,7 @@ use crate::domain::services::Themes;
 
 impl Default for AppState<'static> {
     fn default() -> AppState<'static> {
-        let theme = Themes::load("base16-onedark", "").unwrap();
+        let theme = Themes::get("base16-onedark", "").unwrap();
         return AppState {
             backend_context: "".to_string(),
             bubble_list: BubbleList::new(theme),

@@ -67,7 +67,7 @@ impl<'a> AppState<'a> {
         theme_name: &str,
         theme_file: &str,
     ) -> Result<AppState<'a>> {
-        let theme = Themes::load(theme_name, theme_file)?;
+        let theme = Themes::get(theme_name, theme_file)?;
         let mut app_state = AppState {
             backend_context: "".to_string(),
             bubble_list: BubbleList::new(theme),
@@ -122,7 +122,7 @@ impl<'a> AppState<'a> {
         session_id: &str,
     ) -> Result<AppState<'a>> {
         let session = Sessions::default().load(session_id).await?;
-        let theme = Themes::load(theme_name, theme_file)?;
+        let theme = Themes::get(theme_name, theme_file)?;
 
         let mut app_state = AppState {
             backend_context: session.state.backend_context,

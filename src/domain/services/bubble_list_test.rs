@@ -8,7 +8,7 @@ use crate::domain::services::Themes;
 
 #[test]
 fn it_has_no_cached_lines() -> Result<()> {
-    let theme = Themes::load("base16-seti", "")?;
+    let theme = Themes::get("base16-seti", "")?;
     let bubble_list = BubbleList::new(theme);
 
     assert_eq!(bubble_list.cache.len(), 0);
@@ -17,7 +17,7 @@ fn it_has_no_cached_lines() -> Result<()> {
 
 #[test]
 fn it_caches_lines() -> Result<()> {
-    let theme = Themes::load("base16-seti", "")?;
+    let theme = Themes::get("base16-seti", "")?;
     let messages = vec![
         Message::new(Author::Oatmeal, "Hi there!"),
         Message::new(Author::Oatmeal, codeblock_fixture()),
@@ -32,7 +32,7 @@ fn it_caches_lines() -> Result<()> {
 
 #[test]
 fn it_returns_correct_length() -> Result<()> {
-    let theme = Themes::load("base16-seti", "")?;
+    let theme = Themes::get("base16-seti", "")?;
     let messages = vec![
         Message::new(Author::Oatmeal, "Hi there!"),
         Message::new(Author::Oatmeal, codeblock_fixture()),

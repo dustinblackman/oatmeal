@@ -62,7 +62,7 @@ AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --clean
 cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | cargo gha gh release edit "v$OM_VERSION" --notes-file -
 
 # Release to package managers not supported by GoReleaser.
-cargo publish --no-verify
+cargo publish
 tools/apt.sh "$OM_VERSION" "$(realpath dist)"
 tools/nur.sh "$OM_VERSION" "$(realpath dist)"
 tools/yum.sh "$OM_VERSION" "$(realpath dist)"

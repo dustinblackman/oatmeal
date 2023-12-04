@@ -1,10 +1,11 @@
 #![deny(clippy::implicit_return)]
 #![allow(clippy::needless_return)]
 
+use std::collections::HashMap;
+use std::env;
 use std::fs;
 use std::io::prelude::*;
 use std::io::Cursor;
-use std::path::Path;
 use std::path::PathBuf;
 
 use anyhow::anyhow;
@@ -23,13 +24,39 @@ struct SyntaxDownload<'a> {
     keep_folders: bool,
 }
 
+pub fn get_project_root() -> Result<PathBuf> {
+    let path = env::current_dir()?;
+    let path_ancestors = path.as_path().ancestors();
+
+    for p in path_ancestors {
+        let has_cargo = fs::read_dir(p)?.any(|p| return p.unwrap().file_name() == *"Cargo.lock");
+
+        if has_cargo {
+            return Ok(PathBuf::from(p));
+        }
+    }
+
+    return Err(anyhow!("Root directory for rust project not found."));
+}
+
+fn get_cache_dir() -> Result<PathBuf> {
+    let out_dir = env::var("OUT_DIR").unwrap();
+    if env::var("OPT_LEVEL").unwrap_or_else(|_| return "0".to_string()) == "3"
+        || out_dir.contains("target/package/")
+    {
+        return Ok(PathBuf::from(out_dir).join(".cache"));
+    }
+
+    return Ok(get_project_root()?.join(".cache"));
+}
+
 fn download_files(
-    download_folder: &str,
+    download_folder: PathBuf,
     url: &str,
     files: Vec<&str>,
     keep_folders: bool,
 ) -> Result<()> {
-    fs::create_dir_all(download_folder)?;
+    fs::create_dir_all(download_folder.clone())?;
 
     let bytes = reqwest::blocking::get(url)?.bytes()?;
     let tar = GzDecoder::new(Cursor::new(bytes));
@@ -66,10 +93,16 @@ fn download_files(
                             .to_string_lossy()
                             .to_string();
 
-                        fs::create_dir_all(format!("{download_folder}/{}", dir))?;
-                        entry.unpack(&format!("{download_folder}/{dir}/{filename}"))?;
+                        if dir.is_empty() {
+                            entry.unpack(download_folder.clone().join(filename.clone()))?;
+                        } else {
+                            fs::create_dir_all(download_folder.clone().join(dir.clone()))?;
+                            entry.unpack(
+                                download_folder.clone().join(format!("{dir}/{filename}")),
+                            )?;
+                        }
                     } else {
-                        entry.unpack(&format!("{download_folder}/{filename}"))?;
+                        entry.unpack(download_folder.clone().join(filename.clone()))?;
                     }
                     return Ok(filename);
                 }
@@ -84,7 +117,18 @@ fn download_files(
 }
 
 fn get_syntaxes() -> Result<()> {
-    if Path::new("./.cache/syntaxes/syntaxes.bin").exists() {
+    let out_dir = get_cache_dir()?.join("syntaxes");
+    let syntax_bin = out_dir.join("syntaxes.bin");
+    println!(
+        "cargo:rustc-env=OATMEAL_SYNTAX_BIN={}",
+        syntax_bin.clone().to_str().unwrap()
+    );
+    println!(
+        "cargo:rerun-if-changed={}",
+        syntax_bin.clone().to_str().unwrap()
+    );
+
+    if syntax_bin.exists() {
         return Ok(());
     }
 
@@ -141,7 +185,7 @@ fn get_syntaxes() -> Result<()> {
 
     for download in downloads {
         download_files(
-            &format!("./.cache/syntaxes/{}", download.name),
+            out_dir.join(download.name),
             download.url,
             download.files,
             download.keep_folders,
@@ -150,31 +194,67 @@ fn get_syntaxes() -> Result<()> {
 
     let mut builder = SyntaxSetBuilder::new();
     builder.add_plain_text_syntax();
-    builder.add_from_folder("./.cache/syntaxes", true)?;
+    builder.add_from_folder(out_dir.clone(), true)?;
 
     let syntax_set = builder.build();
     let mut payload = vec![];
     bincode::serialize_into(&mut payload, &syntax_set)?;
 
-    let mut file = fs::File::create("./.cache/syntaxes/syntaxes.bin")?;
+    let mut file = fs::File::create(syntax_bin)?;
     file.write_all(&payload)?;
 
     return Ok(());
 }
 
 fn get_themes() -> Result<()> {
-    if Path::new("./.cache/themes").exists() {
+    // TODO have different folders for release and dev, where dev should just use
+    // the home folder. Need to figure out how to make include_bytes dynamic
+    // though... Sounds hard.
+    let out_dir = get_cache_dir()?.join("themes");
+    let themes_bin = out_dir.join("themes.bin");
+    println!(
+        "cargo:rustc-env=OATMEAL_THEMES_BIN={}",
+        themes_bin.clone().to_str().unwrap()
+    );
+    println!(
+        "cargo:rerun-if-changed={}",
+        themes_bin.clone().to_str().unwrap()
+    );
+    if themes_bin.exists() {
         return Ok(());
     }
 
-    download_files("./.cache/themes", "https://github.com/chriskempson/base16-textmate/archive/0e51ddd568bdbe17189ac2a07eb1c5f55727513e.tar.gz", vec![
+    let files = vec![
         "LICENSE.md",
         "Themes/base16-github.tmTheme",
         "Themes/base16-monokai.tmTheme",
         "Themes/base16-one-light.tmTheme",
         "Themes/base16-onedark.tmTheme",
         "Themes/base16-seti.tmTheme",
-    ], false)?;
+    ];
+    download_files(out_dir.clone(), "https://github.com/chriskempson/base16-textmate/archive/0e51ddd568bdbe17189ac2a07eb1c5f55727513e.tar.gz", files.clone(), true)?;
+
+    let mut themes_map = HashMap::new();
+    for e in files {
+        if !e.ends_with(".tmTheme") {
+            continue;
+        }
+
+        let theme_path = out_dir.join(e);
+        let file_name = theme_path
+            .file_name()
+            .unwrap()
+            .to_string_lossy()
+            .to_string();
+        let theme_name = file_name.split('.').collect::<Vec<_>>()[0].to_string();
+        themes_map.insert(theme_name, fs::read_to_string(&theme_path)?);
+    }
+
+    let mut payload = vec![];
+    bincode::serialize_into(&mut payload, &themes_map)?;
+
+    let mut file = fs::File::create(themes_bin)?;
+    file.write_all(&payload)?;
 
     return Ok(());
 }

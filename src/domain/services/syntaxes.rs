@@ -9,7 +9,7 @@ pub struct Syntaxes {}
 
 impl Syntaxes {
     fn load() -> SyntaxSet {
-        let payload = include_bytes!("../../../.cache/syntaxes/syntaxes.bin");
+        let payload = include_bytes!(env!("OATMEAL_SYNTAX_BIN"));
         let syntax_set: SyntaxSet = bincode::deserialize_from(&payload[..]).unwrap();
         return syntax_set;
     }

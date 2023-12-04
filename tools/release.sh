@@ -50,21 +50,12 @@ while true; do
 	sleep 30
 done
 
-# Download binary builds and debug symbols.
+# Download binary builds
 rm -rf dist-gh
 mkdir dist-gh
 export GH_RUN_ID=$(cargo gha gh run list -R dustinblackman/oatmeal -w build --json databaseId | jq -rc '.[0].databaseId')
 cargo gha gh run download -D dist-gh "$GH_RUN_ID"
 fd -t f . './dist-gh' | grep -v -i -E '(dwp|dSYM|pdb)' | xargs -L1 chmod +x
-
-# Archive and upload debug packages
-tar --strip-components=2 -czf "dist/oatmeal-DEBUG-${OM_VERSION}_darwin_arm64.tar.gz" dist-gh/aarch64-apple-darwin/oatmeal.dSYM
-tar --strip-components=2 -czf "dist/oatmeal-DEBUG-${OM_VERSION}_windows_arm64.tar.gz" dist-gh/aarch64-pc-windows-msvc/oatmeal.pdb
-tar --strip-components=2 -czf "dist/oatmeal-DEBUG-${OM_VERSION}_linux_arm64.tar.gz" dist-gh/aarch64-unknown-linux-gnu/oatmeal.dwp
-tar --strip-components=2 -czf "dist/oatmeal-DEBUG-${OM_VERSION}_darwin_amd64.tar.gz" dist-gh/x86_64-apple-darwin/oatmeal.dSYM
-tar --strip-components=2 -czf "dist/oatmeal-DEBUG-${OM_VERSION}_windows_amd64.tar.gz" dist-gh/x86_64-pc-windows-msvc/oatmeal.pdb
-tar --strip-components=2 -czf "dist/oatmeal-DEBUG-${OM_VERSION}_linux_amd64.tar.gz" dist-gh/x86_64-unknown-linux-gnu/oatmeal.dwp
-ls dist | grep DEBUG | while read f; do cargo gha gh release upload "v$OM_VERSION" "dist/$f"; done
 
 # Release to Github
 AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --clean
@@ -76,3 +67,12 @@ tools/apt.sh "$OM_VERSION" "$(realpath dist)"
 tools/nur.sh "$OM_VERSION" "$(realpath dist)"
 tools/yum.sh "$OM_VERSION" "$(realpath dist)"
 tools/choco.sh "$OM_VERSION" "$(realpath dist)"
+
+# Archive and upload debug packages
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_darwin_arm64.tar.gz" dist-gh/aarch64-apple-darwin/oatmeal.dSYM
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_windows_arm64.tar.gz" dist-gh/aarch64-pc-windows-msvc/oatmeal.pdb
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux_arm64.tar.gz" dist-gh/aarch64-unknown-linux-gnu/oatmeal.dwp
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_darwin_amd64.tar.gz" dist-gh/x86_64-apple-darwin/oatmeal.dSYM
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_windows_amd64.tar.gz" dist-gh/x86_64-pc-windows-msvc/oatmeal.pdb
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux_amd64.tar.gz" dist-gh/x86_64-unknown-linux-gnu/oatmeal.dwp
+ls dist | grep DEBUG | while read f; do cargo gha gh release upload "v$OM_VERSION" "dist/$f"; done

@@ -11,8 +11,7 @@ use clap_complete::Generator;
 use clap_complete::Shell;
 use dialoguer::theme::ColorfulTheme;
 use dialoguer::Select;
-use owo_colors::OwoColorize;
-use owo_colors::Stream;
+use yansi::Paint;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
@@ -207,10 +206,9 @@ fn build() -> Command {
                 || line.starts_with("HOTKEYS:")
                 || line.starts_with("CODE ACTIONS:")
             {
-                return format!("CHAT {line}")
-                    .if_supports_color(Stream::Stdout, |text| {
-                        return text.underline().bold().to_string();
-                    })
+                return Paint::new(format!("CHAT {line}"))
+                    .underline()
+                    .bold()
                     .to_string();
             }
             return line.to_string();

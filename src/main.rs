@@ -17,9 +17,9 @@ use config::ConfigKey;
 use domain::models::Action;
 use domain::models::Event;
 use domain::services::clipboard::ClipboardService;
-use owo_colors::OwoColorize;
 use tokio::sync::mpsc;
 use tokio::task;
+use yansi::Paint;
 
 use crate::application::cli;
 use crate::application::ui;
@@ -36,13 +36,12 @@ async fn flatten<T>(handle: task::JoinHandle<Result<T>>) -> Result<()> {
 fn handle_error(err: Error) {
     eprintln!(
             "{}",
-            format!(
+            Paint::red(format!(
                 "Oh no! Oatmeal has failed with the following app version and error.\n\nVersion: {}\nCommit: {}\nError: {}",
                 env!("CARGO_PKG_VERSION"),
                 env!("VERGEN_GIT_DESCRIBE"),
                 err
-            )
-            .red()
+            ))
         );
 
     let backtrace = err.backtrace();

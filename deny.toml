@@ -10,12 +10,10 @@ allow = [
 ]
 exceptions = [
   { allow = ["Unicode-DFS-2016"], name = "unicode-ident" },
-  { allow = ["ISC"], name = "is_ci" },
   { allow = ["BSD-3-Clause"], name = "encoding_rs" },
   { allow = ["BSL-1.0"], name = "clipboard-win" },
   { allow = ["BSL-1.0"], name = "error-code" },
   { allow = ["BSL-1.0"], name = "str-buf" },
-  { allow = ["MPL-2.0"], name = "option-ext" },
 ]
 
 [[licenses.clarify]]

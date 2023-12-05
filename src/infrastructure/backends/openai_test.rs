@@ -47,15 +47,11 @@ async fn it_successfully_health_checks() {
 }
 
 #[tokio::test]
-async fn it_successfully_health_checks_418() {
-    let mut server = mockito::Server::new();
-    let mock = server.mock("GET", "/").with_status(418).create();
-
-    let backend = OpenAI::with_url(server.url());
+async fn it_successfully_health_checks_with_official_api() {
+    let backend = OpenAI::with_url("https://api.openai.com".to_string());
     let res = backend.health_check().await;
 
     assert!(res.is_ok());
-    mock.assert();
 }
 
 #[tokio::test]

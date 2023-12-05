@@ -90,6 +90,12 @@ impl Backend for OpenAI {
             bail!("OpenAI token is not defined");
         }
 
+        // OpenAI are trolls with their API where the index either returns a 404 or a
+        // 418. If using the official API, don't bother health checking it.
+        if self.url == "https://api.openai.com" {
+            return Ok(());
+        }
+
         let res = reqwest::Client::new()
             .get(&self.url)
             .timeout(Duration::from_millis(1000))
@@ -101,8 +107,7 @@ impl Backend for OpenAI {
         }
 
         let status = res.unwrap().status().as_u16();
-        // OpenAPI's default endpoint returns a 418 with a cat picture...
-        if status > 200 && status != 418 {
+        if status >= 400 {
             bail!("OpenAI health check failed");
         }
 

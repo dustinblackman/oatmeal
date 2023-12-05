@@ -2,9 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0] - 2023-12-05
+
+[v0.6.1...v0.7.0](https://github.com/dustinblackman/oatmeal/compare/v0.6.1...v0.7.0)
+
+### ⛰️ Features
+
+- Add configurable Ollama URL - ([2cf3d8f](https://github.com/dustinblackman/oatmeal/commit/2cf3d8fcf3811411ce637c5ee71debd21ca4b0bd))
+
+### 🐛 Bug Fixes
+
+- Atty security alert - ([b79b3c0](https://github.com/dustinblackman/oatmeal/commit/b79b3c02512225ab5f41478e0993518ae56ff773))
+- OpenAI healthcheck - ([e367cf9](https://github.com/dustinblackman/oatmeal/commit/e367cf9798bb2e565cb77162aa5a061a35fe3197))
+- Installing from cargo - ([8c4aab7](https://github.com/dustinblackman/oatmeal/commit/8c4aab7fe42c8de77b2512ec8c8a5cd2a8f0934c))
+- Uploading debug symbols - ([12a18de](https://github.com/dustinblackman/oatmeal/commit/12a18deb276832df7b06bdb18837d38e80938f85))
+
+### 📚 Documentation
+
+- Readd choco - ([bd12825](https://github.com/dustinblackman/oatmeal/commit/bd12825f7252ebc886a1af5650b89fc2c4fb35b5))
+- Push users towards the editors section - ([bda11c4](https://github.com/dustinblackman/oatmeal/commit/bda11c4a959a98174c7ddf7f75c25f4f55b7d7d6))
+- Organize README - ([663d65b](https://github.com/dustinblackman/oatmeal/commit/663d65bb8200c48bb7b8cad55fba3e36c2c35740))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add basic logging in backend infra - ([1cfbbd4](https://github.com/dustinblackman/oatmeal/commit/1cfbbd4ae1bcae11ae3fe6b1ba975a4a2cde3842))
+
 ## [0.6.1] - 2023-12-03
 
 [v0.6.0...v0.6.1](https://github.com/dustinblackman/oatmeal/compare/v0.6.0...v0.6.1)
+
+### ⛰️ Features
+
+- Release v0.6.1 - ([dfaa305](https://github.com/dustinblackman/oatmeal/commit/dfaa3055a7adf44e240b11a8a28273314a78f599))
 
 ### 🐛 Bug Fixes
 

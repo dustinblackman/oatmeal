@@ -6,7 +6,7 @@
 [![Release](https://img.shields.io/github/v/release/dustinblackman/oatmeal)](https://github.com/dustinblackman/oatmeal/releases)
 [![Coverage Status](https://coveralls.io/repos/github/dustinblackman/oatmeal/badge.svg?branch=main)](https://coveralls.io/github/dustinblackman/oatmeal?branch=main)
 
-> Terminal UI to chat with large language models (LLM) using different model backends, and integrations with your favourite editors!
+> Terminal UI to chat with large language models (LLM) using different model backends, and integrations with your favourite [editors](#editors)!
 
 - [Overview](#Overview)
 - [Install](#Install)
@@ -191,7 +191,8 @@ The following model backends are supported:
 ### Editors
 
 The following editors are currently supported. The `clipboard` editor is a special case where any copy or accept commands
-are simply copied to your clipboard. This is the default behaviour.
+are simply copied to your clipboard. This is the default behaviour. Hit any of the links below for more details on how
+to use!
 
 - Clipboard
 - [Neovim](https://github.com/dustinblackman/oatmeal.nvim)

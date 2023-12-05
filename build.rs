@@ -207,9 +207,6 @@ fn get_syntaxes() -> Result<()> {
 }
 
 fn get_themes() -> Result<()> {
-    // TODO have different folders for release and dev, where dev should just use
-    // the home folder. Need to figure out how to make include_bytes dynamic
-    // though... Sounds hard.
     let out_dir = get_cache_dir()?.join("themes");
     let themes_bin = out_dir.join("themes.bin");
     println!(

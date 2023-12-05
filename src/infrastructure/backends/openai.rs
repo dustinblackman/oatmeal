@@ -103,11 +103,13 @@ impl Backend for OpenAI {
             .await;
 
         if res.is_err() {
+            tracing::error!(error = ?res.unwrap_err(), "OpenAI is not reachable");
             bail!("OpenAI is not reachable");
         }
 
         let status = res.unwrap().status().as_u16();
         if status >= 400 {
+            tracing::error!(status = ?status, "OpenAI health check failed");
             bail!("OpenAI health check failed");
         }
 
@@ -166,6 +168,7 @@ impl Backend for OpenAI {
             .await?;
 
         if !res.status().is_success() {
+            tracing::error!(status = ?res.status(), "Failed to make completion request to OpenAI");
             bail!("Failed to make completion request to OpenAI");
         }
 
@@ -187,6 +190,8 @@ impl Backend for OpenAI {
             }
 
             let ores: CompletionResponse = serde_json::from_str(&cleaned_line).unwrap();
+            tracing::debug!(body = ?ores, "Completion response");
+
             let text = ores.choices[0].delta.content.to_string();
             last_message += &text;
             let msg = BackendResponse {

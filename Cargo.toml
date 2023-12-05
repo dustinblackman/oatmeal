@@ -54,6 +54,9 @@ serde_yaml = "=0.9.27"
 syntect = { version = "=5.1.0", default-features = false, features = ["parsing", "default-syntaxes", "plist-load", "yaml-load", "regex-onig"] }
 tokio = { version = "=1.33.0", features = ["fs", "macros", "rt-multi-thread", "sync", "process"] }
 tokio-util = "=0.7.9"
+tracing = { version = "=0.1.40", default-features = false, features = ["std", "log"] }
+tracing-appender = "=0.2.3"
+tracing-subscriber = { version = "=0.3.18", default-features = false, features = ["json"] }
 tui-textarea = { version = "=0.4.0", default-features = false, features = ["crossterm", "ratatui"] }
 uuid = { version = "=1.6.1", features = ["v4"] }
 yansi = "=0.5.1"

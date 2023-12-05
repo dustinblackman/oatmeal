@@ -74,10 +74,13 @@ impl Backend for Ollama {
             .await;
 
         if res.is_err() {
+            tracing::error!(error = ?res.unwrap_err(), "Ollama is not running");
             bail!("Ollama is not running");
         }
 
-        if res.unwrap().status() != 200 {
+        let res = res.unwrap();
+        if res.status() != 200 {
+            tracing::error!(status = ?res.status(), "Ollama health checkfailed");
             bail!("Ollama health check failed");
         }
 
@@ -129,6 +132,7 @@ impl Backend for Ollama {
             .await?;
 
         if !res.status().is_success() {
+            tracing::error!(status = ?res.status(), "Failed to make completion request to Ollama");
             bail!("Failed to make completion request to Ollama");
         }
 
@@ -141,6 +145,7 @@ impl Backend for Ollama {
             }
 
             let ores: CompletionResponse = serde_json::from_str(&line.unwrap()).unwrap();
+            tracing::debug!(body = ?ores, "Completion response");
             let mut msg = BackendResponse {
                 author: Author::Model,
                 text: ores.response,

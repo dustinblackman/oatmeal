@@ -70,6 +70,20 @@ async fn main() {
         better_panic::Settings::auto().create_panic_handler()(panic_info);
     }));
 
+    let file_appender =
+        tracing_appender::rolling::never(dirs::cache_dir().unwrap().join("oatmeal"), "debug.log");
+    let (writer, _guard) = tracing_appender::non_blocking(file_appender);
+    if env::var("RUST_LOG")
+        .unwrap_or_else(|_| return "".to_string())
+        .contains("oatmeal")
+    {
+        tracing_subscriber::fmt()
+            .json()
+            .with_max_level(tracing::Level::DEBUG)
+            .with_writer(writer)
+            .init();
+    }
+
     Config::set(
         ConfigKey::Username,
         &env::var("USER").unwrap_or_else(|_| return "User".to_string()),

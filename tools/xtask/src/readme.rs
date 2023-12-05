@@ -26,15 +26,15 @@ pub fn update() {
     )
     .unwrap();
 
-    // let version_res = String::from_utf8(
-    //     process::Command::new("./target/debug/oatmeal")
-    //         .arg("--version")
-    //         .output()
-    //         .unwrap()
-    //         .stdout,
-    // )
-    // .unwrap();
-    // let version = version_res.split(' ').collect::<Vec<&str>>()[1];
+    let version_res = String::from_utf8(
+        process::Command::new("./target/debug/oatmeal")
+            .arg("--version")
+            .output()
+            .unwrap()
+            .stdout,
+    )
+    .unwrap();
+    let version = version_res.split(' ').collect::<Vec<&str>>()[1];
 
     let mut readme = fs::read_to_string("./README.md").unwrap();
     let start_help = readme.find("<!-- command-help start -->").unwrap();
@@ -51,14 +51,14 @@ pub fn update() {
         &format!("<!-- command-help-sessions start -->\n```\n{output_help_sessions}```\n"),
     );
 
-    // let start_choco = readme.find("<!-- choco-install start -->").unwrap();
-    // let end_choco = readme.find("<!-- choco-install end -->").unwrap();
-    // readme.replace_range(
-    //     start_choco..end_choco,
-    //     &format!(
-    //         "<!-- choco-install start -->\n```sh\nchoco install oatmeal
-    // --version={version}```\n"     ),
-    // );
+    let start_choco = readme.find("<!-- choco-install start -->").unwrap();
+    let end_choco = readme.find("<!-- choco-install end -->").unwrap();
+    readme.replace_range(
+        start_choco..end_choco,
+        &format!(
+            "<!-- choco-install start -->\n```sh\nchoco install oatmeal --version={version}```\n"
+        ),
+    );
 
     let mut f = fs::File::create("./README.md").unwrap();
     f.write_all(readme.as_bytes()).unwrap();

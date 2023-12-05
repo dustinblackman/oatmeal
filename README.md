@@ -86,7 +86,13 @@ yay -S oatmeal-bin
 
 **Chocolatey**
 
-Coming soon! Waiting on first version approval.
+<!-- choco-install start -->
+
+```sh
+choco install oatmeal --version=0.6.1
+```
+
+<!-- choco-install end -->
 
 **Scoop**
 

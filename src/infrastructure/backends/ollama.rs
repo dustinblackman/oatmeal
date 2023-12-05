@@ -80,7 +80,7 @@ impl Backend for Ollama {
 
         let res = res.unwrap();
         if res.status() != 200 {
-            tracing::error!(status = ?res.status(), "Ollama health checkfailed");
+            tracing::error!(status = res.status().as_u16(), "Ollama health checkfailed");
             bail!("Ollama health check failed");
         }
 
@@ -132,7 +132,10 @@ impl Backend for Ollama {
             .await?;
 
         if !res.status().is_success() {
-            tracing::error!(status = ?res.status(), "Failed to make completion request to Ollama");
+            tracing::error!(
+                status = res.status().as_u16(),
+                "Failed to make completion request to Ollama"
+            );
             bail!("Failed to make completion request to Ollama");
         }
 

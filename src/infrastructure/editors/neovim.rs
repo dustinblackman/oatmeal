@@ -71,8 +71,15 @@ async fn run_lua_command(func: &str) -> Result<String> {
         &lua_func,
     ];
 
-    let stdout = Command::new("nvim").args(args).output().await?.stdout;
+    let stdout = Command::new("nvim")
+        .args(args.clone())
+        .output()
+        .await?
+        .stdout;
     let res = String::from_utf8(stdout)?;
+
+    tracing::error!(args = ?args, res = ?res, "Neovim requeest/response");
+
     return Ok(res);
 }
 

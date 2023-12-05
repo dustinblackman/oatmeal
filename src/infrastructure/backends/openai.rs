@@ -109,7 +109,7 @@ impl Backend for OpenAI {
 
         let status = res.unwrap().status().as_u16();
         if status >= 400 {
-            tracing::error!(status = ?status, "OpenAI health check failed");
+            tracing::error!(status = status, "OpenAI health check failed");
             bail!("OpenAI health check failed");
         }
 
@@ -168,7 +168,10 @@ impl Backend for OpenAI {
             .await?;
 
         if !res.status().is_success() {
-            tracing::error!(status = ?res.status(), "Failed to make completion request to OpenAI");
+            tracing::error!(
+                status = res.status().as_u16(),
+                "Failed to make completion request to OpenAI"
+            );
             bail!("Failed to make completion request to OpenAI");
         }
 

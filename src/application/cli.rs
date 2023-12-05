@@ -388,5 +388,14 @@ pub async fn parse() -> Result<bool> {
         Config::set(ConfigKey::OpenAIToken, openai_token);
     }
 
+    tracing::debug!(
+        backend = Config::get(ConfigKey::Backend),
+        editor = Config::get(ConfigKey::Editor),
+        model = Config::get(ConfigKey::Model),
+        theme = Config::get(ConfigKey::Theme),
+        theme_file = Config::get(ConfigKey::ThemeFile),
+        "Config"
+    );
+
     return Ok(true);
 }

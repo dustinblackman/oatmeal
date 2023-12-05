@@ -270,6 +270,15 @@ fn build() -> Command {
                 .global(true),
         )
         .arg(
+            Arg::new("ollama-url")
+                .long("ollama-url")
+                .env("OATMEAL_OLLAMA_URL")
+                .num_args(1)
+                .help("Ollama API URL when using the Ollama backend")
+                .default_value("http://localhost:11434")
+                .global(true),
+        )
+        .arg(
             Arg::new("openai-url")
                 .long("openai-url")
                 .env("OATMEAL_OPENAI_URL")
@@ -277,7 +286,7 @@ fn build() -> Command {
                 .help("OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy")
                 .default_value("https://api.openai.com")
                 .global(true),
-            )
+        )
         .arg(
             Arg::new("openai-token")
                 .long("openai-token")
@@ -363,6 +372,10 @@ pub async fn parse() -> Result<bool> {
     Config::set(
         ConfigKey::Theme,
         matches.get_one::<String>("theme").unwrap(),
+    );
+    Config::set(
+        ConfigKey::OllamaURL,
+        matches.get_one::<String>("ollama-url").unwrap(),
     );
     Config::set(
         ConfigKey::OpenAIURL,

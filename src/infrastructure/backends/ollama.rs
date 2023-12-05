@@ -58,7 +58,7 @@ pub struct Ollama {
 impl Default for Ollama {
     fn default() -> Ollama {
         return Ollama {
-            url: "http://localhost:11434".to_string(),
+            url: Config::get(ConfigKey::OllamaURL),
         };
     }
 }

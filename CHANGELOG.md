@@ -2,12 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.1] - 2023-12-06
+
+[v0.7.0...v0.7.1](https://github.com/dustinblackman/oatmeal/compare/v0.7.0...v0.7.1)
+
+### 🐛 Bug Fixes
+
+- Pasting in input box - ([d0c76ab](https://github.com/dustinblackman/oatmeal/commit/d0c76ab6b7806ddc64528f9051e75f183adb199c))
+
+### 📚 Documentation
+
+- Cleanup - ([b865de4](https://github.com/dustinblackman/oatmeal/commit/b865de4b40cda848b411d63b39d2dd69ca33d9d6))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add more debug logging - ([1719146](https://github.com/dustinblackman/oatmeal/commit/1719146b42130a745ddbf522e9c172692308fcaf))
+
 ## [0.7.0] - 2023-12-05
 
 [v0.6.1...v0.7.0](https://github.com/dustinblackman/oatmeal/compare/v0.6.1...v0.7.0)
 
 ### ⛰️ Features
 
+- Release v0.7.0 - ([a0ca915](https://github.com/dustinblackman/oatmeal/commit/a0ca91559e62680b9848ef0013e88d660877755b))
 - Add configurable Ollama URL - ([2cf3d8f](https://github.com/dustinblackman/oatmeal/commit/2cf3d8fcf3811411ce637c5ee71debd21ca4b0bd))
 
 ### 🐛 Bug Fixes

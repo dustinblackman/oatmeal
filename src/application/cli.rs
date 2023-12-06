@@ -292,6 +292,13 @@ fn build() -> Command {
                 .num_args(1)
                 .help("OpenAI API token when using the OpenAI backend")
                 .global(true),
+        )
+        .arg(
+            Arg::new("stdin")
+                .long("stdin")
+                .help("Read your first message for the backend from stdin (cat question.txt | oatmeal --stdin)")
+                .num_args(0)
+                .global(true),
         );
 }
 
@@ -386,6 +393,12 @@ pub async fn parse() -> Result<bool> {
 
     if let Some(openai_token) = matches.get_one::<String>("openai-token") {
         Config::set(ConfigKey::OpenAIToken, openai_token);
+    }
+
+    if let Some(use_stdin) = matches.get_one::<bool>("stdin") {
+        if *use_stdin {
+            Config::set(ConfigKey::FirstMessageSTDIN, "true");
+        }
     }
 
     tracing::debug!(

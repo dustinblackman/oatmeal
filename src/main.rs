@@ -97,6 +97,15 @@ async fn main() {
         process::exit(0);
     }
 
+    let mut first_message = "".to_string();
+    if Config::get(ConfigKey::FirstMessageSTDIN) == "true" {
+        let mut lines = vec![];
+        for line in std::io::stdin().lines() {
+            lines.push(line.unwrap());
+        }
+        first_message = lines.join("\n");
+    }
+
     let (action_tx, mut action_rx) = mpsc::unbounded_channel::<Action>();
     let (event_tx, event_rx) = mpsc::unbounded_channel::<Event>();
 
@@ -106,7 +115,7 @@ async fn main() {
     let clipboard_future = tokio::spawn(async move {
         return ClipboardService::start().await;
     });
-    let ui_future = ui::start(action_tx, event_rx);
+    let ui_future = ui::start(action_tx, event_rx, first_message);
 
     let res = tokio::select!(
         res = flatten(actions_future) => res,

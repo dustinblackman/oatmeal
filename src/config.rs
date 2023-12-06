@@ -15,6 +15,7 @@ pub enum ConfigKey {
     Theme,
     ThemeFile,
     Username,
+    FirstMessageSTDIN,
 }
 
 impl ToString for ConfigKey {
@@ -30,6 +31,7 @@ impl ToString for ConfigKey {
             ConfigKey::Theme => return String::from("theme"),
             ConfigKey::ThemeFile => return String::from("themefile"),
             ConfigKey::Username => return String::from("username"),
+            ConfigKey::FirstMessageSTDIN => return String::from("first-message-stdin"),
         }
     }
 }

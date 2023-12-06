@@ -35,12 +35,17 @@ use crate::infrastructure::editors::EditorManager;
 async fn start_loop<B: Backend>(
     terminal: &mut Terminal<B>,
     app_state: &mut AppState<'_>,
+    first_message: String,
     tx: mpsc::UnboundedSender<Action>,
     rx: mpsc::UnboundedReceiver<Event>,
 ) -> Result<()> {
     let mut events = EventsService::new(rx);
     let mut textarea = TextArea::default();
     let loading = Loading::default();
+
+    if !first_message.is_empty() {
+        textarea.insert_str(first_message);
+    }
 
     #[cfg(feature = "dev")]
     {
@@ -219,6 +224,7 @@ pub fn destruct_terminal_for_panic() {
 pub async fn start(
     tx: mpsc::UnboundedSender<Action>,
     rx: mpsc::UnboundedReceiver<Event>,
+    first_message: String,
 ) -> Result<()> {
     let stdout = io::stdout();
     let mut stdout = stdout.lock();
@@ -243,7 +249,7 @@ pub async fn start(
     )
     .await?;
 
-    start_loop(&mut terminal, &mut app_state, tx, rx).await?;
+    start_loop(&mut terminal, &mut app_state, first_message, tx, rx).await?;
     if !editor_name.is_empty() {
         let editor = EditorManager::get(&editor_name)?;
         if editor.health_check().await.is_ok() {

@@ -39,7 +39,7 @@ bincode = "=1.3.3"
 chrono = { version = "=0.4.31", default-features = false, features = ["clock"] }
 clap = { version = "=4.4.7", features = ["env"] }
 clap_complete = "=4.4.4"
-crossterm = { version = "=0.27.0", features = ["event-stream"] }
+crossterm = { version = "=0.27.0", features = ["bracketed-paste", "event-stream"] }
 dashmap = "=5.5.3"
 dialoguer = { version = "=0.10.4", default-features = false, features = ["editor"] }
 dirs = "=5.0.1"

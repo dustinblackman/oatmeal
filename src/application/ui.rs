@@ -2,7 +2,9 @@ use std::io;
 
 use anyhow::Result;
 use crossterm::cursor;
+use crossterm::event::DisableBracketedPaste;
 use crossterm::event::DisableMouseCapture;
+use crossterm::event::EnableBracketedPaste;
 use crossterm::event::EnableMouseCapture;
 use crossterm::terminal::disable_raw_mode;
 use crossterm::terminal::enable_raw_mode;
@@ -42,25 +44,16 @@ async fn start_loop<B: Backend>(
 
     #[cfg(feature = "dev")]
     {
-        use tui_textarea::Input;
-        use tui_textarea::Key;
-
         let test_str = "Write a function in Java that prints from 0 to 10. Return in markdown, add language to code blocks, describe the example before and after.";
-        for char in test_str.chars() {
-            textarea.input(Input {
-                key: Key::Char(char),
-                ctrl: false,
-                alt: false,
-                shift: false,
-            });
-        }
+        textarea.insert_str(test_str);
     }
 
     loop {
         terminal.draw(|frame| {
+            let textarea_len = (textarea.lines().len() + 3).try_into().unwrap();
             let layout = Layout::default()
                 .direction(Direction::Vertical)
-                .constraints(vec![Constraint::Min(1), Constraint::Max(4)])
+                .constraints(vec![Constraint::Min(1), Constraint::Max(textarea_len)])
                 .split(frame.size());
 
             if layout[0].width as usize != app_state.last_known_width
@@ -179,6 +172,14 @@ async fn start_loop<B: Backend>(
                 }
                 send_user_message!(input_str);
             }
+            Event::KeyboardPaste(text) => {
+                if app_state.waiting_for_backend {
+                    continue;
+                }
+                app_state.exit_warning = false;
+                textarea.set_yank_text(text.replace('\r', "\n"));
+                textarea.paste();
+            }
             Event::UIResize() => {
                 continue;
             }
@@ -204,7 +205,12 @@ pub fn destruct_terminal_for_panic() {
     if let Ok(enabled) = is_raw_mode_enabled() {
         if enabled {
             let _ = disable_raw_mode();
-            let _ = crossterm::execute!(io::stdout(), LeaveAlternateScreen, DisableMouseCapture);
+            let _ = crossterm::execute!(
+                io::stdout(),
+                LeaveAlternateScreen,
+                DisableMouseCapture,
+                DisableBracketedPaste
+            );
             let _ = crossterm::execute!(io::stdout(), cursor::Show);
         }
     }
@@ -218,7 +224,12 @@ pub async fn start(
     let mut stdout = stdout.lock();
 
     enable_raw_mode()?;
-    crossterm::execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+    crossterm::execute!(
+        stdout,
+        EnterAlternateScreen,
+        EnableMouseCapture,
+        EnableBracketedPaste
+    )?;
     let term_backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(term_backend)?;
     let editor_name = Config::get(ConfigKey::Editor);
@@ -244,7 +255,8 @@ pub async fn start(
     crossterm::execute!(
         terminal.backend_mut(),
         LeaveAlternateScreen,
-        DisableMouseCapture
+        DisableMouseCapture,
+        DisableBracketedPaste
     )?;
     terminal.show_cursor()?;
 

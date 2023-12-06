@@ -26,6 +26,9 @@ impl EventsService {
             CrosstermEvent::Resize(_, _) => {
                 return Some(Event::UIResize());
             }
+            CrosstermEvent::Paste(text) => {
+                return Some(Event::KeyboardPaste(text));
+            }
             CrosstermEvent::Key(keyevent) => {
                 match keyevent.into() {
                     Input { key: Key::Down, .. } => {

@@ -10,6 +10,7 @@ pub enum Event {
     KeyboardCTRLC(),
     KeyboardCTRLR(),
     KeyboardEnter(),
+    KeyboardPaste(String),
     UIResize(),
     UIScrollDown(),
     UIScrollUp(),

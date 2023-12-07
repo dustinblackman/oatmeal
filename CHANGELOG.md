@@ -2,9 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.3] - 2023-12-07
+
+[v0.7.2...v0.7.3](https://github.com/dustinblackman/oatmeal/compare/v0.7.2...v0.7.3)
+
+### ⚙️ Miscellaneous Tasks
+
+- Improve error message on panics - ([475647b](https://github.com/dustinblackman/oatmeal/commit/475647b6d046a80b9527a7af1825c721fdbcc28f))
+
 ## [0.7.2] - 2023-12-07
 
 [v0.7.1...v0.7.2](https://github.com/dustinblackman/oatmeal/compare/v0.7.1...v0.7.2)
+
+### ⛰️ Features
+
+- Release v0.7.2 - ([8d2c796](https://github.com/dustinblackman/oatmeal/commit/8d2c7963f7bafb15c6040eb8f585128e6204e057))
 
 ### 🐛 Bug Fixes
 

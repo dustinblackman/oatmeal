@@ -69,10 +69,10 @@ tools/yum.sh "$OM_VERSION" "$(realpath dist)"
 tools/choco.sh "$OM_VERSION" "$(realpath dist)"
 
 # Archive and upload debug packages
-tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_darwin_arm64.tar.gz" dist-gh/aarch64-apple-darwin/oatmeal.dSYM
-tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_windows_arm64.tar.gz" dist-gh/aarch64-pc-windows-msvc/oatmeal.pdb
-tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux_arm64.tar.gz" dist-gh/aarch64-unknown-linux-gnu/oatmeal.dwp
-tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_darwin_amd64.tar.gz" dist-gh/x86_64-apple-darwin/oatmeal.dSYM
-tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_windows_amd64.tar.gz" dist-gh/x86_64-pc-windows-msvc/oatmeal.pdb
-tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux_amd64.tar.gz" dist-gh/x86_64-unknown-linux-gnu/oatmeal.dwp
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_darwin_arm64.tar.gz" dist-gh/aarch64-apple-darwin/
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_windows_arm64.tar.gz" dist-gh/aarch64-pc-windows-msvc/
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux_arm64.tar.gz" dist-gh/aarch64-unknown-linux-gnu/
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_darwin_amd64.tar.gz" dist-gh/x86_64-apple-darwin/
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_windows_amd64.tar.gz" dist-gh/x86_64-pc-windows-msvc/
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux_amd64.tar.gz" dist-gh/x86_64-unknown-linux-gnu/
 ls dist | grep DEBUG | while read f; do cargo gha gh release upload "v$OM_VERSION" "dist/$f"; done

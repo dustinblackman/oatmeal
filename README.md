@@ -263,11 +263,10 @@ function oatmeal-sessions() {
 On each Oatmeal release there is a separate download to helps in reporting issues to really drill down in to what the
 problem is! If you've run in to a problem, I'd really help appreciate solving it.
 
-1. Head over to [releases](https://github.com/dustinblackman/oatmeal/releases) and download the DEBUG package for your
-   system and version of Oatmeal you're using.
-2. Extract the contents of the archive next to your oatmeal binary. You can find it on your system by running something
-   equivalent to `which oatmeal`.
-3. Run your command with the arguments provided in the error message.
+1. Head over to [releases](https://github.com/dustinblackman/oatmeal/releases) and download the DEBUG package for the
+   latest release of Oatmeal.
+2. Extract the contents of the archive, and `cd` in your terminal inside the archive.
+3. Run your command with the arguments provided in the error message prefixing with `RUST_BACKTRACE=1 ./oatmeal **ARGS-HERE**`
 4. Copy/paste the output and [open an issue](https://github.com/dustinblackman/oatmeal/issues/new).
 
 ### Development

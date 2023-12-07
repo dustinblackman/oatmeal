@@ -12,8 +12,6 @@ use std::process;
 use anyhow::anyhow;
 use anyhow::Error;
 use anyhow::Result;
-use config::Config;
-use config::ConfigKey;
 use domain::models::Action;
 use domain::models::Event;
 use domain::services::clipboard::ClipboardService;
@@ -84,10 +82,6 @@ async fn main() {
             .init();
     }
 
-    Config::set(
-        ConfigKey::Username,
-        &env::var("USER").unwrap_or_else(|_| return "User".to_string()),
-    );
     let ready_res = cli::parse().await;
     if let Err(ready_err) = ready_res {
         handle_error(ready_err);

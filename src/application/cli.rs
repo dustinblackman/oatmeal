@@ -1,3 +1,4 @@
+use std::env;
 use std::io;
 
 use anyhow::Result;
@@ -380,6 +381,12 @@ pub async fn parse() -> Result<bool> {
         matches.get_one::<String>("openai-url").unwrap(),
     );
 
+    let mut user = env::var("USER").unwrap_or_else(|_| return "".to_string());
+    if user.is_empty() {
+        user = "User".to_string();
+    }
+    Config::set(ConfigKey::Username, &user);
+
     if let Some(theme_file) = matches.get_one::<String>("theme-file") {
         Config::set(ConfigKey::ThemeFile, theme_file);
     }
@@ -389,12 +396,13 @@ pub async fn parse() -> Result<bool> {
     }
 
     tracing::debug!(
+        username = Config::get(ConfigKey::Username),
         backend = Config::get(ConfigKey::Backend),
         editor = Config::get(ConfigKey::Editor),
         model = Config::get(ConfigKey::Model),
         theme = Config::get(ConfigKey::Theme),
         theme_file = Config::get(ConfigKey::ThemeFile),
-        "Config"
+        "config"
     );
 
     return Ok(true);

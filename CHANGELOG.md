@@ -2,9 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.2] - 2023-12-07
+
+[v0.7.1...v0.7.2](https://github.com/dustinblackman/oatmeal/compare/v0.7.1...v0.7.2)
+
+### 🐛 Bug Fixes
+
+- Window resize event, crashes on small windows - ([3c981fd](https://github.com/dustinblackman/oatmeal/commit/3c981fdff75dff873aae384fb409e7a51f2400cd))
+
+### 📚 Documentation
+
+- Change steps for DEBUG packages - ([02c1285](https://github.com/dustinblackman/oatmeal/commit/02c12852cf900012640324b2dd609e88022c789a))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add username to config log - ([c1ba105](https://github.com/dustinblackman/oatmeal/commit/c1ba10520b66573a380f66a77dbf8b3cdb96bea2))
+
 ## [0.7.1] - 2023-12-06
 
 [v0.7.0...v0.7.1](https://github.com/dustinblackman/oatmeal/compare/v0.7.0...v0.7.1)
+
+### ⛰️ Features
+
+- Release v0.7.1 - ([ef860ed](https://github.com/dustinblackman/oatmeal/commit/ef860ed4ff3196439a9948ab7d4eb13b825da013))
 
 ### 🐛 Bug Fixes
 

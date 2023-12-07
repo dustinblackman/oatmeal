@@ -4,15 +4,7 @@ mod tests;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-use crate::config::Config;
-use crate::config::ConfigKey;
-
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum Author {
-    User,
-    Oatmeal,
-    Model,
-}
+use super::Author;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MessageType {
@@ -24,23 +16,13 @@ pub enum MessageType {
 pub struct Message {
     pub author: Author,
     pub text: String,
-    pub author_formatted: String,
     mtype: MessageType,
-}
-
-fn formatted_author(author: Author) -> String {
-    return match author {
-        Author::User => Config::get(ConfigKey::Username),
-        Author::Oatmeal => "Oatmeal".to_string(),
-        Author::Model => Config::get(ConfigKey::Model),
-    };
 }
 
 impl Message {
     pub fn new(author: Author, text: &str) -> Message {
         return Message {
             author: author.clone(),
-            author_formatted: formatted_author(author),
             text: text.to_string().replace('\t', "  "),
             mtype: MessageType::Normal,
         };
@@ -49,7 +31,6 @@ impl Message {
     pub fn new_with_type(author: Author, mtype: MessageType, text: &str) -> Message {
         return Message {
             author: author.clone(),
-            author_formatted: formatted_author(author),
             text: text.to_string().replace('\t', "  "),
             mtype,
         };

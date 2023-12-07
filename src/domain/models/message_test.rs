@@ -8,7 +8,7 @@ use super::MessageType;
 fn it_executes_new() {
     let msg = Message::new(Author::Oatmeal, "Hi there!");
     assert_eq!(msg.author, Author::Oatmeal);
-    assert_eq!(msg.author_formatted, "Oatmeal");
+    assert_eq!(msg.author.to_string(), "Oatmeal");
     assert_eq!(msg.text, "Hi there!".to_string());
     assert_eq!(msg.mtype, MessageType::Normal);
 }
@@ -17,7 +17,7 @@ fn it_executes_new() {
 fn it_executes_new_replacing_tabs() {
     let msg = Message::new(Author::Oatmeal, "\t\tHi there!");
     assert_eq!(msg.author, Author::Oatmeal);
-    assert_eq!(msg.author_formatted, "Oatmeal");
+    assert_eq!(msg.author.to_string(), "Oatmeal");
     assert_eq!(msg.text, "    Hi there!".to_string());
     assert_eq!(msg.mtype, MessageType::Normal);
 }
@@ -26,7 +26,7 @@ fn it_executes_new_replacing_tabs() {
 fn it_executes_new_with_type() {
     let msg = Message::new_with_type(Author::Oatmeal, MessageType::Error, "It broke!");
     assert_eq!(msg.author, Author::Oatmeal);
-    assert_eq!(msg.author_formatted, "Oatmeal");
+    assert_eq!(msg.author.to_string(), "Oatmeal");
     assert_eq!(msg.text, "It broke!".to_string());
     assert_eq!(msg.mtype, MessageType::Error);
 }
@@ -35,7 +35,7 @@ fn it_executes_new_with_type() {
 fn it_executes_new_with_type_replacing_tabs() {
     let msg = Message::new_with_type(Author::Oatmeal, MessageType::Error, "\t\tIt broke!");
     assert_eq!(msg.author, Author::Oatmeal);
-    assert_eq!(msg.author_formatted, "Oatmeal");
+    assert_eq!(msg.author.to_string(), "Oatmeal");
     assert_eq!(msg.text, "    It broke!".to_string());
     assert_eq!(msg.mtype, MessageType::Error);
 }

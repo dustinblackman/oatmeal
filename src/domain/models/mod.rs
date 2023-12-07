@@ -1,4 +1,5 @@
 mod action;
+mod author;
 mod backend;
 mod editor;
 mod event;
@@ -9,6 +10,7 @@ mod slash_commands;
 mod textarea;
 
 pub use action::*;
+pub use author::*;
 pub use backend::*;
 pub use editor::*;
 pub use event::*;

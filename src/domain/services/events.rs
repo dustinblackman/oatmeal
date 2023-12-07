@@ -3,6 +3,7 @@ use crossterm::event::Event as CrosstermEvent;
 use crossterm::event::EventStream;
 use futures::StreamExt;
 use tokio::sync::mpsc;
+use tokio::time;
 use tui_textarea::Input;
 use tui_textarea::Key;
 
@@ -23,9 +24,6 @@ impl EventsService {
 
     fn handle_crossterm(&self, event: CrosstermEvent) -> Option<Event> {
         match event {
-            CrosstermEvent::Resize(_, _) => {
-                return Some(Event::UIResize());
-            }
             CrosstermEvent::Paste(text) => {
                 return Some(Event::KeyboardPaste(text));
             }
@@ -110,6 +108,7 @@ impl EventsService {
                     Some(Err(_)) => None,
                     None => None
                 },
+                _ = time::sleep(time::Duration::from_millis(500)) => Some(Event::UITick())
             };
 
             if let Some(event) = evt {

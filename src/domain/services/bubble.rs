@@ -28,6 +28,30 @@ pub struct Bubble {
     codeblock_counter: usize,
 }
 
+pub struct BubbleConfig {
+    pub magic_spacing: usize,
+    pub border_elements_length: usize,
+    pub outer_padding_percentage: f32,
+}
+
+fn repeat_from_subtractions(text: &str, subtractions: Vec<usize>) -> String {
+    let count = subtractions
+        .into_iter()
+        .map(|e| {
+            return i32::try_from(e).unwrap();
+        })
+        .reduce(|a, b| {
+            return a - b;
+        })
+        .unwrap();
+
+    if count <= 0 {
+        return "".to_string();
+    }
+
+    return [text].repeat(count.try_into().unwrap()).join("");
+}
+
 impl<'a> Bubble {
     pub fn new(
         message: Message,
@@ -40,6 +64,17 @@ impl<'a> Bubble {
             message,
             window_max_width,
             codeblock_counter,
+        };
+    }
+
+    pub fn style_confg() -> BubbleConfig {
+        return BubbleConfig {
+            // TODO wtf is 8
+            magic_spacing: 8,
+            // left border + left padding + (text, not counted) + right padding + right border +
+            // scrollbar.
+            border_elements_length: 5,
+            outer_padding_percentage: 0.04,
         };
     }
 
@@ -106,7 +141,8 @@ impl<'a> Bubble {
                 }
             }
 
-            let bubble_padding = [" "].repeat(self.window_max_width - line_length).join("");
+            let bubble_padding =
+                repeat_from_subtractions(" ", vec![self.window_max_width, line_length]);
 
             if self.alignment == BubbleAlignment::Left {
                 spans.push(Span::from(bubble_padding));
@@ -123,11 +159,13 @@ impl<'a> Bubble {
 
     fn get_message_lines(&self) -> (Vec<String>, usize) {
         // Add a minimum 4% of padding on the side.
-        let min_bubble_padding_length = ((self.window_max_width as f32 * 0.04).ceil()) as usize;
+        let min_bubble_padding_length = ((self.window_max_width as f32
+            * Bubble::style_confg().outer_padding_percentage)
+            .ceil()) as usize;
 
-        // left border + left padding + (text, not counted) + right padding + right
-        // border + scrollbar. And then minimum bubble padding.
-        let line_border_width = 5 + min_bubble_padding_length;
+        // Border elements + minimum bubble padding.
+        let line_border_width =
+            Bubble::style_confg().border_elements_length + min_bubble_padding_length;
 
         let message_lines = self
             .message
@@ -141,7 +179,7 @@ impl<'a> Bubble {
             .max()
             .unwrap();
 
-        let username = &self.message.author_formatted;
+        let username = &self.message.author.to_string();
         if max_line_length < username.len() {
             max_line_length = username.len();
         }
@@ -155,12 +193,16 @@ impl<'a> Bubble {
         let top_left_border = "╭";
         let mut top_bar = format!("{top_left_border}{inner_bar}╮");
         let bottom_bar = format!("╰{inner_bar}╯");
-        let bar_bubble_padding = [" "]
-            // TODO WTF is 8?
-            .repeat(self.window_max_width - max_line_length - 8)
-            .join("");
+        let bar_bubble_padding = repeat_from_subtractions(
+            " ",
+            vec![
+                self.window_max_width,
+                max_line_length,
+                Bubble::style_confg().magic_spacing,
+            ],
+        );
 
-        let username = &self.message.author_formatted;
+        let username = &self.message.author.to_string();
 
         if self.alignment == BubbleAlignment::Left {
             let top_replace = ["─"].repeat(username.len()).join("");
@@ -193,7 +235,7 @@ impl<'a> Bubble {
         max_line_length: usize,
         mut spans: Vec<Span<'a>>,
     ) -> (Vec<Span<'a>>, usize) {
-        let fill = [" "].repeat(max_line_length - line_str.len()).join("");
+        let fill = repeat_from_subtractions(" ", vec![max_line_length, line_str.len()]);
         let line_length = format!("│ {line_str}{fill} │").len();
 
         let mut spans_res = vec![self.highlight_span("│ ".to_string())];

@@ -161,7 +161,7 @@ fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Event>) -> R
         let formatted = messages
             .iter()
             .map(|message| {
-                return format!("{}: {}", message.author_formatted, message.text);
+                return format!("{}: {}", message.author.to_string(), message.text);
             })
             .collect::<Vec<String>>()
             .join("\n\n");

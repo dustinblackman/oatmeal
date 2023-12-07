@@ -13,6 +13,7 @@ use crossterm::terminal::EnterAlternateScreen;
 use crossterm::terminal::LeaveAlternateScreen;
 use ratatui::backend::CrosstermBackend;
 use ratatui::prelude::*;
+use ratatui::widgets::Paragraph;
 use ratatui::widgets::Scrollbar;
 use ratatui::widgets::ScrollbarOrientation;
 use ratatui::Terminal;
@@ -30,7 +31,26 @@ use crate::domain::models::SlashCommand;
 use crate::domain::models::TextArea;
 use crate::domain::services::events::EventsService;
 use crate::domain::services::AppState;
+use crate::domain::services::Bubble;
 use crate::infrastructure::editors::EditorManager;
+
+/// Verifies that the current window size is large enough to handle the bare
+/// minimum width that includes the model name, username, bubbles, and padding.
+fn is_line_width_sufficient(line_width: u16) -> bool {
+    let author_lengths = vec![Author::User, Author::Oatmeal, Author::Model]
+        .into_iter()
+        .map(|e| return e.to_string().len())
+        .max()
+        .unwrap();
+
+    let bubble_style = Bubble::style_confg();
+    let min_width =
+        (author_lengths + bubble_style.magic_spacing + bubble_style.border_elements_length) as i32;
+    let trimmed_line_width =
+        ((line_width as f32 * (1.0 - bubble_style.outer_padding_percentage)).ceil()) as i32;
+
+    return trimmed_line_width >= min_width;
+}
 
 async fn start_loop<B: Backend>(
     terminal: &mut Terminal<B>,
@@ -50,6 +70,14 @@ async fn start_loop<B: Backend>(
 
     loop {
         terminal.draw(|frame| {
+            if !is_line_width_sufficient(frame.size().width) {
+                frame.render_widget(
+                    Paragraph::new("I'm too small, make me bigger!").alignment(Alignment::Left),
+                    frame.size(),
+                );
+                return;
+            }
+
             let textarea_len = (textarea.lines().len() + 3).try_into().unwrap();
             let layout = Layout::default()
                 .direction(Direction::Vertical)
@@ -180,7 +208,7 @@ async fn start_loop<B: Backend>(
                 textarea.set_yank_text(text.replace('\r', "\n"));
                 textarea.paste();
             }
-            Event::UIResize() => {
+            Event::UITick() => {
                 continue;
             }
             Event::UIScrollDown() => {

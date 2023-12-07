@@ -46,13 +46,13 @@ fn handle_error(err: Error) {
     if backtrace.to_string() == "disabled backtrace" {
         let args = env::args().collect::<Vec<String>>().join(" ");
         eprintln!(
-            "\nIf you could spare a moment, please head over to the docs to report this issue!"
+            "\nIf you could spare a moment, please head over to the docs to report this issue! It contains steps to assist in debugging."
         );
         eprintln!(
             "\nhttps://github.com/dustinblackman/oatmeal/blob/v{}/README.md#report-an-issue",
             env!("CARGO_PKG_VERSION")
         );
-        eprintln!("\nAfterward debugging is setup, you can rerun your command with the following:");
+        eprintln!("\nOtherwise, running the following can help explain further what the issue is:");
         eprintln!("\nRUST_BACKTRACE=1 {args}");
     } else {
         eprintln!("\n{}", backtrace);

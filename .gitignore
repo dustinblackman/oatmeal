@@ -7,3 +7,4 @@ completions/
 .cache/
 *.html
 .DS_Store
+flamegraph.svg

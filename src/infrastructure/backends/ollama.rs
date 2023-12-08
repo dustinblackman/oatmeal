@@ -53,12 +53,14 @@ struct ModelListResponse {
 
 pub struct Ollama {
     url: String,
+    timeout: String,
 }
 
 impl Default for Ollama {
     fn default() -> Ollama {
         return Ollama {
             url: Config::get(ConfigKey::OllamaURL),
+            timeout: Config::get(ConfigKey::BackendHealthCheckTimeout),
         };
     }
 }
@@ -69,7 +71,7 @@ impl Backend for Ollama {
     async fn health_check(&self) -> Result<()> {
         let res = reqwest::Client::new()
             .get(&self.url)
-            .timeout(Duration::from_millis(200))
+            .timeout(Duration::from_millis(self.timeout.parse::<u64>()?))
             .send()
             .await;
 

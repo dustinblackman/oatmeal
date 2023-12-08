@@ -175,6 +175,17 @@ fn arg_backend() -> Arg {
         .default_value("ollama");
 }
 
+fn arg_backend_health_check_timeout() -> Arg {
+    return Arg::new("backend-health-check-timeout")
+        .long("backend-health-check-timeout")
+        .env("OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT")
+        .num_args(1)
+        .help(
+            "Time to wait in milliseconds before timing out when doing a healthcheck for a backend",
+        )
+        .default_value("1000");
+}
+
 fn arg_model() -> Arg {
     return Arg::new("model")
         .short('m')
@@ -189,6 +200,7 @@ fn subcommand_chat() -> Command {
     return Command::new("chat")
         .about("Start a new chat session")
         .arg(arg_backend())
+        .arg(arg_backend_health_check_timeout())
         .arg(arg_model());
 }
 
@@ -252,6 +264,7 @@ fn build() -> Command {
         .subcommand(subcommand_debug())
         .subcommand(subcommand_sessions())
         .arg(arg_backend())
+        .arg(arg_backend_health_check_timeout())
         .arg(arg_model())
         .arg(
             Arg::new("editor")
@@ -344,6 +357,12 @@ pub async fn parse() -> Result<bool> {
                 subcmd_matches.get_one::<String>("backend").unwrap(),
             );
             Config::set(
+                ConfigKey::BackendHealthCheckTimeout,
+                matches
+                    .get_one::<String>("backend-health-check-timeout")
+                    .unwrap(),
+            );
+            Config::set(
                 ConfigKey::Model,
                 subcmd_matches.get_one::<String>("model").unwrap(),
             );
@@ -394,6 +413,12 @@ pub async fn parse() -> Result<bool> {
             Config::set(
                 ConfigKey::Backend,
                 matches.get_one::<String>("backend").unwrap(),
+            );
+            Config::set(
+                ConfigKey::BackendHealthCheckTimeout,
+                matches
+                    .get_one::<String>("backend-health-check-timeout")
+                    .unwrap(),
             );
             Config::set(
                 ConfigKey::Model,

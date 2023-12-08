@@ -14,7 +14,10 @@ use crate::domain::models::Event;
 
 impl Ollama {
     fn with_url(url: String) -> Ollama {
-        return Ollama { url };
+        return Ollama {
+            url,
+            timeout: "200".to_string(),
+        };
     }
 }
 

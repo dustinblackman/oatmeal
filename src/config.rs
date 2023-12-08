@@ -6,6 +6,7 @@ static CONFIG: Lazy<DashMap<String, String>> = Lazy::new(DashMap::new);
 #[derive(PartialEq, Eq)]
 pub enum ConfigKey {
     Backend,
+    BackendHealthCheckTimeout,
     Editor,
     Model,
     OllamaURL,
@@ -21,6 +22,9 @@ impl ToString for ConfigKey {
     fn to_string(&self) -> String {
         match self {
             ConfigKey::Backend => return String::from("backend"),
+            ConfigKey::BackendHealthCheckTimeout => {
+                return String::from("backend-health-check-timeout")
+            }
             ConfigKey::Editor => return String::from("editor"),
             ConfigKey::Model => return String::from("model"),
             ConfigKey::OllamaURL => return String::from("ollama-url"),

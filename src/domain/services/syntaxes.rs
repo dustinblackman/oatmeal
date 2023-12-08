@@ -31,7 +31,11 @@ impl Syntaxes {
     }
 
     pub fn list() -> Vec<String> {
-        let mut syntaxes = SYNTAX_SET.syntaxes().iter().map(|e| return e.name.to_string()).collect::<Vec<String>>();
+        let mut syntaxes = SYNTAX_SET
+            .syntaxes()
+            .iter()
+            .map(|e| return e.name.to_string())
+            .collect::<Vec<String>>();
         syntaxes.sort();
         return syntaxes;
     }

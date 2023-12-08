@@ -68,6 +68,7 @@ struct CompletionResponse {
 pub struct OpenAI {
     url: String,
     token: String,
+    timeout: String,
 }
 
 impl Default for OpenAI {
@@ -75,6 +76,7 @@ impl Default for OpenAI {
         return OpenAI {
             url: Config::get(ConfigKey::OpenAIURL),
             token: Config::get(ConfigKey::OpenAIToken),
+            timeout: Config::get(ConfigKey::BackendHealthCheckTimeout),
         };
     }
 }
@@ -98,7 +100,7 @@ impl Backend for OpenAI {
 
         let res = reqwest::Client::new()
             .get(&self.url)
-            .timeout(Duration::from_millis(1000))
+            .timeout(Duration::from_millis(self.timeout.parse::<u64>()?))
             .send()
             .await;
 

@@ -21,6 +21,7 @@ impl OpenAI {
         return OpenAI {
             url,
             token: "abc".to_string(),
+            timeout: "200".to_string(),
         };
     }
 }

@@ -8,6 +8,7 @@ pub fn update() {
             .arg("--help")
             .env("NO_COLOR", "1")
             .env("OATMEAL_THEME", "")
+            .env("OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT", "")
             .output()
             .unwrap()
             .stdout,
@@ -20,6 +21,7 @@ pub fn update() {
             .arg("--help")
             .env("NO_COLOR", "1")
             .env("OATMEAL_THEME", "")
+            .env("OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT", "")
             .output()
             .unwrap()
             .stdout,

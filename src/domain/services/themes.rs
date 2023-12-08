@@ -19,10 +19,13 @@ impl Themes {
     }
 
     pub fn list() -> Vec<String> {
-        return Themes::load()
+        let mut themes = Themes::load()
             .keys()
             .map(|e| return e.to_string())
             .collect::<Vec<String>>();
+        themes.sort();
+
+        return themes;
     }
 
     fn get_from_memory(theme_name: &str) -> Result<Theme> {

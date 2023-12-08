@@ -147,7 +147,7 @@ Options:
   -b, --backend <backend>            The initial backend hosting a model to connect to. [Possible values: ollama, openai] [env: OATMEAL_BACKEND=] [default: ollama]
   -m, --model <model>                The initial model on a backend to consume [env: OATMEAL_MODEL=] [default: llama2:latest]
   -e, --editor <editor>              The editor to integrate with. [Possible values: clipboard, neovim] [env: OATMEAL_EDITOR=] [default: clipboard]
-  -t, --theme <theme>                Sets code syntax highlighting theme. [Possible values: base16-onedark, base16-seti, base16-monokai, base16-github, base16-one-light] [env: OATMEAL_THEME=] [default: base16-onedark]
+  -t, --theme <theme>                Sets code syntax highlighting theme. [Possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti] [env: OATMEAL_THEME=] [default: base16-onedark]
       --theme-file <theme-file>      Absolute path to a TextMate tmTheme to use for code syntax highlighting [env: OATMEAL_THEME_FILE=]
       --ollama-url <ollama-url>      Ollama API URL when using the Ollama backend [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
       --openai-url <openai-url>      OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
@@ -177,7 +177,7 @@ When working with models that provide code, and using an editor integration, Oat
 
   - /append (/a) [CODE_BLOCK_NUMBER?] will append one-to-many model provided code blocks to the open file in your editor.
   - /replace (/r) [CODE_BLOCK_NUMBER?] - will replace selected code in your editor with one-to-many model provided code blocks.
-  - /copy (/c) [CODE_BLOCK_NUMBER?] - will append one-to-many model provided code blocks to your clipboard, no matter the editor integration being used.
+  - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used it will append one-to-many model provided code blocks to your clipboard, no matter the editor integration.
 
 The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to your editor at once. The parameter can be set as follows:
   - `1` - Selects the first code block
@@ -231,7 +231,7 @@ Commands:
 
 Options:
   -e, --editor <editor>              The editor to integrate with. [Possible values: clipboard, neovim] [env: OATMEAL_EDITOR=] [default: clipboard]
-  -t, --theme <theme>                Sets code syntax highlighting theme. [Possible values: base16-one-light, base16-onedark, base16-github, base16-seti, base16-monokai] [env: OATMEAL_THEME=] [default: base16-onedark]
+  -t, --theme <theme>                Sets code syntax highlighting theme. [Possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti] [env: OATMEAL_THEME=] [default: base16-onedark]
       --theme-file <theme-file>      Absolute path to a TextMate tmTheme to use for code syntax highlighting [env: OATMEAL_THEME_FILE=]
       --ollama-url <ollama-url>      Ollama API URL when using the Ollama backend [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
       --openai-url <openai-url>      OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]

@@ -30,6 +30,12 @@ impl Syntaxes {
         return SYNTAX_SET.find_syntax_plain_text();
     }
 
+    pub fn list() -> Vec<String> {
+        let mut syntaxes = SYNTAX_SET.syntaxes().iter().map(|e| return e.name.to_string()).collect::<Vec<String>>();
+        syntaxes.sort();
+        return syntaxes;
+    }
+
     pub fn translate_colour(syntect_color: syntect::highlighting::Color) -> Option<Color> {
         match syntect_color {
             syntect::highlighting::Color { r, g, b, a } if a > 0 => {

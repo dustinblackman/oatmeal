@@ -64,7 +64,7 @@ async fn start_loop<B: Backend>(
 
     #[cfg(feature = "dev")]
     {
-        let test_str = "Write a function in Java that prints from 0 to 10. Return in markdown, add language to code blocks, describe the example before and after.";
+        let test_str = "Write a function in Java that prints from 0 to 10. Describe the example before and after.";
         textarea.insert_str(test_str);
     }
 

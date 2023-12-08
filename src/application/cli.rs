@@ -19,6 +19,7 @@ use crate::config::ConfigKey;
 use crate::domain::models::Session;
 use crate::domain::services::actions::help_text;
 use crate::domain::services::Sessions;
+use crate::domain::services::Syntaxes;
 use crate::domain::services::Themes;
 
 fn print_completions<G: Generator>(gen: G, cmd: &mut Command) {
@@ -108,6 +109,21 @@ async fn load_config_from_session_interactive() -> Result<()> {
     load_config_from_session(&sessions[idx].id).await?;
 
     return Ok(());
+}
+
+fn subcommand_debug() -> Command {
+    return Command::new("debug")
+        .about("Debug helpers for Oatmeal")
+        .hide(true)
+        .subcommand(
+            Command::new("syntaxes").about("List all supported code highlighting languages")
+        )
+        .subcommand(
+            Command::new("themes").about("List all supported code highlighting themes")
+        )
+        .subcommand(
+            Command::new("log-path").about("Output path to debug log file generated when running Oatmeal with environment variable RUST_LOG=oatmeal")
+        );
 }
 
 fn subcommand_completions() -> Command {
@@ -233,6 +249,7 @@ fn build() -> Command {
         .arg_required_else_help(false)
         .subcommand(subcommand_chat())
         .subcommand(subcommand_completions())
+        .subcommand(subcommand_debug())
         .subcommand(subcommand_sessions())
         .arg(arg_backend())
         .arg(arg_model())
@@ -300,6 +317,27 @@ pub async fn parse() -> Result<bool> {
     let matches = build().get_matches();
 
     match matches.subcommand() {
+        Some(("debug", debug_matches)) => {
+            match debug_matches.subcommand() {
+                Some(("syntaxes", _)) => {
+                    println!("{}", Syntaxes::list().join("\n"));
+                    return Ok(false);
+                }
+                Some(("themes", _)) => {
+                    println!("{}", Themes::list().join("\n"));
+                    return Ok(false);
+                }
+                Some(("log-path", _)) => {
+                    let log_path = dirs::cache_dir().unwrap().join("oatmeal/debug.log");
+                    println!("{}", log_path.to_str().unwrap());
+                    return Ok(false);
+                }
+                _ => {
+                    subcommand_debug().print_long_help()?;
+                    return Ok(false);
+                }
+            }
+        }
         Some(("chat", subcmd_matches)) => {
             Config::set(
                 ConfigKey::Backend,

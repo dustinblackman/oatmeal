@@ -46,6 +46,20 @@ pub struct AppState<'a> {
     pub waiting_for_backend: bool,
 }
 
+fn editor_message(editor_context: String) -> Message {
+    return Message::new(
+        Author::Model,
+        &format!(
+            "Hey there! Let's talk about the following: \n\n{}",
+            editor_context
+        ),
+    );
+}
+
+fn intro_message() -> Message {
+    return Message::new(Author::Model, "Hey there! What can I do for you?");
+}
+
 impl<'a> AppState<'a> {
     pub async fn new(props: AppStateProps) -> Result<AppState<'a>> {
         if props.session_id.is_some() {
@@ -102,10 +116,7 @@ impl<'a> AppState<'a> {
             .await
             .is_err()
         {
-            app_state.messages.push(Message::new(
-                Author::Model,
-                "Hey there! What can I do for you?",
-            ));
+            app_state.messages.push(intro_message());
         }
 
         return Ok(app_state);
@@ -169,17 +180,33 @@ impl<'a> AppState<'a> {
         if let Some(editor_context) = editor.get_context().await? {
             let formatted = editor_context.format();
             self.editor_context = Some(editor_context);
-            self.messages.push(Message::new(
-                Author::Model,
-                &format!(
-                    "Hey there! Let's talk about the following: \n\n{}",
-                    formatted
-                ),
-            ));
+            self.messages.push(editor_message(formatted));
 
             return Ok(());
         } else {
             return Err(anyhow!("No editor context"));
+        }
+    }
+
+    pub fn reset_state(&mut self, clear_context: bool) {
+        self.backend_context = "".to_string();
+        self.exit_warning = false;
+        self.last_known_width = 0;
+        self.last_known_height = 0;
+        self.messages = vec![];
+        self.session_id = Sessions::create_id();
+        self.scroll = Scroll::default();
+
+        if clear_context {
+            self.editor_context = None;
+        }
+
+        if self.editor_context.is_some() {
+            self.messages.push(editor_message(
+                self.editor_context.clone().unwrap().format(),
+            ))
+        } else {
+            self.messages.push(intro_message());
         }
     }
 
@@ -274,6 +301,11 @@ impl<'a> AppState<'a> {
             // Reset backend context on model switch.
             if command.is_model_set() {
                 self.backend_context = "".to_string();
+            }
+
+            if command.is_new() {
+                self.reset_state(!command.args.is_empty() && command.args[0] == "clear");
+                should_continue = true;
             }
         }
 

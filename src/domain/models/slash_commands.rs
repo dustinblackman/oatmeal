@@ -29,6 +29,7 @@ impl SlashCommand {
             || cmd.is_copy_code_block()
             || cmd.is_copy_chat()
             || cmd.is_help()
+            || cmd.is_new()
         {
             return Some(cmd);
         }
@@ -66,5 +67,9 @@ impl SlashCommand {
 
     pub fn is_help(&self) -> bool {
         return ["/h", "/help"].contains(&self.command.as_str());
+    }
+
+    pub fn is_new(&self) -> bool {
+        return ["/n", "/new"].contains(&self.command.as_str());
     }
 }

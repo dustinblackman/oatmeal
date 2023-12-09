@@ -31,6 +31,7 @@ use crate::domain::models::SlashCommand;
 use crate::domain::models::TextArea;
 use crate::domain::services::events::EventsService;
 use crate::domain::services::AppState;
+use crate::domain::services::AppStateProps;
 use crate::domain::services::Bubble;
 use crate::infrastructure::editors::EditorManager;
 
@@ -54,12 +55,13 @@ fn is_line_width_sufficient(line_width: u16) -> bool {
 
 async fn start_loop<B: Backend>(
     terminal: &mut Terminal<B>,
-    app_state: &mut AppState<'_>,
+    app_state_props: AppStateProps,
     tx: mpsc::UnboundedSender<Action>,
     rx: mpsc::UnboundedReceiver<Event>,
 ) -> Result<()> {
     let mut events = EventsService::new(rx);
     let mut textarea = TextArea::default();
+    let mut app_state = AppState::new(app_state_props).await?;
     let loading = Loading::default();
 
     #[cfg(feature = "dev")]
@@ -93,6 +95,7 @@ async fn start_loop<B: Backend>(
             app_state
                 .bubble_list
                 .render(frame, layout[0], app_state.scroll.position);
+
             frame.render_stateful_widget(
                 Scrollbar::new(ScrollbarOrientation::VerticalRight),
                 layout[0].inner(&Margin {
@@ -119,6 +122,7 @@ async fn start_loop<B: Backend>(
 
                 let (should_break, should_continue) =
                     app_state.handle_slash_commands(input_str, &tx)?;
+
                 if should_break {
                     break;
                 }
@@ -261,17 +265,21 @@ pub async fn start(
     let term_backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(term_backend)?;
     let editor_name = Config::get(ConfigKey::Editor);
-    let mut app_state = AppState::new(
-        &Config::get(ConfigKey::Backend),
-        &editor_name,
-        &Config::get(ConfigKey::Model),
-        &Config::get(ConfigKey::Theme),
-        &Config::get(ConfigKey::ThemeFile),
-        &Config::get(ConfigKey::SessionID),
-    )
-    .await?;
+    let mut session_id = None;
+    if !Config::get(ConfigKey::SessionID).is_empty() {
+        session_id = Some(Config::get(ConfigKey::SessionID));
+    }
 
-    start_loop(&mut terminal, &mut app_state, tx, rx).await?;
+    let app_state_pros = AppStateProps {
+        backend_name: Config::get(ConfigKey::Backend),
+        editor_name: editor_name.to_string(),
+        model_name: Config::get(ConfigKey::Model),
+        theme_name: Config::get(ConfigKey::Theme),
+        theme_file: Config::get(ConfigKey::ThemeFile),
+        session_id,
+    };
+
+    start_loop(&mut terminal, app_state_pros, tx, rx).await?;
     if !editor_name.is_empty() {
         let editor = EditorManager::get(&editor_name)?;
         if editor.health_check().await.is_ok() {

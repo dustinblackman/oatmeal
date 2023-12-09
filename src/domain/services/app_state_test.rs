@@ -11,6 +11,7 @@ use crate::domain::models::Author;
 use crate::domain::models::BackendResponse;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
+use crate::domain::services::AppStateProps;
 use crate::domain::services::BubbleList;
 use crate::domain::services::CodeBlocks;
 use crate::domain::services::Scroll;
@@ -250,25 +251,25 @@ mod init {
 
     #[tokio::test]
     async fn it_inits_and_reloads_from_session() -> Result<()> {
-        let app_state = AppState::new(
-            "ollama",
-            "clipboard",
-            "codellama:latest",
-            "base16-onedark",
-            "",
-            "",
-        )
+        let app_state = AppState::new(AppStateProps {
+            backend_name: "ollama".to_string(),
+            editor_name: "clipboard".to_string(),
+            model_name: "codellama:latest".to_string(),
+            theme_name: "base16-onedark".to_string(),
+            theme_file: "".to_string(),
+            session_id: None,
+        })
         .await?;
         app_state.save_session().await?;
         let session_id = app_state.session_id;
-        AppState::new(
-            "ollama",
-            "clipboard",
-            "codellama:latest",
-            "base16-onedark",
-            "",
-            &session_id,
-        )
+        AppState::new(AppStateProps {
+            backend_name: "ollama".to_string(),
+            editor_name: "clipboard".to_string(),
+            model_name: "codellama:latest".to_string(),
+            theme_name: "base16-onedark".to_string(),
+            theme_file: "".to_string(),
+            session_id: Some(session_id.to_string()),
+        })
         .await?;
         Sessions::default().delete(&session_id).await?;
 

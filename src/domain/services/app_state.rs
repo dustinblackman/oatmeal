@@ -23,6 +23,15 @@ use crate::infrastructure::editors::EditorManager;
 #[path = "app_state_test.rs"]
 mod tests;
 
+pub struct AppStateProps {
+    pub backend_name: String,
+    pub editor_name: String,
+    pub model_name: String,
+    pub theme_name: String,
+    pub theme_file: String,
+    pub session_id: Option<String>,
+}
+
 pub struct AppState<'a> {
     pub backend_context: String,
     pub bubble_list: BubbleList<'a>,
@@ -38,36 +47,19 @@ pub struct AppState<'a> {
 }
 
 impl<'a> AppState<'a> {
-    pub async fn new(
-        backend_name: &str,
-        editor_name: &str,
-        model_name: &str,
-        theme_name: &str,
-        theme_file: &str,
-        session_id: &str,
-    ) -> Result<AppState<'a>> {
-        if !session_id.is_empty() {
-            return AppState::from_session(editor_name, theme_name, theme_file, session_id).await;
+    pub async fn new(props: AppStateProps) -> Result<AppState<'a>> {
+        if props.session_id.is_some() {
+            return AppState::from_session(props).await;
         }
 
-        return AppState::init(
-            backend_name,
-            editor_name,
-            model_name,
-            theme_name,
-            theme_file,
-        )
-        .await;
+        return AppState::init(props).await;
     }
 
-    async fn init(
-        backend_name: &str,
-        editor_name: &str,
-        model_name: &str,
-        theme_name: &str,
-        theme_file: &str,
-    ) -> Result<AppState<'a>> {
-        let theme = Themes::get(theme_name, theme_file)?;
+    async fn init(props: AppStateProps) -> Result<AppState<'a>> {
+        let backend_name = &props.backend_name;
+        let model_name = &props.model_name;
+        let theme = Themes::get(&props.theme_name, &props.theme_file)?;
+
         let mut app_state = AppState {
             backend_context: "".to_string(),
             bubble_list: BubbleList::new(theme),
@@ -105,7 +97,11 @@ impl<'a> AppState<'a> {
         }
 
         // Fallback to the default intro message when there's no editor context.
-        if app_state.add_editor_context(editor_name).await.is_err() {
+        if app_state
+            .add_editor_context(&props.editor_name)
+            .await
+            .is_err()
+        {
             app_state.messages.push(Message::new(
                 Author::Model,
                 "Hey there! What can I do for you?",
@@ -115,14 +111,10 @@ impl<'a> AppState<'a> {
         return Ok(app_state);
     }
 
-    async fn from_session(
-        editor_name: &str,
-        theme_name: &str,
-        theme_file: &str,
-        session_id: &str,
-    ) -> Result<AppState<'a>> {
-        let session = Sessions::default().load(session_id).await?;
-        let theme = Themes::get(theme_name, theme_file)?;
+    async fn from_session(props: AppStateProps) -> Result<AppState<'a>> {
+        let session_id = props.session_id.clone().unwrap().to_string();
+        let session = Sessions::default().load(&session_id).await?;
+        let theme = Themes::get(&props.theme_name, &props.theme_file)?;
 
         let mut app_state = AppState {
             backend_context: session.state.backend_context,
@@ -134,7 +126,7 @@ impl<'a> AppState<'a> {
             last_known_width: 0,
             messages: session.state.messages,
             scroll: Scroll::default(),
-            session_id: session_id.to_string(),
+            session_id,
             waiting_for_backend: false,
         };
 
@@ -142,7 +134,7 @@ impl<'a> AppState<'a> {
             .codeblocks
             .replace_from_messages(&app_state.messages);
 
-        if let Ok(editor) = EditorManager::get(editor_name) {
+        if let Ok(editor) = EditorManager::get(&props.editor_name) {
             if editor.health_check().await.is_ok() {
                 app_state.editor_context = editor.get_context().await?;
             }

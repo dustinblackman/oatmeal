@@ -2,9 +2,45 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2023-12-10
+
+[v0.7.3...v0.8.0](https://github.com/dustinblackman/oatmeal/compare/v0.7.3...v0.8.0)
+
+### ⛰️ Features
+
+- Handle mouse/touchpad scrolling - ([64af526](https://github.com/dustinblackman/oatmeal/commit/64af526454a8a1d46ef7a96e1a397cf4de614874))
+- Add backend timeout flag - ([7c5f717](https://github.com/dustinblackman/oatmeal/commit/7c5f717858717291ed9f40c8258b7b6cf3f29565))
+
+### 🐛 Bug Fixes
+
+- Remove default syntaxes - ([1125076](https://github.com/dustinblackman/oatmeal/commit/11250765b8e17dbef3d5c469197d3fac1b5484b3))
+
+### 🚜 Refactor
+
+- AppState props - ([21b410b](https://github.com/dustinblackman/oatmeal/commit/21b410b773cc1bf02f6e24f425642b3ff33b08c7))
+
+### 📚 Documentation
+
+- Update secondary mention of copy command - ([f51849d](https://github.com/dustinblackman/oatmeal/commit/f51849d83b5dfd8e81eeac40195bfbb321f7db64))
+
+### ⚡ Performance
+
+- Reduce memory allocations and string copies in bubbles - ([03ae852](https://github.com/dustinblackman/oatmeal/commit/03ae852909dc9cba44b527c447e35219a9398f1a))
+- Add further profiling tools - ([5585aac](https://github.com/dustinblackman/oatmeal/commit/5585aac35bd5f5f18d697c6523e347517b6e9f5d))
+- Add flamegraphs - ([c2cd9f5](https://github.com/dustinblackman/oatmeal/commit/c2cd9f54f44bc243d45487f2edb0d61a97a9a7cf))
+
+### ⚙️ Miscellaneous Tasks
+
+- Shrink linux binary sizes - ([285d503](https://github.com/dustinblackman/oatmeal/commit/285d503f5e88dfc5442d286083814ede05309034))
+- Add hidden debug subcommands - ([5420bef](https://github.com/dustinblackman/oatmeal/commit/5420bef1b06498813e45c3cf728aee88739b7861))
+
 ## [0.7.3] - 2023-12-07
 
 [v0.7.2...v0.7.3](https://github.com/dustinblackman/oatmeal/compare/v0.7.2...v0.7.3)
+
+### ⛰️ Features
+
+- Release v0.7.3 - ([6f1082c](https://github.com/dustinblackman/oatmeal/commit/6f1082c3070e657e357ba68a52edc487a08310f8))
 
 ### ⚙️ Miscellaneous Tasks
 

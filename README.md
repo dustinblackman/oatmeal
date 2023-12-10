@@ -89,7 +89,7 @@ yay -S oatmeal-bin
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.7.3
+choco install oatmeal --version=0.8.0
 ```
 
 <!-- choco-install end -->
@@ -132,8 +132,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.7.3
-Commit: v0.7.3
+Version: 0.8.0
+Commit: v0.8.0
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 
@@ -144,16 +144,28 @@ Commands:
   help         Print this message or the help of the given subcommand(s)
 
 Options:
-  -b, --backend <backend>            The initial backend hosting a model to connect to. [Possible values: ollama, openai] [env: OATMEAL_BACKEND=] [default: ollama]
-  -m, --model <model>                The initial model on a backend to consume [env: OATMEAL_MODEL=] [default: llama2:latest]
-  -e, --editor <editor>              The editor to integrate with. [Possible values: clipboard, neovim] [env: OATMEAL_EDITOR=] [default: clipboard]
-  -t, --theme <theme>                Sets code syntax highlighting theme. [Possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti] [env: OATMEAL_THEME=] [default: base16-onedark]
-      --theme-file <theme-file>      Absolute path to a TextMate tmTheme to use for code syntax highlighting [env: OATMEAL_THEME_FILE=]
-      --ollama-url <ollama-url>      Ollama API URL when using the Ollama backend [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
-      --openai-url <openai-url>      OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
-      --openai-token <openai-token>  OpenAI API token when using the OpenAI backend [env: OATMEAL_OPENAI_TOKEN=]
-  -h, --help                         Print help
-  -V, --version                      Print version
+  -b, --backend <backend>
+          The initial backend hosting a model to connect to. [Possible values: ollama, openai] [env: OATMEAL_BACKEND=] [default: ollama]
+      --backend-health-check-timeout <backend-health-check-timeout>
+          Time to wait in milliseconds before timing out when doing a healthcheck for a backend [env: OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT=] [default: 1000]
+  -m, --model <model>
+          The initial model on a backend to consume [env: OATMEAL_MODEL=] [default: llama2:latest]
+  -e, --editor <editor>
+          The editor to integrate with. [Possible values: clipboard, neovim] [env: OATMEAL_EDITOR=] [default: clipboard]
+  -t, --theme <theme>
+          Sets code syntax highlighting theme. [Possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti] [env: OATMEAL_THEME=] [default: base16-onedark]
+      --theme-file <theme-file>
+          Absolute path to a TextMate tmTheme to use for code syntax highlighting [env: OATMEAL_THEME_FILE=]
+      --ollama-url <ollama-url>
+          Ollama API URL when using the Ollama backend [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
+      --openai-url <openai-url>
+          OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
+      --openai-token <openai-token>
+          OpenAI API token when using the OpenAI backend [env: OATMEAL_OPENAI_TOKEN=]
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 
 CHAT COMMANDS:
   - /modellist (/ml) - Lists all available models from the backend.

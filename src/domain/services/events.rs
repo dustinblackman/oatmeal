@@ -1,6 +1,7 @@
 use anyhow::Result;
 use crossterm::event::Event as CrosstermEvent;
 use crossterm::event::EventStream;
+use crossterm::event::MouseEventKind;
 use futures::StreamExt;
 use tokio::sync::mpsc;
 use tokio::time;
@@ -26,6 +27,19 @@ impl EventsService {
         match event {
             CrosstermEvent::Paste(text) => {
                 return Some(Event::KeyboardPaste(text));
+            }
+            CrosstermEvent::Mouse(mouseevent) => {
+                match mouseevent.kind {
+                    MouseEventKind::ScrollUp => {
+                        return Some(Event::UIScrollUp());
+                    }
+                    MouseEventKind::ScrollDown => {
+                        return Some(Event::UIScrollDown());
+                    }
+                    _ => {
+                        return None;
+                    }
+                }
             }
             CrosstermEvent::Key(keyevent) => {
                 match keyevent.into() {

@@ -21,7 +21,7 @@ fn create_lines(
 
     let message = Message::new(author, text);
     let theme = Themes::get("base16-seti", "")?;
-    let lines = Bubble::new(message, alignment, 50, codeblock_count).as_lines(&theme);
+    let lines = Bubble::new(&message, alignment, 50, codeblock_count).as_lines(&theme);
     let lines_str = lines
         .iter()
         .map(|line| {

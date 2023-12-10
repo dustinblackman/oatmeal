@@ -25,6 +25,7 @@ description = "Terminal UI to chat with large language models (LLM) using differ
 
 [features]
 dev = []
+dhat-heap = ["dep:dhat"]
 
 [workspace]
 members = ["tools/xtask"]
@@ -41,6 +42,7 @@ clap = { version = "=4.4.7", features = ["env"] }
 clap_complete = "=4.4.4"
 crossterm = { version = "=0.27.0", features = ["bracketed-paste", "event-stream"] }
 dashmap = "=5.5.3"
+dhat = { version = "=0.3.2", optional = true }
 dialoguer = { version = "=0.10.4", default-features = false, features = ["editor"] }
 dirs = "=5.0.1"
 futures = "=0.3.28"
@@ -96,6 +98,7 @@ committed = { version = "1.0.20" }
 dprint = { version = "0.40.2" }
 flamegraph = { version = "0.5.1", bins = ["cargo-flamegraph"] }
 git-cliff = { version = "1.3.1" }
+samply = { version = "0.11.0" }
 
 [profile.release]
 codegen-units = 1
@@ -198,7 +201,21 @@ thirdparty = '''set -e
   ./tools/thirdparty/run.sh
 '''
 
-profile = '''
+profile = '''set -e
+  cargo build --release --features dev
+  cargo bin samply record ./target/release/oatmeal --model codellama:latest
+'''
+
+profile-heap = '''set -e
+  cargo run --features dhat-heap --features dev --release -- --model codellama:latest
+  if [ ! -d ".cache/valgrind" ]; then
+    git clone git://sourceware.org/git/valgrind.git .cache/valgrind
+    (cd .cache/valgrind && git checkout 8a4b233e1da5991893de1cbe072dee40cf793c39)
+  fi
+  open .cache/valgrind/dhat/dh_view.html
+'''
+
+profile-flamegraph = '''set -e
   sudo cargo flamegraph --bin=oatmeal --features dev -- --model codellama:latest
 '''
 

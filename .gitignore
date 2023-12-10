@@ -8,3 +8,5 @@ completions/
 *.html
 .DS_Store
 flamegraph.svg
+profile.json
+dhat-heap.json

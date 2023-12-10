@@ -23,6 +23,10 @@ use crate::application::cli;
 use crate::application::ui;
 use crate::domain::services::actions::ActionsService;
 
+#[cfg(feature = "dhat-heap")]
+#[global_allocator]
+static ALLOC: dhat::Alloc = dhat::Alloc;
+
 async fn flatten<T>(handle: task::JoinHandle<Result<T>>) -> Result<()> {
     return match handle.await {
         Ok(Ok(_result)) => Ok(()),
@@ -68,6 +72,9 @@ async fn main() {
         better_panic::Settings::auto().create_panic_handler()(panic_info);
     }));
 
+    #[cfg(feature = "dhat-heap")]
+    let _profiler = dhat::Profiler::new_heap();
+
     let file_appender =
         tracing_appender::rolling::never(dirs::cache_dir().unwrap().join("oatmeal"), "debug.log");
     let (writer, _guard) = tracing_appender::non_blocking(file_appender);
@@ -112,6 +119,9 @@ async fn main() {
         ui::destruct_terminal_for_panic();
         handle_error(res.unwrap_err());
     }
+
+    #[cfg(feature = "dhat-heap")]
+    drop(_profiler);
 
     process::exit(0);
 }

@@ -126,14 +126,14 @@ jobs:
           cache-directories: ".bin"
       - name: Build
         run: |
-          cargo build --release --target x86_64-pc-windows-msvc
+          cargo build --profile release-windows --target x86_64-pc-windows-msvc
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           name: x86_64-pc-windows-msvc
           path: |
-            target/x86_64-pc-windows-msvc/release/oatmeal.exe
-            target/x86_64-pc-windows-msvc/release/oatmeal.pdb
+            target/x86_64-pc-windows-msvc/release-windows/oatmeal.exe
+            target/x86_64-pc-windows-msvc/release-windows/oatmeal.pdb
 
   windows-arm:
     runs-on: windows-latest
@@ -150,11 +150,11 @@ jobs:
       - name: Build
         run: |
           rustup target add aarch64-pc-windows-msvc
-          cargo build --release --target aarch64-pc-windows-msvc
+          cargo build --profile release-windows --target aarch64-pc-windows-msvc
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           name: aarch64-pc-windows-msvc
           path: |
-            target/aarch64-pc-windows-msvc/release/oatmeal.exe
-            target/aarch64-pc-windows-msvc/release/oatmeal.pdb
+            target/aarch64-pc-windows-msvc/release-windows/oatmeal.exe
+            target/aarch64-pc-windows-msvc/release-windows/oatmeal.pdb

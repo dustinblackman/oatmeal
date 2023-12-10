@@ -108,6 +108,10 @@ opt-level = 3
 split-debuginfo = "packed"
 strip = "symbols"
 
+[profile.release-windows]
+inherits = "release"
+strip = "none"
+
 [profile.dev.package]
 insta.opt-level = 3
 similar.opt-level = 3

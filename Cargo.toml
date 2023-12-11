@@ -138,8 +138,8 @@ dev = '''set -e
 
 dev-install = '''set -e
   cargo build --release
-  sudo rm -f /usr/local/bin/oatmeal
-  sudo mv ./target/release/oatmeal /usr/local/bin/
+  rm -f $HOME/.cargo/bin/oatmeal
+  mv ./target/release/oatmeal $HOME/.cargo/bin/
 '''
 
 lint = '''set -e

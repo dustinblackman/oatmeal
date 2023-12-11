@@ -57,9 +57,6 @@ impl Scroll {
             content_length = 1;
         }
 
-        self.scrollbar_state = self
-            .scrollbar_state
-            .content_length(content_length)
-            .viewport_content_length(viewport_length.saturating_sub(2));
+        self.scrollbar_state = self.scrollbar_state.content_length(content_length);
     }
 }

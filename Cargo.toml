@@ -20,6 +20,7 @@ exclude = [
 keywords = ["cli", "llm", "chat", "tui"]
 license = "MIT"
 description = "Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!"
+repository = "https://github.com/dustinblackman/oatmeal"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

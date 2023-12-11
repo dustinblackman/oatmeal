@@ -51,9 +51,15 @@ impl Scroll {
     pub fn set_state(&mut self, list_length: usize, viewport_length: usize) {
         self.list_length = list_length;
         self.viewport_length = viewport_length;
+
+        let mut content_length = list_length.saturating_sub(viewport_length);
+        if content_length == 0 {
+            content_length = 1;
+        }
+
         self.scrollbar_state = self
             .scrollbar_state
-            .content_length(list_length)
-            .viewport_content_length(viewport_length);
+            .content_length(content_length)
+            .viewport_content_length(viewport_length.saturating_sub(2));
     }
 }

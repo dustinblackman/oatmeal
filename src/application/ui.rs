@@ -92,9 +92,11 @@ async fn start_loop<B: Backend>(
                 app_state.set_rect(layout[0]);
             }
 
-            app_state
-                .bubble_list
-                .render(frame, layout[0], app_state.scroll.position);
+            app_state.bubble_list.render(
+                layout[0],
+                frame.buffer_mut(),
+                app_state.scroll.position.try_into().unwrap(),
+            );
 
             frame.render_stateful_widget(
                 Scrollbar::new(ScrollbarOrientation::VerticalRight),

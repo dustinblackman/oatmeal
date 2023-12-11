@@ -1,10 +1,8 @@
 use std::collections::HashMap;
 
+use ratatui::prelude::Buffer;
 use ratatui::prelude::Rect;
 use ratatui::text::Line;
-use ratatui::widgets::Block;
-use ratatui::widgets::Paragraph;
-use ratatui::Frame;
 use syntect::highlighting::Theme;
 
 use super::Bubble;
@@ -88,21 +86,32 @@ impl<'a> BubbleList<'a> {
         return self.lines_len;
     }
 
-    pub fn render(&self, frame: &mut Frame, rect: Rect, scroll: usize) {
-        let mut indexes: Vec<usize> = self.cache.keys().cloned().collect();
-        indexes.sort();
-        let lines: Vec<Line<'a>> = indexes
-            .iter()
-            .flat_map(|idx| {
-                return self.cache.get(idx).unwrap().lines.to_owned();
-            })
-            .collect();
+    pub fn render(&self, rect: Rect, buf: &mut Buffer, scroll_index: u16) {
+        let mut cache_keys: Vec<usize> = self.cache.keys().cloned().collect();
+        cache_keys.sort();
 
-        frame.render_widget(
-            Paragraph::new(lines)
-                .block(Block::default())
-                .scroll((scroll.try_into().unwrap(), 0)),
-            rect,
-        );
+        let mut line_idx = 0;
+        let mut should_break = false;
+
+        for cache_key in cache_keys {
+            for line in self.cache.get(&cache_key).unwrap().lines.as_slice() {
+                if line_idx < scroll_index {
+                    line_idx += 1;
+                    continue;
+                }
+
+                if (line_idx - scroll_index) >= rect.height {
+                    should_break = true;
+                    break;
+                }
+
+                buf.set_line(0, line_idx - scroll_index, line, rect.width);
+                line_idx += 1;
+            }
+
+            if should_break {
+                break;
+            }
+        }
     }
 }

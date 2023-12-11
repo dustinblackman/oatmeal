@@ -2,9 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.2] - 2023-12-11
+
+[v0.8.1...v0.8.2](https://github.com/dustinblackman/oatmeal/compare/v0.8.1...v0.8.2)
+
+### 🐛 Bug Fixes
+
+- Use default viewport length for scrollbar - ([c47f61c](https://github.com/dustinblackman/oatmeal/commit/c47f61c5a990ec52d6495979da9f9d893cbeb35d))
+
 ## [0.8.1] - 2023-12-11
 
 [v0.8.0...v0.8.1](https://github.com/dustinblackman/oatmeal/compare/v0.8.0...v0.8.1)
+
+### ⛰️ Features
+
+- Release v0.8.1 - ([3296b62](https://github.com/dustinblackman/oatmeal/commit/3296b62c3f5de32cdff0348d8567d384c14d8183))
 
 ### 🐛 Bug Fixes
 

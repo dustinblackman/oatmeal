@@ -2,12 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.1] - 2023-12-11
+
+[v0.8.0...v0.8.1](https://github.com/dustinblackman/oatmeal/compare/v0.8.0...v0.8.1)
+
+### 🐛 Bug Fixes
+
+- Scrollbar accuracy - ([1fb27fa](https://github.com/dustinblackman/oatmeal/commit/1fb27fa8194ec23524921be616f7a3bc98578311))
+- Windows debug packages - ([f426569](https://github.com/dustinblackman/oatmeal/commit/f426569afb6a4a702909831238f077e12fe0ef10))
+
+### ⚡ Performance
+
+- Reimplement writing to frame manually - ([227f369](https://github.com/dustinblackman/oatmeal/commit/227f3691c2d2c1661280e98df3d7748ac25a5d13))
+
 ## [0.8.0] - 2023-12-10
 
 [v0.7.3...v0.8.0](https://github.com/dustinblackman/oatmeal/compare/v0.7.3...v0.8.0)
 
 ### ⛰️ Features
 
+- Release v0.8.0 - ([fd7b2eb](https://github.com/dustinblackman/oatmeal/commit/fd7b2eb62868cc7b720161e6f13d01f2f5f36fe0))
 - Handle mouse/touchpad scrolling - ([64af526](https://github.com/dustinblackman/oatmeal/commit/64af526454a8a1d46ef7a96e1a397cf4de614874))
 - Add backend timeout flag - ([7c5f717](https://github.com/dustinblackman/oatmeal/commit/7c5f717858717291ed9f40c8258b7b6cf3f29565))
 

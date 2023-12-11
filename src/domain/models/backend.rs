@@ -13,6 +13,7 @@ use super::Event;
 pub struct BackendPrompt {
     pub text: String,
     pub backend_context: String,
+    pub system_prompt: String,
 }
 
 impl BackendPrompt {
@@ -20,23 +21,24 @@ impl BackendPrompt {
         return BackendPrompt {
             text,
             backend_context,
+            // TODO configurable?
+            // TODO disable completely?
+            system_prompt: "You're an assistant. You return any code examples in individual markdown code block, with the language added to the code block.".to_string()
         };
     }
 
-    pub fn append_system_prompt(&mut self, editor_context: &Option<EditorContext>) {
+    pub fn append_editor_context(&mut self, editor_context: &Option<EditorContext>) {
         if let Some(context) = editor_context {
             let lang = &context.language;
             let code = &context.code;
 
-            let system_prompt = format!(". The coding language is {lang}. Return results in markdown, add language to code blocks.");
+            let system_prompt = format!(". The coding language is {lang}.");
             self.text += &system_prompt;
 
             if !code.is_empty() {
                 let code_prompt = format!(" The code is the following:\n{code}");
                 self.text += &code_prompt;
             }
-        } else {
-            self.text += ". Return results in markdown, add language to code blocks."
         }
     }
 }

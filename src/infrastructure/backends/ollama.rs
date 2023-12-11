@@ -31,6 +31,7 @@ fn convert_err(err: reqwest::Error) -> std::io::Error {
 struct CompletionRequest {
     model: String,
     prompt: String,
+    system: String,
     context: Option<Vec<i32>>,
 }
 
@@ -120,6 +121,7 @@ impl Backend for Ollama {
         let mut req = CompletionRequest {
             model: Config::get(ConfigKey::Model),
             prompt: prompt.text,
+            system: prompt.system_prompt,
             context: None,
         };
 

@@ -116,13 +116,13 @@ async fn it_gets_completions() -> Result<()> {
     })?;
 
     let body = [first_line, second_line].join("\n");
-    let prompt = BackendPrompt {
-        text: "Say hi to the world".to_string(),
-        backend_context: serde_json::to_string(&vec![MessageRequest {
+    let prompt = BackendPrompt::new(
+        "Say hi to the world".to_string(),
+        serde_json::to_string(&vec![MessageRequest {
             role: "assistant".to_string(),
             content: "How may I help you?".to_string(),
         }])?,
-    };
+    );
 
     let mut server = mockito::Server::new();
     let mock = server

@@ -6,7 +6,7 @@ fn it_adds_default_system_prompt() {
     let mut prompt = BackendPrompt::new("Hello world".to_string(), "".to_string());
     prompt.append_chat_context(&None);
 
-    insta::assert_snapshot!(prompt.text, @"Hello world. Return results in markdown, add language to code blocks.");
+    insta::assert_snapshot!(prompt.text, @"Hello world. Add language to any code blocks.");
 }
 
 #[test]
@@ -20,7 +20,7 @@ fn it_adds_language_system_prompt() {
         end_line: None,
     }));
 
-    insta::assert_snapshot!(prompt.text, @"Hello world. The coding language is rust. Return results in markdown, add language to code blocks.");
+    insta::assert_snapshot!(prompt.text, @"Hello world. The coding language is rust. Add language to any code blocks.");
 }
 
 #[test]
@@ -35,7 +35,7 @@ fn it_adds_language_and_code_system_prompt() {
     }));
 
     insta::assert_snapshot!(prompt.text, @r###"
-    Hello world. The coding language is rust. Return results in markdown, add language to code blocks. The code is the following:
+    Hello world. The coding language is rust. Add language to any code blocks. The code is the following:
     println!("Test!")
     "###);
 }

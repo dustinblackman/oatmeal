@@ -28,7 +28,8 @@ impl BackendPrompt {
             let lang = &context.language;
             let code = &context.code;
 
-            let system_prompt = format!(". The coding language is {lang}. Return results in markdown, add language to code blocks.");
+            let system_prompt =
+                format!(". The coding language is {lang}. Add language to any code blocks.");
             self.text += &system_prompt;
 
             if !code.is_empty() {
@@ -36,7 +37,7 @@ impl BackendPrompt {
                 self.text += &code_prompt;
             }
         } else {
-            self.text += ". Return results in markdown, add language to code blocks."
+            self.text += ". Add language to any code blocks."
         }
     }
 }

@@ -117,7 +117,7 @@ impl<'a> Bubble<'_> {
             if line.trim().starts_with("```") {
                 let lang = line.trim().replace("```", "");
                 let syntax = Syntaxes::get(&lang);
-                if syntax.name.to_lowercase() != "plain text" {
+                if !in_codeblock {
                     highlight = HighlightLines::new(syntax, theme);
                     in_codeblock = true;
 

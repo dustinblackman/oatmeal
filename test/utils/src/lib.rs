@@ -31,7 +31,7 @@ function printNumbers() {
 }
 ```
 
-This is a markdown codeblock that has no language, so it should not be included.
+This is a markdown codeblock that has no language. We count it as well incase an LLM doesn't attach a language.
 
 ```
 abc123

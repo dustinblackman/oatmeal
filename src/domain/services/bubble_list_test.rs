@@ -41,6 +41,6 @@ fn it_returns_correct_length() -> Result<()> {
     let mut bubble_list = BubbleList::new(theme);
     bubble_list.set_messages(&messages, 50);
 
-    assert_eq!(bubble_list.len(), 42);
+    assert_eq!(bubble_list.len(), 43);
     return Ok(());
 }

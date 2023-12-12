@@ -27,7 +27,7 @@ fn it_replaces_messages() {
 
     let mut codeblocks = CodeBlocks::default();
     codeblocks.replace_from_messages(&messages);
-    assert_eq!(codeblocks.codeblocks.len(), 3);
+    assert_eq!(codeblocks.codeblocks.len(), 4);
 }
 
 #[test]
@@ -89,8 +89,7 @@ fn it_provides_first_second_third_codeblock() {
         return numbers.join('\n');
     }
 
-    for i in range(11):
-        print(i)
+    abc123
     "###);
 }
 

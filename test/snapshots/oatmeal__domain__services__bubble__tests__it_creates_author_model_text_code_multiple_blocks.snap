@@ -27,15 +27,16 @@ expression: lines_str
 │ ```                                      │  
 │                                          │  
 │ This is a markdown codeblock that has no │  
-│ language, so it should not be included.  │  
+│ language. We count it as well incase an  │  
+│ LLM doesn't attach a language.           │  
 │                                          │  
-│ ```                                      │  
+│ ``` (12)                                 │  
 │ abc123                                   │  
 │ ```                                      │  
 │                                          │  
 │ Let's do Python as well!                 │  
 │                                          │  
-│ ```python (12)                           │  
+│ ```python (13)                           │  
 │ for i in range(11):                      │  
 │     print(i)                             │  
 │ ```                                      │  

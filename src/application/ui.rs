@@ -138,7 +138,7 @@ async fn start_loop<B: Backend>(
 
                 if app_state.backend_context.is_empty() && SlashCommand::parse(&input_str).is_none()
                 {
-                    prompt.append_editor_context(&app_state.editor_context);
+                    prompt.append_chat_context(&app_state.editor_context);
                 }
 
                 tx.send(Action::BackendRequest(prompt))?;

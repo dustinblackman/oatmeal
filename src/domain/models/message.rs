@@ -88,10 +88,6 @@ impl Message {
                     current_codeblock = vec![];
                     in_codeblock = false
                 } else {
-                    // Only count code blocks with a language attached to it.
-                    if trimmed == "```" {
-                        continue;
-                    }
                     in_codeblock = true;
                 }
                 continue;

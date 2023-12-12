@@ -77,7 +77,7 @@ fn it_executes_codeblocks() {
     let msg = Message::new(Author::Oatmeal, codeblock_fixture());
     let codeblocks = msg.codeblocks();
 
-    assert_eq!(codeblocks.len(), 3);
+    assert_eq!(codeblocks.len(), 4);
     insta::assert_snapshot!(codeblocks[0], @r###"
     fn print_numbers() {
         for i in 0..=0 {
@@ -96,7 +96,9 @@ fn it_executes_codeblocks() {
     }
     "###);
 
-    insta::assert_snapshot!(codeblocks[2], @r###"
+    insta::assert_snapshot!(codeblocks[2], @"abc123");
+
+    insta::assert_snapshot!(codeblocks[3], @r###"
     for i in range(11):
         print(i)
     "###);

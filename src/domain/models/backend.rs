@@ -27,7 +27,7 @@ impl BackendPrompt {
         };
     }
 
-    pub fn append_editor_context(&mut self, editor_context: &Option<EditorContext>) {
+    pub fn append_chat_context(&mut self, editor_context: &Option<EditorContext>) {
         if let Some(context) = editor_context {
             let lang = &context.language;
             let code = &context.code;

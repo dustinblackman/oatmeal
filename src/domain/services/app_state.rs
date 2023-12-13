@@ -11,6 +11,7 @@ use super::Themes;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
+use crate::domain::models::BackendName;
 use crate::domain::models::BackendResponse;
 use crate::domain::models::EditorContext;
 use crate::domain::models::EditorName;
@@ -75,7 +76,7 @@ impl<'a> AppState<'a> {
             waiting_for_backend: false,
         };
 
-        let backend = BackendManager::get(backend_name)?;
+        let backend = BackendManager::get(BackendName::parse(backend_name.to_string()).unwrap())?;
         if let Err(err) = backend.health_check().await {
             app_state
                 .messages

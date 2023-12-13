@@ -1,41 +1,23 @@
 use dashmap::DashMap;
 use once_cell::sync::Lazy;
+use strum::EnumVariantNames;
 
 static CONFIG: Lazy<DashMap<String, String>> = Lazy::new(DashMap::new);
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, EnumVariantNames, strum::Display)]
+#[strum(serialize_all = "kebab-case")]
 pub enum ConfigKey {
     Backend,
     BackendHealthCheckTimeout,
     Editor,
     Model,
     OllamaURL,
-    OpenAIToken,
-    OpenAIURL,
+    OpenAiToken,
+    OpenAiURL,
     SessionID,
     Theme,
     ThemeFile,
     Username,
-}
-
-impl ToString for ConfigKey {
-    fn to_string(&self) -> String {
-        match self {
-            ConfigKey::Backend => return String::from("backend"),
-            ConfigKey::BackendHealthCheckTimeout => {
-                return String::from("backend-health-check-timeout")
-            }
-            ConfigKey::Editor => return String::from("editor"),
-            ConfigKey::Model => return String::from("model"),
-            ConfigKey::OllamaURL => return String::from("ollama-url"),
-            ConfigKey::OpenAIToken => return String::from("openai-token"),
-            ConfigKey::OpenAIURL => return String::from("openai-url"),
-            ConfigKey::SessionID => return String::from("session-id"),
-            ConfigKey::Theme => return String::from("theme"),
-            ConfigKey::ThemeFile => return String::from("themefile"),
-            ConfigKey::Username => return String::from("username"),
-        }
-    }
 }
 
 pub struct Config {}

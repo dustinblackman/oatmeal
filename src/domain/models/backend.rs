@@ -4,11 +4,27 @@ mod tests;
 
 use anyhow::Result;
 use async_trait::async_trait;
+use strum::EnumIter;
+use strum::EnumVariantNames;
+use strum::IntoEnumIterator;
 use tokio::sync::mpsc;
 
 use super::Author;
 use super::EditorContext;
 use super::Event;
+
+#[derive(Clone, Debug, PartialEq, Eq, EnumIter, EnumVariantNames, strum::Display)]
+#[strum(serialize_all = "lowercase")]
+pub enum BackendName {
+    Ollama,
+    OpenAI,
+}
+
+impl BackendName {
+    pub fn parse(text: String) -> Option<BackendName> {
+        return BackendName::iter().find(|e| return e.to_string() == text);
+    }
+}
 
 pub struct BackendPrompt {
     pub text: String,

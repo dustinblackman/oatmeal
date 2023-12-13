@@ -74,8 +74,8 @@ pub struct OpenAI {
 impl Default for OpenAI {
     fn default() -> OpenAI {
         return OpenAI {
-            url: Config::get(ConfigKey::OpenAIURL),
-            token: Config::get(ConfigKey::OpenAIToken),
+            url: Config::get(ConfigKey::OpenAiURL),
+            token: Config::get(ConfigKey::OpenAiToken),
             timeout: Config::get(ConfigKey::BackendHealthCheckTimeout),
         };
     }

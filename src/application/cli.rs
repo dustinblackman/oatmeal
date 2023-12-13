@@ -18,6 +18,7 @@ use yansi::Paint;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
+use crate::domain::models::BackendName;
 use crate::domain::models::EditorName;
 use crate::domain::models::Session;
 use crate::domain::services::actions::help_text;
@@ -119,13 +120,16 @@ fn subcommand_debug() -> Command {
         .about("Debug helpers for Oatmeal")
         .hide(true)
         .subcommand(
-            Command::new("syntaxes").about("List all supported code highlighting languages")
+            Command::new("syntaxes").about("List all supported code highlighting languages.")
         )
         .subcommand(
-            Command::new("themes").about("List all supported code highlighting themes")
+            Command::new("themes").about("List all supported code highlighting themes.")
         )
         .subcommand(
             Command::new("log-path").about("Output path to debug log file generated when running Oatmeal with environment variable RUST_LOG=oatmeal")
+        )
+        .subcommand(
+            Command::new("enum-config").about("List all config keys as strings.")
         );
 }
 
@@ -136,7 +140,7 @@ fn subcommand_completions() -> Command {
             clap::Arg::new("shell")
                 .short('s')
                 .long("shell")
-                .help("Which shell to generate completions for")
+                .help("Which shell to generate completions for.")
                 .action(ArgAction::Set)
                 .value_parser(value_parser!(Shell))
                 .required(true),
@@ -172,9 +176,8 @@ fn arg_backend() -> Arg {
         .long("backend")
         .env("OATMEAL_BACKEND")
         .num_args(1)
-        .help(
-            "The initial backend hosting a model to connect to. [Possible values: ollama, openai]",
-        )
+        .help("The initial backend hosting a model to connect to.")
+        .value_parser(PossibleValuesParser::new(BackendName::VARIANTS))
         .default_value("ollama");
 }
 
@@ -211,11 +214,11 @@ fn subcommand_sessions() -> Command {
     return Command::new("sessions")
         .about("Manage past chat sessions")
         .arg_required_else_help(true)
-        .subcommand(Command::new("dir").about("Print the sessions cache directory path"))
-        .subcommand(Command::new("list").about("List all previous sessions with their ids and models"))
+        .subcommand(Command::new("dir").about("Print the sessions cache directory path."))
+        .subcommand(Command::new("list").about("List all previous sessions with their ids and models."))
         .subcommand(
             Command::new("open")
-                .about("Open a previous session by ID. Omit passing any session ID to load an interactive selection")
+                .about("Open a previous session by ID. Omit passing any session ID to load an interactive selection.")
                 .arg(
                     clap::Arg::new("session-id")
                         .short('i')
@@ -254,7 +257,8 @@ fn build() -> Command {
         env!("CARGO_PKG_VERSION"),
         env!("VERGEN_GIT_DESCRIBE")
     );
-    let themes = Themes::list().join(", ");
+
+    let themes = Themes::list();
 
     return Command::new("oatmeal")
         .about(about)
@@ -275,7 +279,7 @@ fn build() -> Command {
                 .long("editor")
                 .env("OATMEAL_EDITOR")
                 .num_args(1)
-                .help("The editor to integrate with")
+                .help("The editor to integrate with.")
                 .value_parser(PossibleValuesParser::new(EditorName::VARIANTS))
                 .default_value("clipboard")
                 .global(true),
@@ -286,9 +290,8 @@ fn build() -> Command {
                 .long("theme")
                 .env("OATMEAL_THEME")
                 .num_args(1)
-                .help(format!(
-                    "Sets code syntax highlighting theme. [Possible values: {themes}]"
-                ))
+                .help("Sets code syntax highlighting theme.")
+                .value_parser(PossibleValuesParser::new(themes))
                 .default_value("base16-onedark")
                 .global(true),
         )
@@ -298,7 +301,7 @@ fn build() -> Command {
                 .env("OATMEAL_THEME_FILE")
                 .num_args(1)
                 .help(
-                    "Absolute path to a TextMate tmTheme to use for code syntax highlighting"
+                    "Absolute path to a TextMate tmTheme to use for code syntax highlighting."
                 )
                 .global(true),
         )
@@ -307,7 +310,7 @@ fn build() -> Command {
                 .long("ollama-url")
                 .env("OATMEAL_OLLAMA_URL")
                 .num_args(1)
-                .help("Ollama API URL when using the Ollama backend")
+                .help("Ollama API URL when using the Ollama backend.")
                 .default_value("http://localhost:11434")
                 .global(true),
         )
@@ -316,7 +319,7 @@ fn build() -> Command {
                 .long("openai-url")
                 .env("OATMEAL_OPENAI_URL")
                 .num_args(1)
-                .help("OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy")
+                .help("OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy.")
                 .default_value("https://api.openai.com")
                 .global(true),
         )
@@ -325,7 +328,7 @@ fn build() -> Command {
                 .long("openai-token")
                 .env("OATMEAL_OPENAI_TOKEN")
                 .num_args(1)
-                .help("OpenAI API token when using the OpenAI backend")
+                .help("OpenAI API token when using the OpenAI backend.")
                 .global(true),
         );
 }
@@ -347,6 +350,11 @@ pub async fn parse() -> Result<bool> {
                 Some(("log-path", _)) => {
                     let log_path = dirs::cache_dir().unwrap().join("oatmeal/debug.log");
                     println!("{}", log_path.to_str().unwrap());
+                    return Ok(false);
+                }
+                Some(("enum-config", _)) => {
+                    let res = ConfigKey::VARIANTS.join("\n");
+                    println!("{}", res);
                     return Ok(false);
                 }
                 _ => {
@@ -444,7 +452,7 @@ pub async fn parse() -> Result<bool> {
         matches.get_one::<String>("ollama-url").unwrap(),
     );
     Config::set(
-        ConfigKey::OpenAIURL,
+        ConfigKey::OpenAiURL,
         matches.get_one::<String>("openai-url").unwrap(),
     );
 
@@ -459,7 +467,7 @@ pub async fn parse() -> Result<bool> {
     }
 
     if let Some(openai_token) = matches.get_one::<String>("openai-token") {
-        Config::set(ConfigKey::OpenAIToken, openai_token);
+        Config::set(ConfigKey::OpenAiToken, openai_token);
     }
 
     tracing::debug!(

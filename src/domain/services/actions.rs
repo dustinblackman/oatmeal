@@ -8,6 +8,7 @@ use crate::config::ConfigKey;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
+use crate::domain::models::BackendName;
 use crate::domain::models::EditorContext;
 use crate::domain::models::EditorName;
 use crate::domain::models::Event;
@@ -22,18 +23,18 @@ pub fn help_text() -> String {
     let text = r#"
 COMMANDS:
 - /modellist (/ml) - Lists all available models from the backend.
-- /model (/model) [MODEL_NAME,MODEL_INDEX] - Sets the specified model as the active model. You can pass either the model name, or the index from /modellist
+- /model (/model) [MODEL_NAME,MODEL_INDEX] - Sets the specified model as the active model. You can pass either the model name, or the index from `/modellist`.
 - /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
 - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
-- /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
+- /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a `CODE_BLOCK_NUMBER` is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
 - /quit /exit (/q) - Exit Oatmeal.
 - /help (/h) - Provides this help menu.
 
 HOTKEYS:
-- Up arrow - Scroll up
-- Down arrow - Scroll down
-- CTRL+U - Page up
-- CTRL+D - Page down
+- Up arrow - Scroll up.
+- Down arrow - Scroll down.
+- CTRL+U - Page up.
+- CTRL+D - Page down.
 - CTRL+C - Interrupt waiting for prompt response if in progress, otherwise exit.
 - CTRL+R - Resubmit your last message to the backend.
 
@@ -42,9 +43,9 @@ When working with models that provide code, and using an editor integration, Oat
 
 - /append (/a) [CODE_BLOCK_NUMBER?] will append one-to-many model provided code blocks to the open file in your editor.
 - /replace (/r) [CODE_BLOCK_NUMBER?] - will replace selected code in your editor with one-to-many model provided code blocks.
-- /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used it will append one-to-many model provided code blocks to your clipboard, no matter the editor integration.
+- /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a `CODE_BLOCK_NUMBER` is used it will append one-to-many model provided code blocks to your clipboard, no matter the editor integration.
 
-The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to your editor at once. The parameter can be set as follows:
+The `CODE_BLOCK_NUMBER` allows you to select several code blocks to send back to your editor at once. The parameter can be set as follows:
 - `1` - Selects the first code block
 - `1,3,5` - Selects code blocks 1, 3, and 5.
 - `2..5`- Selects an inclusive range of code blocks between 2 and 5.
@@ -223,7 +224,8 @@ impl ActionsService {
         tx: mpsc::UnboundedSender<Event>,
         rx: &mut mpsc::UnboundedReceiver<Action>,
     ) -> Result<()> {
-        let backend = BackendManager::get(&Config::get(ConfigKey::Backend))?;
+        let backend =
+            BackendManager::get(BackendName::parse(Config::get(ConfigKey::Backend)).unwrap())?;
 
         // Lazy default.
         let mut worker: JoinHandle<Result<()>> = tokio::spawn(async {
@@ -264,9 +266,11 @@ impl ActionsService {
                     }
 
                     worker = tokio::spawn(async move {
-                        let res = BackendManager::get(&Config::get(ConfigKey::Backend))?
-                            .get_completion(prompt, &worker_tx)
-                            .await;
+                        let res = BackendManager::get(
+                            BackendName::parse(Config::get(ConfigKey::Backend)).unwrap(),
+                        )?
+                        .get_completion(prompt, &worker_tx)
+                        .await;
 
                         if let Err(err) = res {
                             worker_error(err, &worker_tx)?;

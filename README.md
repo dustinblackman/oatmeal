@@ -302,7 +302,7 @@ Each backend implements the [Backend trait](./src/domain/models/backend.rs) in i
 The following steps should be completed to add a backend:
 
 1. Implement trait for new backend.
-2. Update the [BackendName](./src/domain/models/editor.rs) with your new Backend name.
+2. Update the [BackendName](./src/domain/models/backend.rs) enum with your new Backend name.
 3. Update the [BackendManager](./src/infrastructure/backends/mod.rs) to provide your new backend.
 4. Write tests
 
@@ -313,7 +313,7 @@ Each editor implements the [Editor trait](./src/domain/models/editor.rs) in its 
 The following steps should be completed to add an editor:
 
 1. Implement trait for new editor.
-2. Update the [EditorName](./src/domain/models/editor.rs) with your new Editor name.
+2. Update the [EditorName](./src/domain/models/editor.rs) enum with your new Editor name.
 3. Update the [EditorManager](./src/infrastructure/editors/mod.rs) to provide your new editor.
 4. Write tests
 

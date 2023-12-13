@@ -181,7 +181,7 @@ mod handle_slash_commands {
         insta::assert_snapshot!(last_message.text, @r###"
         There was an error trying to parse your command:
 
-        Code block index 999 is not valid
+        Code block index 1000 is not valid
         "###);
 
         return Ok(());

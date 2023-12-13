@@ -45,19 +45,22 @@ impl CodeBlocks {
                 let trimmed = arg.trim();
                 if trimmed.contains("..") {
                     let split = trimmed.split("..").collect::<Vec<&str>>();
-                    let first = split[0].parse::<usize>()? - 1;
-                    let last = split[1].parse::<usize>()?;
+                    let first = self.validate_index(split[0])? - 1;
+                    let last = self.validate_index(split[1])?;
 
                     indexes.extend_from_slice(&(first..last).collect::<Vec<usize>>())
                 } else {
-                    indexes.push(e.parse::<usize>()? - 1);
+                    indexes.push(self.validate_index(e)? - 1);
                 }
             }
         }
 
         for index in indexes.clone() {
             if self.codeblocks.get(index).is_none() {
-                return Err(anyhow!(format!("Code block index {index} is not valid")));
+                return Err(anyhow!(format!(
+                    "Code block index {} is not valid",
+                    index + 1
+                )));
             }
         }
 
@@ -67,6 +70,14 @@ impl CodeBlocks {
             .collect::<Vec<String>>()
             .join("\n\n");
 
+        return Ok(res);
+    }
+
+    fn validate_index(&self, entry: &str) -> Result<usize> {
+        let res = entry.parse::<usize>()?;
+        if res == 0 {
+            return Err(anyhow!(format!("Code block index 0 is not valid")));
+        }
         return Ok(res);
     }
 }

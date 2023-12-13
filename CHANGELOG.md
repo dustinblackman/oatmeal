@@ -2,9 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.0] - 2023-12-13
+
+[v0.8.2...v0.9.0](https://github.com/dustinblackman/oatmeal/compare/v0.8.2...v0.9.0)
+
+### ⛰️ Features
+
+- Add noop editor - ([eebba85](https://github.com/dustinblackman/oatmeal/commit/eebba8550b247856313b104a0efdb189d7ee0ee4))
+
+### 🐛 Bug Fixes
+
+- Codeblock error messages - ([e9d35a4](https://github.com/dustinblackman/oatmeal/commit/e9d35a49afc2437f91cee3bc49318f2d35c6b1df))
+- Copy commands - ([6b6001d](https://github.com/dustinblackman/oatmeal/commit/6b6001d41247c86accd554574c6d150e9d051ddb))
+- Change first prompt postfix to not mention markdown - ([58be9ca](https://github.com/dustinblackman/oatmeal/commit/58be9ca80379a14c6156c6e0f4a4727f3415f9f9))
+- Add copy counter to all code blocks - ([9c264e8](https://github.com/dustinblackman/oatmeal/commit/9c264e885bdb2ca09bc48289b595921c6f39e283))
+
+### ⚙️ Miscellaneous Tasks
+
+- Update debian packages before install - ([a7d9977](https://github.com/dustinblackman/oatmeal/commit/a7d99779fd69b6aa660d3bb915ae9c85c6781fd4))
+- Migrate to dtolnay/rust-toolchain actions - ([124df90](https://github.com/dustinblackman/oatmeal/commit/124df90513e029902384caaeae515fdb789aee46))
+- Add CLI parameter validation - ([b712edc](https://github.com/dustinblackman/oatmeal/commit/b712edcdd5be5e379a8e7ad01e8c192dac06337c))
+- Clearer function names - ([861a638](https://github.com/dustinblackman/oatmeal/commit/861a6387b4ed7c06f49ba47938d859819e64d668))
+- Lint - ([68b526d](https://github.com/dustinblackman/oatmeal/commit/68b526df8f212fdd9f6c0c09aae5790e5614d2c1))
+- Add repository link to cargo.toml ([#20](https://github.com/dustinblackman/oatmeal/issues/20)) - ([c243771](https://github.com/dustinblackman/oatmeal/commit/c243771ba958b36b9382748353515586296c4a79))
+
 ## [0.8.2] - 2023-12-11
 
 [v0.8.1...v0.8.2](https://github.com/dustinblackman/oatmeal/compare/v0.8.1...v0.8.2)
+
+### ⛰️ Features
+
+- Release v0.8.2 - ([4cd207a](https://github.com/dustinblackman/oatmeal/commit/4cd207a021beaaed91f095a6f82cf6034877ffef))
 
 ### 🐛 Bug Fixes
 

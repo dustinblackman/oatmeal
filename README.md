@@ -89,7 +89,7 @@ yay -S oatmeal-bin
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.8.2
+choco install oatmeal --version=0.9.0
 ```
 
 <!-- choco-install end -->
@@ -132,8 +132,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.8.2
-Commit: v0.8.2
+Version: 0.9.0
+Commit: v0.9.0
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 
@@ -145,23 +145,23 @@ Commands:
 
 Options:
   -b, --backend <backend>
-          The initial backend hosting a model to connect to. [Possible values: ollama, openai] [env: OATMEAL_BACKEND=] [default: ollama]
+          The initial backend hosting a model to connect to. [env: OATMEAL_BACKEND=] [default: ollama] [possible values: ollama, openai]
       --backend-health-check-timeout <backend-health-check-timeout>
           Time to wait in milliseconds before timing out when doing a healthcheck for a backend [env: OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT=] [default: 1000]
   -m, --model <model>
           The initial model on a backend to consume [env: OATMEAL_MODEL=] [default: llama2:latest]
   -e, --editor <editor>
-          The editor to integrate with. [Possible values: clipboard, neovim] [env: OATMEAL_EDITOR=] [default: clipboard]
+          The editor to integrate with. [env: OATMEAL_EDITOR=] [default: clipboard] [possible values: neovim, clipboard, none]
   -t, --theme <theme>
-          Sets code syntax highlighting theme. [Possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti] [env: OATMEAL_THEME=] [default: base16-onedark]
+          Sets code syntax highlighting theme. [env: OATMEAL_THEME=] [default: base16-onedark] [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
       --theme-file <theme-file>
-          Absolute path to a TextMate tmTheme to use for code syntax highlighting [env: OATMEAL_THEME_FILE=]
+          Absolute path to a TextMate tmTheme to use for code syntax highlighting. [env: OATMEAL_THEME_FILE=]
       --ollama-url <ollama-url>
-          Ollama API URL when using the Ollama backend [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
+          Ollama API URL when using the Ollama backend. [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
       --openai-url <openai-url>
-          OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
+          OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy. [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
       --openai-token <openai-token>
-          OpenAI API token when using the OpenAI backend [env: OATMEAL_OPENAI_TOKEN=]
+          OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
   -h, --help
           Print help
   -V, --version
@@ -169,18 +169,18 @@ Options:
 
 CHAT COMMANDS:
   - /modellist (/ml) - Lists all available models from the backend.
-  - /model (/model) [MODEL_NAME,MODEL_INDEX] - Sets the specified model as the active model. You can pass either the model name, or the index from /modellist
+  - /model (/model) [MODEL_NAME,MODEL_INDEX] - Sets the specified model as the active model. You can pass either the model name, or the index from `/modellist`.
   - /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
   - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
-  - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
+  - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a `CODE_BLOCK_NUMBER` is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
   - /quit /exit (/q) - Exit Oatmeal.
   - /help (/h) - Provides this help menu.
 
 CHAT HOTKEYS:
-  - Up arrow - Scroll up
-  - Down arrow - Scroll down
-  - CTRL+U - Page up
-  - CTRL+D - Page down
+  - Up arrow - Scroll up.
+  - Down arrow - Scroll down.
+  - CTRL+U - Page up.
+  - CTRL+D - Page down.
   - CTRL+C - Interrupt waiting for prompt response if in progress, otherwise exit.
   - CTRL+R - Resubmit your last message to the backend.
 
@@ -189,9 +189,9 @@ When working with models that provide code, and using an editor integration, Oat
 
   - /append (/a) [CODE_BLOCK_NUMBER?] will append one-to-many model provided code blocks to the open file in your editor.
   - /replace (/r) [CODE_BLOCK_NUMBER?] - will replace selected code in your editor with one-to-many model provided code blocks.
-  - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a CODE_BLOCK_NUMBER is used it will append one-to-many model provided code blocks to your clipboard, no matter the editor integration.
+  - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a `CODE_BLOCK_NUMBER` is used it will append one-to-many model provided code blocks to your clipboard, no matter the editor integration.
 
-The CODE_BLOCK_NUMBER allows you to select several code blocks to send back to your editor at once. The parameter can be set as follows:
+The `CODE_BLOCK_NUMBER` allows you to select several code blocks to send back to your editor at once. The parameter can be set as follows:
   - `1` - Selects the first code block
   - `1,3,5` - Selects code blocks 1, 3, and 5.
   - `2..5`- Selects an inclusive range of code blocks between 2 and 5.
@@ -236,19 +236,19 @@ Manage past chat sessions
 Usage: oatmeal sessions [OPTIONS] [COMMAND]
 
 Commands:
-  dir     Print the sessions cache directory path
-  list    List all previous sessions with their ids and models
-  open    Open a previous session by ID. Omit passing any session ID to load an interactive selection
+  dir     Print the sessions cache directory path.
+  list    List all previous sessions with their ids and models.
+  open    Open a previous session by ID. Omit passing any session ID to load an interactive selection.
   delete  Delete one or all sessions
   help    Print this message or the help of the given subcommand(s)
 
 Options:
-  -e, --editor <editor>              The editor to integrate with. [Possible values: clipboard, neovim] [env: OATMEAL_EDITOR=] [default: clipboard]
-  -t, --theme <theme>                Sets code syntax highlighting theme. [Possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti] [env: OATMEAL_THEME=] [default: base16-onedark]
-      --theme-file <theme-file>      Absolute path to a TextMate tmTheme to use for code syntax highlighting [env: OATMEAL_THEME_FILE=]
-      --ollama-url <ollama-url>      Ollama API URL when using the Ollama backend [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
-      --openai-url <openai-url>      OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
-      --openai-token <openai-token>  OpenAI API token when using the OpenAI backend [env: OATMEAL_OPENAI_TOKEN=]
+  -e, --editor <editor>              The editor to integrate with. [env: OATMEAL_EDITOR=] [default: clipboard] [possible values: neovim, clipboard, none]
+  -t, --theme <theme>                Sets code syntax highlighting theme. [env: OATMEAL_THEME=] [default: base16-onedark] [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
+      --theme-file <theme-file>      Absolute path to a TextMate tmTheme to use for code syntax highlighting. [env: OATMEAL_THEME_FILE=]
+      --ollama-url <ollama-url>      Ollama API URL when using the Ollama backend. [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
+      --openai-url <openai-url>      OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy. [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
+      --openai-token <openai-token>  OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
   -h, --help                         Print help
 ```
 

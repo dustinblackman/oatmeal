@@ -246,6 +246,7 @@ impl<'a> AppState<'a> {
                         Author::Model,
                         &codeblocks_res.unwrap(),
                     )]))?;
+
                     self.waiting_for_backend = true;
                     return Ok((should_break, should_continue));
                 }

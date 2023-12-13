@@ -96,5 +96,5 @@ fn it_provides_first_second_third_codeblock() {
 #[test]
 fn it_throws_an_error_on_invalid_index() {
     let res = from_slash_command("/a 1010101").unwrap_err().to_string();
-    insta::assert_snapshot!(res, @"1010100 is out of bounds.");
+    insta::assert_snapshot!(res, @"Code block index 1010100 is not valid");
 }

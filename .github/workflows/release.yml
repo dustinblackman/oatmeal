@@ -5,11 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          toolchain: stable
-          target: x86_64-unknown-linux-gnu
+          targets: x86_64-unknown-linux-gnu
       - uses: Swatinem/rust-cache@v2
         with:
           cache-directories: ".bin"
@@ -34,11 +32,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           cache-directories: ".bin"
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          toolchain: stable
-          target: aarch64-unknown-linux-gnu
+          targets: aarch64-unknown-linux-gnu
       - name: Build
         run: |
           sudo apt-get install gcc-aarch64-linux-gnu
@@ -57,11 +53,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          target: x86_64-apple-darwin
-          toolchain: stable
+          targets: x86_64-apple-darwin
       - uses: Swatinem/rust-cache@v2
         with:
           cache-directories: ".bin"
@@ -90,11 +84,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           cache-directories: ".bin"
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          toolchain: stable
-          target: aarch64-apple-darwin
+          targets: aarch64-apple-darwin
       - name: Build
         run: |
           rustup target add aarch64-apple-darwin
@@ -116,11 +108,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          toolchain: stable
-          target: x86_64-pc-windows-msvc
+          targets: x86_64-pc-windows-msvc
       - uses: Swatinem/rust-cache@v2
         with:
           cache-directories: ".bin"
@@ -139,11 +129,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          toolchain: stable
-          target: aarch64-pc-windows-msvc
+          targets: aarch64-pc-windows-msvc
       - uses: Swatinem/rust-cache@v2
         with:
           cache-directories: ".bin"

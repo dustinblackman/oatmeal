@@ -1291,6 +1291,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "serde_yaml",
+ "strum",
  "syntect",
  "tar",
  "test_utils",

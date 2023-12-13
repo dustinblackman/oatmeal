@@ -9,6 +9,7 @@ use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::EditorContext;
+use crate::domain::models::EditorName;
 use crate::domain::models::Event;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
@@ -133,42 +134,61 @@ async fn accept_codeblock(
     context: Option<EditorContext>,
     codeblock: String,
     accept_type: AcceptType,
+    tx: &mpsc::UnboundedSender<Event>,
 ) -> Result<()> {
-    let editor_name = Config::get(ConfigKey::Editor);
-    let editor = EditorManager::get(&editor_name)?;
+    let editor_name = EditorName::parse(Config::get(ConfigKey::Editor)).unwrap();
+    let editor = EditorManager::get(editor_name.clone())?;
+    let mut context_mut = context;
 
-    if editor_name == "clipboard" {
-        editor
-            .send_codeblock(EditorContext::default(), codeblock, accept_type)
-            .await?;
-
-        return Ok(());
+    if editor_name == EditorName::Clipboard || editor_name == EditorName::None {
+        context_mut = Some(EditorContext::default());
     }
 
-    if let Some(editor_context) = context {
-        editor
+    if let Some(editor_context) = context_mut {
+        let res = editor
             .send_codeblock(editor_context, codeblock, accept_type)
-            .await?;
+            .await;
+
+        if let Err(err) = res {
+            tx.send(Event::BackendMessage(Message::new_with_type(
+                Author::Oatmeal,
+                MessageType::Error,
+                &format!("Failed to commuicate with editor:\n\n{err}"),
+            )))?;
+        }
+    }
+
+    if editor_name == EditorName::Clipboard {
+        tx.send(Event::BackendMessage(Message::new(
+            Author::Oatmeal,
+            "Copied codeblocks to clipboard.",
+        )))?;
     }
 
     return Ok(());
 }
 
 fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Event>) -> Result<()> {
-    if messages.len() == 1 {
-        ClipboardService::set(messages[0].text.to_string())?;
-    } else {
-        let formatted = messages
+    let mut payload = messages[0].text.to_string();
+    if messages.len() > 1 {
+        payload = messages
             .iter()
             .map(|message| {
                 return format!("{}: {}", message.author.to_string(), message.text);
             })
             .collect::<Vec<String>>()
             .join("\n\n");
-
-        ClipboardService::set(formatted)?;
     }
 
+    if let Err(err) = ClipboardService::set(payload) {
+        tx.send(Event::BackendMessage(Message::new_with_type(
+            Author::Oatmeal,
+            MessageType::Error,
+            &format!("Failed to copy to clipboard:\n\n{err}"),
+        )))?;
+
+        return Ok(());
+    }
     tx.send(Event::BackendMessage(Message::new(
         Author::Oatmeal,
         "Copied chat log to clipboard.",
@@ -219,7 +239,7 @@ impl ActionsService {
             let worker_tx = tx.clone();
             match event.unwrap() {
                 Action::AcceptCodeBlock(context, codeblock, accept_type) => {
-                    accept_codeblock(context, codeblock, accept_type).await?;
+                    accept_codeblock(context, codeblock, accept_type, &tx).await?;
                 }
                 Action::CopyMessages(messages) => {
                     copy_messages(messages, &tx)?;

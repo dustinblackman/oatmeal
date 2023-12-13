@@ -24,6 +24,7 @@ use crate::config::ConfigKey;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::BackendPrompt;
+use crate::domain::models::EditorName;
 use crate::domain::models::Event;
 use crate::domain::models::Loading;
 use crate::domain::models::Message;
@@ -266,7 +267,7 @@ pub async fn start(
     )?;
     let term_backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(term_backend)?;
-    let editor_name = Config::get(ConfigKey::Editor);
+    let editor_name = EditorName::parse(Config::get(ConfigKey::Editor)).unwrap();
     let mut session_id = None;
     if !Config::get(ConfigKey::SessionID).is_empty() {
         session_id = Some(Config::get(ConfigKey::SessionID));
@@ -274,7 +275,7 @@ pub async fn start(
 
     let app_state_pros = AppStateProps {
         backend_name: Config::get(ConfigKey::Backend),
-        editor_name: editor_name.to_string(),
+        editor_name: editor_name.clone(),
         model_name: Config::get(ConfigKey::Model),
         theme_name: Config::get(ConfigKey::Theme),
         theme_file: Config::get(ConfigKey::ThemeFile),
@@ -282,11 +283,9 @@ pub async fn start(
     };
 
     start_loop(&mut terminal, app_state_pros, tx, rx).await?;
-    if !editor_name.is_empty() {
-        let editor = EditorManager::get(&editor_name)?;
-        if editor.health_check().await.is_ok() {
-            editor.clear_context().await?;
-        }
+    let editor = EditorManager::get(editor_name)?;
+    if editor.health_check().await.is_ok() {
+        editor.clear_context().await?;
     }
 
     disable_raw_mode()?;

@@ -9,9 +9,7 @@ mod infrastructure;
 use std::env;
 use std::process;
 
-use anyhow::anyhow;
 use anyhow::Error;
-use anyhow::Result;
 use domain::models::Action;
 use domain::models::Event;
 use domain::services::clipboard::ClipboardService;
@@ -26,14 +24,6 @@ use crate::domain::services::actions::ActionsService;
 #[cfg(feature = "dhat-heap")]
 #[global_allocator]
 static ALLOC: dhat::Alloc = dhat::Alloc;
-
-async fn flatten<T>(handle: task::JoinHandle<Result<T>>) -> Result<()> {
-    return match handle.await {
-        Ok(Ok(_result)) => Ok(()),
-        Ok(Err(err)) => Err(err),
-        Err(err) => Err(anyhow!(format!("Failed flatten handle: {:?}", err))),
-    };
-}
 
 fn handle_error(err: Error) {
     eprintln!(
@@ -101,17 +91,23 @@ async fn main() {
     let (action_tx, mut action_rx) = mpsc::unbounded_channel::<Action>();
     let (event_tx, event_rx) = mpsc::unbounded_channel::<Event>();
 
-    let actions_future = tokio::spawn(async move {
+    let mut background_futures = task::JoinSet::new();
+    background_futures.spawn(async move {
         return ActionsService::start(event_tx, &mut action_rx).await;
     });
-    let clipboard_future = tokio::spawn(async move {
-        return ClipboardService::start().await;
-    });
+
+    if let Err(clipboard_err) = ClipboardService::healthcheck() {
+        tracing::warn!(err = ?clipboard_err, "Clipboard service is unable to start")
+    } else {
+        background_futures.spawn(async move {
+            return ClipboardService::start().await;
+        });
+    }
+
     let ui_future = ui::start(action_tx, event_rx);
 
     let res = tokio::select!(
-        res = flatten(actions_future) => res,
-        res = flatten(clipboard_future) => res,
+        res = background_futures.join_next() => res.unwrap().unwrap(),
         res = ui_future => res,
     );
 

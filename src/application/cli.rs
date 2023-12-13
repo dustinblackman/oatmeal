@@ -2,6 +2,7 @@ use std::env;
 use std::io;
 
 use anyhow::Result;
+use clap::builder::PossibleValuesParser;
 use clap::value_parser;
 use clap::Arg;
 use clap::ArgAction;
@@ -12,10 +13,12 @@ use clap_complete::Generator;
 use clap_complete::Shell;
 use dialoguer::theme::ColorfulTheme;
 use dialoguer::Select;
+use strum::VariantNames;
 use yansi::Paint;
 
 use crate::config::Config;
 use crate::config::ConfigKey;
+use crate::domain::models::EditorName;
 use crate::domain::models::Session;
 use crate::domain::services::actions::help_text;
 use crate::domain::services::Sessions;
@@ -272,7 +275,8 @@ fn build() -> Command {
                 .long("editor")
                 .env("OATMEAL_EDITOR")
                 .num_args(1)
-                .help("The editor to integrate with. [Possible values: clipboard, neovim]")
+                .help("The editor to integrate with")
+                .value_parser(PossibleValuesParser::new(EditorName::VARIANTS))
                 .default_value("clipboard")
                 .global(true),
         )

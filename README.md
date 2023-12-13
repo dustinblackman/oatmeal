@@ -213,7 +213,8 @@ The following editors are currently supported. The `clipboard` editor is a speci
 are simply copied to your clipboard. This is the default behaviour. Hit any of the links below for more details on how
 to use!
 
-- Clipboard
+- Clipboard (Default)
+- None (Disables all editor functionality)
 - [Neovim](https://github.com/dustinblackman/oatmeal.nvim)
 
 ### Themes

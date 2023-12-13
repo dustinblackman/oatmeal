@@ -9,6 +9,7 @@ use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::BackendResponse;
+use crate::domain::models::EditorName;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
 use crate::domain::services::AppStateProps;
@@ -246,14 +247,13 @@ mod handle_backend_response {
 }
 
 mod init {
-
     use super::*;
 
     #[tokio::test]
     async fn it_inits_and_reloads_from_session() -> Result<()> {
         let app_state = AppState::new(AppStateProps {
             backend_name: "ollama".to_string(),
-            editor_name: "clipboard".to_string(),
+            editor_name: EditorName::Clipboard,
             model_name: "codellama:latest".to_string(),
             theme_name: "base16-onedark".to_string(),
             theme_file: "".to_string(),
@@ -261,10 +261,11 @@ mod init {
         })
         .await?;
         app_state.save_session().await?;
+
         let session_id = app_state.session_id;
         AppState::new(AppStateProps {
             backend_name: "ollama".to_string(),
-            editor_name: "clipboard".to_string(),
+            editor_name: EditorName::Clipboard,
             model_name: "codellama:latest".to_string(),
             theme_name: "base16-onedark".to_string(),
             theme_file: "".to_string(),

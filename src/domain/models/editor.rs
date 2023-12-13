@@ -6,6 +6,23 @@ use std::fmt;
 
 use anyhow::Result;
 use async_trait::async_trait;
+use strum::EnumIter;
+use strum::EnumVariantNames;
+use strum::IntoEnumIterator;
+
+#[derive(Clone, Debug, PartialEq, Eq, EnumIter, EnumVariantNames, strum::Display)]
+#[strum(serialize_all = "lowercase")]
+pub enum EditorName {
+    Neovim,
+    Clipboard,
+    None,
+}
+
+impl EditorName {
+    pub fn parse(text: String) -> Option<EditorName> {
+        return EditorName::iter().find(|e| return e.to_string() == text);
+    }
+}
 
 #[derive(Debug, PartialEq)]
 pub enum AcceptType {

@@ -1,3 +1,4 @@
+use anyhow::anyhow;
 use anyhow::Result;
 use once_cell::sync::OnceCell;
 use tokio::sync::mpsc;
@@ -22,8 +23,21 @@ impl ClipboardService {
         }
     }
 
-    pub fn set(text: String) -> Result<()> {
-        SENDER.get().unwrap().send(text)?;
+    pub fn healthcheck() -> Result<()> {
+        if SENDER.get().is_some() {
+            return Ok(());
+        }
+
+        arboard::Clipboard::new()?;
         return Ok(());
+    }
+
+    pub fn set(text: String) -> Result<()> {
+        if let Some(tx) = SENDER.get() {
+            tx.send(text)?;
+            return Ok(());
+        }
+
+        return Err(anyhow!("Clipboard service is not initialized."));
     }
 }

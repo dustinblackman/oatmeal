@@ -13,6 +13,7 @@ use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::BackendResponse;
 use crate::domain::models::EditorContext;
+use crate::domain::models::EditorName;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
 use crate::domain::models::SlashCommand;
@@ -25,7 +26,7 @@ mod tests;
 
 pub struct AppStateProps {
     pub backend_name: String,
-    pub editor_name: String,
+    pub editor_name: EditorName,
     pub model_name: String,
     pub theme_name: String,
     pub theme_file: String,
@@ -98,7 +99,7 @@ impl<'a> AppState<'a> {
 
         // Fallback to the default intro message when there's no editor context.
         if app_state
-            .add_editor_context(&props.editor_name)
+            .add_editor_context(props.editor_name)
             .await
             .is_err()
         {
@@ -134,7 +135,7 @@ impl<'a> AppState<'a> {
             .codeblocks
             .replace_from_messages(&app_state.messages);
 
-        if let Ok(editor) = EditorManager::get(&props.editor_name) {
+        if let Ok(editor) = EditorManager::get(props.editor_name) {
             if editor.health_check().await.is_ok() {
                 app_state.editor_context = editor.get_context().await?;
             }
@@ -143,12 +144,8 @@ impl<'a> AppState<'a> {
         return Ok(app_state);
     }
 
-    async fn add_editor_context(&mut self, editor_name: &str) -> Result<()> {
-        if editor_name.is_empty() {
-            return Err(anyhow!("Editor name not set."));
-        }
-
-        let editor_res = EditorManager::get(editor_name);
+    async fn add_editor_context(&mut self, editor_name: EditorName) -> Result<()> {
+        let editor_res = EditorManager::get(editor_name.clone());
         if editor_res.is_err() {
             return Err(anyhow!("Failed to load editor from manager"));
         }

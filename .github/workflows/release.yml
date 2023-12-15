@@ -87,14 +87,10 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-apple-darwin
-      - uses: goto-bus-stop/setup-zig@v2
-        with:
-          version: 0.11.0
       - name: Build
         run: |
           rustup target add aarch64-apple-darwin
-          cargo install cargo-run-bin
-          cargo zigbuild --release --target aarch64-apple-darwin
+          cargo build --release --target aarch64-apple-darwin
           cd target/aarch64-apple-darwin/release
           cp -r "$(readlink oatmeal.dSYM)" symbols
           rm oatmeal.dSYM

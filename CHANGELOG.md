@@ -2,12 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.1] - 2023-12-15
+
+[v0.9.0...v0.9.1](https://github.com/dustinblackman/oatmeal/compare/v0.9.0...v0.9.1)
+
+### 🐛 Bug Fixes
+
+- Remove zig from macos arm builds - ([e6fa908](https://github.com/dustinblackman/oatmeal/commit/e6fa90800c25e79caf221b31bcd9064a83291548))
+
+### 📚 Documentation
+
+- Update editor and backend links - ([84ca94e](https://github.com/dustinblackman/oatmeal/commit/84ca94e23d497b8677d51af184b3089aa35dc866))
+
+### ⚙️ Miscellaneous Tasks
+
+- Test binaries in actions, move zig setup - ([5b14c72](https://github.com/dustinblackman/oatmeal/commit/5b14c721b4bc84f61e2b86ab4087ed3f3dbe8ad2))
+
 ## [0.9.0] - 2023-12-13
 
 [v0.8.2...v0.9.0](https://github.com/dustinblackman/oatmeal/compare/v0.8.2...v0.9.0)
 
 ### ⛰️ Features
 
+- Release v0.9.0 - ([948dbd9](https://github.com/dustinblackman/oatmeal/commit/948dbd954d5bf8212d9662d033800dfc7aeb3a1e))
 - Add noop editor - ([eebba85](https://github.com/dustinblackman/oatmeal/commit/eebba8550b247856313b104a0efdb189d7ee0ee4))
 
 ### 🐛 Bug Fixes

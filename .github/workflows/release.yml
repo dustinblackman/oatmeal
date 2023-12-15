@@ -14,6 +14,7 @@ jobs:
       - name: Build
         run: |
           cargo build --release --target x86_64-unknown-linux-gnu
+          ./target/x86_64-unknown-linux-gnu/release/oatmeal --help
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
@@ -67,6 +68,7 @@ jobs:
           cp -r "$(readlink oatmeal.dSYM)" symbols
           rm oatmeal.dSYM
           mv symbols oatmeal.dSYM
+          ./oatmeal --help
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
@@ -79,15 +81,15 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: goto-bus-stop/setup-zig@v2
-        with:
-          version: 0.11.0
       - uses: Swatinem/rust-cache@v2
         with:
           cache-directories: ".bin"
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-apple-darwin
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.11.0
       - name: Build
         run: |
           rustup target add aarch64-apple-darwin
@@ -118,6 +120,7 @@ jobs:
       - name: Build
         run: |
           cargo build --profile release-windows --target x86_64-pc-windows-msvc
+          .\target\x86_64-pc-windows-msvc\release-windows\oatmeal.exe --help
       - name: Upload
         uses: actions/upload-artifact@v2
         with:

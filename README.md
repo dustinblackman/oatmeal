@@ -259,13 +259,33 @@ nicely using [Ripgrep](https://github.com/BurntSushi/ripgrep) and [FZF](https://
 
 ```bash
 function oatmeal-sessions() {
-    current=$(pwd)
+    (
+        cd "$(oatmeal sessions dir)"
+        id=$(rg --color always -n . | fzf --ansi | awk -F ':' '{print $1}' | head -n1 | awk -F '.' '{print $1}')
+        oatmeal sessions open --id "$id"
+    )
+}
+```
 
-    cd "$(oatmeal sessions dir)"
-    id=$(rg --color always -n . | fzf --ansi | awk -F ':' '{print $1}' | head -n1 | awk -F '.' '{print $1}')
-    oatmeal sessions open --id "$id"
+Or something a little more in depth (while hacky) that additionally uses [yq](https://github.com/mikefarah/yq) and [jq](https://github.com/jqlang/jq).
 
-    cd $current
+```bash
+function oatmeal-sessions() {
+    (
+        cd "$(oatmeal sessions dir)"
+        id=$(
+          ls | \
+          (while read f; do echo "$(cat $f)\n---\n"; done;) | \
+          yq -p=yaml -o=json - 2> /dev/null | \
+          jq -s . | \
+          jq -rc '. |= sort_by(.timestamp) | .[] |  "\(.id):\(.timestamp):\(.state.backend_model):\(.state.editor_language):\(.state.messages[] | .text | tojson)"' | \
+          fzf --ansi | \
+          awk -F ':' '{print $1}' | \
+          head -n1 | \
+          awk -F '.' '{print $1}'
+        )
+        oatmeal sessions open --id "$id"
+    )
 }
 ```
 

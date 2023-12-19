@@ -104,7 +104,7 @@ scoop install oatmeal
 ### Cargo
 
 ```sh
-cargo install oatmeal
+cargo install oatmeal --locked
 ```
 
 ### Manual

@@ -65,6 +65,9 @@ tui-textarea = { version = "=0.4.0", default-features = false, features = ["cros
 uuid = { version = "=1.6.1", features = ["v4"] }
 yansi = "=0.5.1"
 
+# Fix for cargo-about
+errno = "*"
+
 [patch.crates-io]
 dirs-sys = { git = 'https://github.com/dustinblackman/dirs-sys-rs', rev = "5d460f956c7ef21615c3d3169233ae0fe0eb00d4" }
 
@@ -85,7 +88,7 @@ tar = "=0.4.40"
 vergen = { version = "=8.2.5", features = ["build", "git", "gitcl"] }
 
 [package.metadata.bin]
-cargo-about = { version = "0.5.7" }
+cargo-about = { version = "0.6.0" }
 cargo-binstall = { version = "1.4.3" }
 cargo-cmd = { version = "0.3.1" }
 cargo-deny = { version = "0.14.2" }

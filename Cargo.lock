@@ -1279,6 +1279,7 @@ dependencies = [
  "dhat",
  "dialoguer",
  "dirs",
+ "errno",
  "flate2",
  "futures",
  "glob-match",

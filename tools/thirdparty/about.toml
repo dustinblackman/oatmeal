@@ -14,12 +14,12 @@ ignore-build-dependencies = true
 ignore-dev-dependencies = true
 
 targets = [
-  "x86_64-apple-darwin",
-  "aarch64-apple-darwin",
   "x86_64-unknown-linux-gnu",
   "aarch64-unknown-linux-gnu",
   "x86_64-pc-windows-msvc",
   "aarch64-pc-windows-msvc",
+  "x86_64-apple-darwin",
+  "aarch64-apple-darwin",
 ]
 
 [x11rb.clarify]
@@ -59,7 +59,7 @@ checksum = "35b228510156c3d7bf94b129c81b7e3cc72d347586e632be15686232b342562a"
 
 [system-configuration-sys.clarify]
 license = "MIT"
-override_git_commit = "8f82d7fd73cab9edd295ba23dcfdfdf376b27a01"
+override-git-commit = "8f82d7fd73cab9edd295ba23dcfdfdf376b27a01"
 
 [[system-configuration-sys.clarify.git]]
 path = "LICENSE-MIT"
@@ -102,7 +102,7 @@ checksum = "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0"
 
 [malloc_buf.clarify]
 license = "MIT"
-override_git_commit = "d9a3e539642bd90e07df458d226b19cdfa606863"
+override-git-commit = "d9a3e539642bd90e07df458d226b19cdfa606863"
 
 [[malloc_buf.clarify.git]]
 path = "LICENSE"

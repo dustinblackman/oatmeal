@@ -36,6 +36,17 @@ fi
 # Cargo packages
 cargo about generate -c "$PROGDIR/about.toml" "$PROGDIR/templates/html.hbs" >"$PROGDIR/../../THIRDPARTY.html"
 
+# Final sanity check that all cargo packages are in there.
+yq -p=toml -o=json "$PROGDIR/about.toml" | jq -rc '.targets[]' | while read target; do
+	cargo tree --target "$target" -e normal -f '{p}' | sd ' ' '\n' | grep '[a-zA-Z]' | grep -v '^v\d' | grep -v -E "(oatmeal|.git|(proc-macro))" | sort | uniq | while read f; do
+		cat "$PROGDIR/../../THIRDPARTY.html" | grep -q "$f" || (echo "ERROR: Missing license $f for target $target" && FAILED_LINT="true")
+	done
+done
+
+if [[ "$FAILED_LINT" == "true" ]]; then
+	exit 1
+fi
+
 # Additional Third Party
 sd '__OPENSSL_LICENSE__' "$(curl -s -L https://raw.githubusercontent.com/sfackler/rust-openssl/48b8e81e807b6f589ae66fed9567084c3d833b83/THIRD_PARTY)" "$PROGDIR/../../THIRDPARTY.html"
 

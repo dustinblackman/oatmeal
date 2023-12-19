@@ -2,9 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.2] - 2023-12-19
+
+[v0.9.1...v0.9.2](https://github.com/dustinblackman/oatmeal/compare/v0.9.1...v0.9.2)
+
+### 🐛 Bug Fixes
+
+- Linting before releases - ([18f006e](https://github.com/dustinblackman/oatmeal/commit/18f006ec055edd481b93ded1b55c0837c91ca15f))
+
+### 📚 Documentation
+
+- Add more in depth sessions shell function - ([c160fdb](https://github.com/dustinblackman/oatmeal/commit/c160fdba720cbc5b00d1cb7b83456bb8d7e1042b))
+
 ## [0.9.1] - 2023-12-15
 
 [v0.9.0...v0.9.1](https://github.com/dustinblackman/oatmeal/compare/v0.9.0...v0.9.1)
+
+### ⛰️ Features
+
+- Release v0.9.1 - ([96f08a7](https://github.com/dustinblackman/oatmeal/commit/96f08a7b65c7be249a9f8497e247cc920c08459d))
 
 ### 🐛 Bug Fixes
 

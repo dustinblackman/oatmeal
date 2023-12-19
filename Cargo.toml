@@ -66,7 +66,8 @@ uuid = { version = "=1.6.1", features = ["v4"] }
 yansi = "=0.5.1"
 
 # Fix for cargo-about
-errno = "*"
+[target.'cfg(target_os="macos")'.dependencies]
+errno = "=0.3.5"
 
 [patch.crates-io]
 dirs-sys = { git = 'https://github.com/dustinblackman/dirs-sys-rs', rev = "5d460f956c7ef21615c3d3169233ae0fe0eb00d4" }

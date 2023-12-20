@@ -90,7 +90,7 @@ impl<'a> AppState<'a> {
                 .push(Message::new_with_type(
                     Author::Oatmeal,
                     MessageType::Error,
-                    format!("Model {model_name} doesn't exist for backend {backend_name}. You can use `/modellist` to view all avaiable models, and `/model NAME` to switch models.").as_str(),
+                    format!("Model {model_name} doesn't exist for backend {backend_name}. You can use `/modellist` to view all available models, and `/model NAME` to switch models.").as_str(),
                 ));
             }
         }

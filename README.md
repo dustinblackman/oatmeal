@@ -159,7 +159,7 @@ Options:
       --ollama-url <ollama-url>
           Ollama API URL when using the Ollama backend. [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
       --openai-url <openai-url>
-          OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy. [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
+          OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy. [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
       --openai-token <openai-token>
           OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
   -h, --help
@@ -204,7 +204,7 @@ The `CODE_BLOCK_NUMBER` allows you to select several code blocks to send back to
 
 The following model backends are supported:
 
-- [OpenAI](https://chat.openai.com) (Or any compatiable proxy/API)
+- [OpenAI](https://chat.openai.com) (Or any compatible proxy/API)
 - [Ollama](https://github.com/jmorganca/ollama)
 
 ### Editors
@@ -247,7 +247,7 @@ Options:
   -t, --theme <theme>                Sets code syntax highlighting theme. [env: OATMEAL_THEME=] [default: base16-onedark] [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
       --theme-file <theme-file>      Absolute path to a TextMate tmTheme to use for code syntax highlighting. [env: OATMEAL_THEME_FILE=]
       --ollama-url <ollama-url>      Ollama API URL when using the Ollama backend. [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
-      --openai-url <openai-url>      OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy. [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
+      --openai-url <openai-url>      OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy. [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
       --openai-token <openai-token>  OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
   -h, --help                         Print help
 ```

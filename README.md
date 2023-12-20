@@ -204,7 +204,7 @@ The `CODE_BLOCK_NUMBER` allows you to select several code blocks to send back to
 
 The following model backends are supported:
 
-- [OpenAI](https://chat.openai.com)
+- [OpenAI](https://chat.openai.com) (Or any compatiable proxy/API)
 - [Ollama](https://github.com/jmorganca/ollama)
 
 ### Editors

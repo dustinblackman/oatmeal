@@ -76,6 +76,9 @@ File: {file_path}
 
 #[async_trait]
 pub trait Editor {
+    /// Returns the name of the editor.
+    fn name(&self) -> EditorName;
+
     /// Used at startup to verify all configurations are available to work with
     /// the editor.
     async fn health_check(&self) -> Result<()>;
@@ -98,3 +101,5 @@ pub trait Editor {
         accept_type: AcceptType,
     ) -> Result<()>;
 }
+
+pub type EditorBox = Box<dyn Editor + Send + Sync>;

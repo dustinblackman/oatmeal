@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use anyhow::Result;
 use tokio::sync::mpsc;
 use tokio::task::JoinHandle;
@@ -8,15 +10,13 @@ use crate::config::ConfigKey;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
-use crate::domain::models::BackendName;
+use crate::domain::models::BackendBox;
 use crate::domain::models::EditorContext;
 use crate::domain::models::EditorName;
 use crate::domain::models::Event;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
 use crate::domain::models::SlashCommand;
-use crate::infrastructure::backends::BackendBox;
-use crate::infrastructure::backends::BackendManager;
 use crate::infrastructure::editors::EditorManager;
 
 pub fn help_text() -> String {
@@ -221,11 +221,11 @@ pub struct ActionsService {}
 
 impl ActionsService {
     pub async fn start(
+        backend: BackendBox,
         tx: mpsc::UnboundedSender<Event>,
         rx: &mut mpsc::UnboundedReceiver<Action>,
     ) -> Result<()> {
-        let backend =
-            BackendManager::get(BackendName::parse(Config::get(ConfigKey::Backend)).unwrap())?;
+        let backend_arc = Arc::new(backend);
 
         // Lazy default.
         let mut worker: JoinHandle<Result<()>> = tokio::spawn(async {
@@ -252,11 +252,11 @@ impl ActionsService {
                 Action::BackendRequest(prompt) => {
                     if let Some(command) = SlashCommand::parse(&prompt.text) {
                         if command.is_model_list() {
-                            model_list(&backend, &tx).await?;
+                            model_list(&backend_arc, &tx).await?;
                             continue;
                         }
                         if command.is_model_set() {
-                            model_set(&backend, &tx, &prompt.text).await?;
+                            model_set(&backend_arc, &tx, &prompt.text).await?;
                             continue;
                         }
                         if command.is_help() {
@@ -265,12 +265,9 @@ impl ActionsService {
                         }
                     }
 
+                    let backend_worker = backend_arc.clone();
                     worker = tokio::spawn(async move {
-                        let res = BackendManager::get(
-                            BackendName::parse(Config::get(ConfigKey::Backend)).unwrap(),
-                        )?
-                        .get_completion(prompt, &worker_tx)
-                        .await;
+                        let res = backend_worker.get_completion(prompt, &worker_tx).await;
 
                         if let Err(err) = res {
                             worker_error(err, &worker_tx)?;

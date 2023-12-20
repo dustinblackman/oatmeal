@@ -10,9 +10,13 @@ use std::env;
 use std::process;
 
 use anyhow::Error;
+use config::Config;
+use config::ConfigKey;
 use domain::models::Action;
+use domain::models::BackendName;
 use domain::models::Event;
 use domain::services::clipboard::ClipboardService;
+use infrastructure::backends::BackendManager;
 use tokio::sync::mpsc;
 use tokio::task;
 use yansi::Paint;
@@ -93,7 +97,13 @@ async fn main() {
 
     let mut background_futures = task::JoinSet::new();
     background_futures.spawn(async move {
-        return ActionsService::start(event_tx, &mut action_rx).await;
+        let backend = BackendName::parse(Config::get(ConfigKey::Backend)).unwrap();
+        return ActionsService::start(
+            BackendManager::get(backend).unwrap(),
+            event_tx,
+            &mut action_rx,
+        )
+        .await;
     });
 
     if let Err(clipboard_err) = ClipboardService::healthcheck() {

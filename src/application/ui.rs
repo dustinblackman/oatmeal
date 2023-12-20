@@ -23,6 +23,7 @@ use crate::config::Config;
 use crate::config::ConfigKey;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
+use crate::domain::models::BackendName;
 use crate::domain::models::BackendPrompt;
 use crate::domain::models::EditorName;
 use crate::domain::models::Event;
@@ -34,6 +35,7 @@ use crate::domain::services::events::EventsService;
 use crate::domain::services::AppState;
 use crate::domain::services::AppStateProps;
 use crate::domain::services::Bubble;
+use crate::infrastructure::backends::BackendManager;
 use crate::infrastructure::editors::EditorManager;
 
 /// Verifies that the current window size is large enough to handle the bare
@@ -273,9 +275,12 @@ pub async fn start(
         session_id = Some(Config::get(ConfigKey::SessionID));
     }
 
+    let backend =
+        BackendManager::get(BackendName::parse(Config::get(ConfigKey::Backend)).unwrap())?;
+    let editor = EditorManager::get(EditorName::parse(Config::get(ConfigKey::Editor)).unwrap())?;
     let app_state_pros = AppStateProps {
-        backend_name: Config::get(ConfigKey::Backend),
-        editor_name: editor_name.clone(),
+        backend,
+        editor,
         model_name: Config::get(ConfigKey::Model),
         theme_name: Config::get(ConfigKey::Theme),
         theme_file: Config::get(ConfigKey::ThemeFile),

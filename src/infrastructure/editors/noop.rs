@@ -9,12 +9,16 @@ use async_trait::async_trait;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Editor;
 use crate::domain::models::EditorContext;
+use crate::domain::models::EditorName;
 
 #[derive(Default)]
 pub struct NoopEditor {}
 
 #[async_trait]
 impl Editor for NoopEditor {
+    fn name(&self) -> EditorName {
+        return EditorName::None;
+    }
     #[allow(clippy::implicit_return)]
     async fn health_check(&self) -> Result<()> {
         return Ok(());

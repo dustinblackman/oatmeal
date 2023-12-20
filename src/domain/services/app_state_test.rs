@@ -8,6 +8,7 @@ use super::AppState;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
+use crate::domain::models::BackendName;
 use crate::domain::models::BackendResponse;
 use crate::domain::models::EditorName;
 use crate::domain::models::Message;
@@ -18,6 +19,8 @@ use crate::domain::services::CodeBlocks;
 use crate::domain::services::Scroll;
 use crate::domain::services::Sessions;
 use crate::domain::services::Themes;
+use crate::infrastructure::backends::BackendManager;
+use crate::infrastructure::editors::EditorManager;
 
 impl Default for AppState<'static> {
     fn default() -> AppState<'static> {
@@ -247,13 +250,17 @@ mod handle_backend_response {
 }
 
 mod init {
+
     use super::*;
 
     #[tokio::test]
     async fn it_inits_and_reloads_from_session() -> Result<()> {
+        let backend = BackendManager::get(BackendName::Ollama)?;
+        let editor = EditorManager::get(EditorName::None)?;
+
         let app_state = AppState::new(AppStateProps {
-            backend_name: "ollama".to_string(),
-            editor_name: EditorName::Clipboard,
+            backend,
+            editor,
             model_name: "codellama:latest".to_string(),
             theme_name: "base16-onedark".to_string(),
             theme_file: "".to_string(),
@@ -263,9 +270,12 @@ mod init {
         app_state.save_session().await?;
 
         let session_id = app_state.session_id;
+        let backend = BackendManager::get(BackendName::Ollama)?;
+        let editor = EditorManager::get(EditorName::None)?;
+
         AppState::new(AppStateProps {
-            backend_name: "ollama".to_string(),
-            editor_name: EditorName::Clipboard,
+            backend,
+            editor,
             model_name: "codellama:latest".to_string(),
             theme_name: "base16-onedark".to_string(),
             theme_file: "".to_string(),

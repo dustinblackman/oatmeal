@@ -18,6 +18,7 @@ use crate::config::Config;
 use crate::config::ConfigKey;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
+use crate::domain::models::BackendName;
 use crate::domain::models::BackendPrompt;
 use crate::domain::models::BackendResponse;
 use crate::domain::models::Event;
@@ -67,6 +68,10 @@ impl Default for Ollama {
 
 #[async_trait]
 impl Backend for Ollama {
+    fn name(&self) -> BackendName {
+        return BackendName::Ollama;
+    }
+
     #[allow(clippy::implicit_return)]
     async fn health_check(&self) -> Result<()> {
         let res = reqwest::Client::new()

@@ -11,23 +11,21 @@ use super::Themes;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
-use crate::domain::models::BackendName;
+use crate::domain::models::BackendBox;
 use crate::domain::models::BackendResponse;
+use crate::domain::models::EditorBox;
 use crate::domain::models::EditorContext;
-use crate::domain::models::EditorName;
 use crate::domain::models::Message;
 use crate::domain::models::MessageType;
 use crate::domain::models::SlashCommand;
-use crate::infrastructure::backends::BackendManager;
-use crate::infrastructure::editors::EditorManager;
 
 #[cfg(test)]
 #[path = "app_state_test.rs"]
 mod tests;
 
 pub struct AppStateProps {
-    pub backend_name: String,
-    pub editor_name: EditorName,
+    pub backend: BackendBox,
+    pub editor: EditorBox,
     pub model_name: String,
     pub theme_name: String,
     pub theme_file: String,
@@ -58,7 +56,6 @@ impl<'a> AppState<'a> {
     }
 
     async fn init(props: AppStateProps) -> Result<AppState<'a>> {
-        let backend_name = &props.backend_name;
         let model_name = &props.model_name;
         let theme = Themes::get(&props.theme_name, &props.theme_file)?;
 
@@ -76,8 +73,8 @@ impl<'a> AppState<'a> {
             waiting_for_backend: false,
         };
 
-        let backend = BackendManager::get(BackendName::parse(backend_name.to_string()).unwrap())?;
-        if let Err(err) = backend.health_check().await {
+        let backend_name = props.backend.name();
+        if let Err(err) = props.backend.health_check().await {
             app_state
                 .messages
                 .push(Message::new_with_type(
@@ -86,7 +83,7 @@ impl<'a> AppState<'a> {
                     &format!("Hey, it looks like backend {backend_name} isn't running, I can't connect to it. You should double check that before we start talking, otherwise I may crash.\n\nError: {err}"),
                 ));
         } else {
-            let models = backend.list_models().await?;
+            let models = props.backend.list_models().await?;
             if !models.contains(&model_name.to_string()) {
                 app_state
                 .messages
@@ -99,11 +96,7 @@ impl<'a> AppState<'a> {
         }
 
         // Fallback to the default intro message when there's no editor context.
-        if app_state
-            .add_editor_context(props.editor_name)
-            .await
-            .is_err()
-        {
+        if app_state.add_editor_context(props.editor).await.is_err() {
             app_state.messages.push(Message::new(
                 Author::Model,
                 "Hey there! What can I do for you?",
@@ -136,22 +129,15 @@ impl<'a> AppState<'a> {
             .codeblocks
             .replace_from_messages(&app_state.messages);
 
-        if let Ok(editor) = EditorManager::get(props.editor_name) {
-            if editor.health_check().await.is_ok() {
-                app_state.editor_context = editor.get_context().await?;
-            }
+        if props.editor.health_check().await.is_ok() {
+            app_state.editor_context = props.editor.get_context().await?;
         }
 
         return Ok(app_state);
     }
 
-    async fn add_editor_context(&mut self, editor_name: EditorName) -> Result<()> {
-        let editor_res = EditorManager::get(editor_name.clone());
-        if editor_res.is_err() {
-            return Err(anyhow!("Failed to load editor from manager"));
-        }
-
-        let editor = editor_res.unwrap();
+    async fn add_editor_context(&mut self, editor: EditorBox) -> Result<()> {
+        let editor_name = editor.name();
         if let Err(err) = editor.health_check().await {
             self
                 .messages

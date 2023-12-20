@@ -68,6 +68,9 @@ pub struct BackendResponse {
 
 #[async_trait]
 pub trait Backend {
+    /// Returns the name of the backend
+    fn name(&self) -> BackendName;
+
     /// Used at startup to verify all configurations are available to work with
     /// the backend.
     async fn health_check(&self) -> Result<()>;
@@ -91,3 +94,5 @@ pub trait Backend {
         tx: &'a mpsc::UnboundedSender<Event>,
     ) -> Result<()>;
 }
+
+pub type BackendBox = Box<dyn Backend + Send + Sync>;

@@ -3,10 +3,8 @@ pub mod openai;
 use anyhow::bail;
 use anyhow::Result;
 
-use crate::domain::models::Backend;
+use crate::domain::models::BackendBox;
 use crate::domain::models::BackendName;
-
-pub type BackendBox = Box<dyn Backend + Send + Sync>;
 
 pub struct BackendManager {}
 

@@ -5,10 +5,8 @@ pub mod noop;
 use anyhow::bail;
 use anyhow::Result;
 
-use crate::domain::models::Editor;
+use crate::domain::models::EditorBox;
 use crate::domain::models::EditorName;
-
-pub type EditorBox = Box<dyn Editor + Send + Sync>;
 
 pub struct EditorManager {}
 

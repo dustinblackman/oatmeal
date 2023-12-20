@@ -191,7 +191,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation
 
-- Readd choco - ([bd12825](https://github.com/dustinblackman/oatmeal/commit/bd12825f7252ebc886a1af5650b89fc2c4fb35b5))
+- Re-add choco - ([bd12825](https://github.com/dustinblackman/oatmeal/commit/bd12825f7252ebc886a1af5650b89fc2c4fb35b5))
 - Push users towards the editors section - ([bda11c4](https://github.com/dustinblackman/oatmeal/commit/bda11c4a959a98174c7ddf7f75c25f4f55b7d7d6))
 - Organize README - ([663d65b](https://github.com/dustinblackman/oatmeal/commit/663d65bb8200c48bb7b8cad55fba3e36c2c35740))
 

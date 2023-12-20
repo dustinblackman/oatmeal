@@ -319,7 +319,7 @@ fn build() -> Command {
                 .long("openai-url")
                 .env("OATMEAL_OPENAI_URL")
                 .num_args(1)
-                .help("OpenAI API URL when using the OpenAI backend. Can be swapped to a compatiable proxy.")
+                .help("OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy.")
                 .default_value("https://api.openai.com")
                 .global(true),
         )

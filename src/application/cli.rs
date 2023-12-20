@@ -149,7 +149,7 @@ fn subcommand_completions() -> Command {
 
 fn subcommand_sessions_delete() -> Command {
     return Command::new("delete")
-        .about("Delete one or all sessions")
+        .about("Delete one or all sessions.")
         .arg(
             clap::Arg::new("session-id")
                 .short('i')
@@ -160,7 +160,7 @@ fn subcommand_sessions_delete() -> Command {
         .arg(
             clap::Arg::new("all")
                 .long("all")
-                .help("Delete all sessions")
+                .help("Delete all sessions.")
                 .num_args(0),
         )
         .group(
@@ -187,7 +187,7 @@ fn arg_backend_health_check_timeout() -> Arg {
         .env("OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT")
         .num_args(1)
         .help(
-            "Time to wait in milliseconds before timing out when doing a healthcheck for a backend",
+            "Time to wait in milliseconds before timing out when doing a healthcheck for a backend.",
         )
         .default_value("1000");
 }
@@ -198,8 +198,7 @@ fn arg_model() -> Arg {
         .long("model")
         .env("OATMEAL_MODEL")
         .num_args(1)
-        .help("The initial model on a backend to consume")
-        .default_value("llama2:latest");
+        .help("The initial model on a backend to consume. Defaults to the first model available from the backend if not set.");
 }
 
 fn subcommand_chat() -> Command {
@@ -432,10 +431,9 @@ pub async fn parse() -> Result<bool> {
                     .get_one::<String>("backend-health-check-timeout")
                     .unwrap(),
             );
-            Config::set(
-                ConfigKey::Model,
-                matches.get_one::<String>("model").unwrap(),
-            );
+            if let Some(model) = matches.get_one::<String>("model") {
+                Config::set(ConfigKey::Model, model);
+            }
         }
     }
 

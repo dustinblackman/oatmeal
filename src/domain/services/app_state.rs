@@ -8,6 +8,8 @@ use super::CodeBlocks;
 use super::Scroll;
 use super::Sessions;
 use super::Themes;
+use crate::config::Config;
+use crate::config::ConfigKey;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
@@ -56,7 +58,7 @@ impl<'a> AppState<'a> {
     }
 
     async fn init(props: AppStateProps) -> Result<AppState<'a>> {
-        let model_name = &props.model_name;
+        let mut model_name = props.model_name.to_string();
         let theme = Themes::get(&props.theme_name, &props.theme_file)?;
 
         let mut app_state = AppState {
@@ -84,7 +86,11 @@ impl<'a> AppState<'a> {
                 ));
         } else {
             let models = props.backend.list_models().await?;
-            if !models.contains(&model_name.to_string()) {
+            if model_name.is_empty() {
+                model_name = models[0].to_string();
+                // TODO refactor this out later.
+                Config::set(ConfigKey::Model, &model_name);
+            } else if !models.contains(&model_name.to_string()) {
                 app_state
                 .messages
                 .push(Message::new_with_type(
@@ -96,7 +102,7 @@ impl<'a> AppState<'a> {
         }
 
         // Fallback to the default intro message when there's no editor context.
-        if app_state.add_editor_context(props.editor).await.is_err() {
+        if app_state.add_editor_context(props.editor).await.is_err() && !model_name.is_empty() {
             app_state.messages.push(Message::new(
                 Author::Model,
                 "Hey there! What can I do for you?",

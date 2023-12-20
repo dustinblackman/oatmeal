@@ -11,6 +11,7 @@ use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::BackendBox;
+use crate::domain::models::BackendPrompt;
 use crate::domain::models::EditorContext;
 use crate::domain::models::EditorName;
 use crate::domain::models::Event;
@@ -208,6 +209,21 @@ fn worker_error(err: anyhow::Error, tx: &mpsc::UnboundedSender<Event>) -> Result
     return Ok(());
 }
 
+async fn completions(
+    backend: &BackendBox,
+    prompt: BackendPrompt,
+    tx: &mpsc::UnboundedSender<Event>,
+) -> Result<()> {
+    if Config::get(ConfigKey::Model).is_empty() {
+        let models = backend.list_models().await?;
+        Config::set(ConfigKey::Model, &models[0]);
+    }
+
+    backend.get_completion(prompt, tx).await?;
+
+    return Ok(());
+}
+
 fn help(tx: &mpsc::UnboundedSender<Event>) -> Result<()> {
     tx.send(Event::BackendMessage(Message::new(
         Author::Oatmeal,
@@ -267,12 +283,9 @@ impl ActionsService {
 
                     let backend_worker = backend_arc.clone();
                     worker = tokio::spawn(async move {
-                        let res = backend_worker.get_completion(prompt, &worker_tx).await;
-
-                        if let Err(err) = res {
+                        if let Err(err) = completions(&backend_worker, prompt, &worker_tx).await {
                             worker_error(err, &worker_tx)?;
                         }
-
                         return Ok(());
                     });
                 }

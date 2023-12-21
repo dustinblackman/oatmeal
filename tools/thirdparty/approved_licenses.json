@@ -1,5 +1,4 @@
 {
   "allow_defaults": ["block--0.1.6", "objc_id--0.1.1", "objc-foundation--0.1.1", "winapi-wsapoll--0.1.1"],
-  "apache": ["line-wrap--0.1.1", "ryu--1.0.15", "gethostname--0.2.3", "openssl--0.10.60"],
-  "badly_formatted": ["chrono--0.4.31"]
+  "apache": ["line-wrap--0.1.1", "ryu--1.0.15", "gethostname--0.2.3"]
 }

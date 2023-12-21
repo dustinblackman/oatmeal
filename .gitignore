@@ -10,3 +10,4 @@ completions/
 flamegraph.svg
 profile.json
 dhat-heap.json
+tools/thirdparty/.failed-lint

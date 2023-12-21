@@ -13,6 +13,7 @@ git-fetch-with-cli = true
 [licenses]
 unlicensed = "deny"
 copyleft = "deny"
+confidence-threshold = 0.93
 allow = [
   "MIT",
   "Apache-2.0",
@@ -23,6 +24,9 @@ exceptions = [
   { allow = ["BSL-1.0"], name = "clipboard-win" },
   { allow = ["BSL-1.0"], name = "error-code" },
   { allow = ["BSL-1.0"], name = "str-buf" },
+  { allow = ["MIT", "ISC", "OpenSSL"], name = "ring" },
+  { allow = ["ISC"], name = "rustls-webpki" },
+  { allow = ["ISC"], name = "untrusted" },
 ]
 
 [[licenses.clarify]]

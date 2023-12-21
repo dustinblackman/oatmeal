@@ -25,7 +25,7 @@ jobs:
         run: |
           cargo build
           cargo cmd test-coverage-lcov
-
+          ./target/debug/oatmeal --help
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
@@ -51,3 +51,9 @@ jobs:
         run: |
           cargo build
           cargo nextest run
+      - name: Validate binary runs
+        if: matrix.os != 'windows-latest'
+        run: ./target/debug/oatmeal --help
+      - name: Validate binary runs
+        if: matrix.os == 'windows-latest'
+        run: .\target\debug\oatmeal.exe --help

@@ -1,3 +1,4 @@
+# Lazy priority acceptance. Real linting happens in cargo-deny before this gets run.
 accepted = [
   # Prioritized
   "MIT",
@@ -8,7 +9,9 @@ accepted = [
   "ISC",
   "Unicode-DFS-2016",
   "BSD-3-Clause",
+  "OpenSSL",
 ]
+workarounds = ["chrono", "ring", "rustls"]
 
 ignore-build-dependencies = true
 ignore-dev-dependencies = true
@@ -115,16 +118,9 @@ license = "MIT"
 path = "LICENSE-MIT"
 checksum = "0593d22d122d4bfec6407115e3907546312976f75473417aaa4c57ecd2095ae6"
 
-[typenum.clarify]
-license = "MIT"
+[rustls-webpki.clarify]
+license = "ISC"
 
-[[typenum.clarify.git]]
-path = "LICENSE-MIT"
-checksum = "a825bd853ab71619a4923d7b4311221427848070ff44d990da39b0b274c1683f"
-
-[openssl.clarify]
-license = "Apache-2.0"
-
-[[openssl.clarify.git]]
-path = "openssl/LICENSE"
-checksum = "f3d4287b4a21c5176fea2f9bd4ae800696004e2fb8e05cbc818be513f188a941"
+[[rustls-webpki.clarify.git]]
+path = "LICENSE"
+checksum = "5b698ca13897be3afdb7174256fa1574f8c6892b8bea1a66dd6469d3fe27885a"

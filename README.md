@@ -89,7 +89,7 @@ yay -S oatmeal-bin
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.9.2
+choco install oatmeal --version=0.10.0
 ```
 
 <!-- choco-install end -->
@@ -132,8 +132,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.9.2
-Commit: v0.9.2
+Version: 0.10.0
+Commit: v0.10.0
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 
@@ -145,17 +145,19 @@ Commands:
 
 Options:
   -b, --backend <backend>
-          The initial backend hosting a model to connect to. [env: OATMEAL_BACKEND=] [default: ollama] [possible values: ollama, openai]
+          The initial backend hosting a model to connect to. [env: OATMEAL_BACKEND=] [default: ollama] [possible values: langchain, ollama, openai]
       --backend-health-check-timeout <backend-health-check-timeout>
-          Time to wait in milliseconds before timing out when doing a healthcheck for a backend [env: OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT=] [default: 1000]
+          Time to wait in milliseconds before timing out when doing a healthcheck for a backend. [env: OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT=] [default: 1000]
   -m, --model <model>
-          The initial model on a backend to consume [env: OATMEAL_MODEL=] [default: llama2:latest]
+          The initial model on a backend to consume. Defaults to the first model available from the backend if not set. [env: OATMEAL_MODEL=]
   -e, --editor <editor>
           The editor to integrate with. [env: OATMEAL_EDITOR=] [default: clipboard] [possible values: neovim, clipboard, none]
   -t, --theme <theme>
           Sets code syntax highlighting theme. [env: OATMEAL_THEME=] [default: base16-onedark] [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
       --theme-file <theme-file>
           Absolute path to a TextMate tmTheme to use for code syntax highlighting. [env: OATMEAL_THEME_FILE=]
+      --langchain-url <langchain-url>
+          LangChain Serve API URL when using the LangChain backend. [env: OATMEAL_LANGCHAIN_URL=] [default: http://localhost:8000]
       --ollama-url <ollama-url>
           Ollama API URL when using the Ollama backend. [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
       --openai-url <openai-url>
@@ -240,17 +242,18 @@ Commands:
   dir     Print the sessions cache directory path.
   list    List all previous sessions with their ids and models.
   open    Open a previous session by ID. Omit passing any session ID to load an interactive selection.
-  delete  Delete one or all sessions
+  delete  Delete one or all sessions.
   help    Print this message or the help of the given subcommand(s)
 
 Options:
-  -e, --editor <editor>              The editor to integrate with. [env: OATMEAL_EDITOR=] [default: clipboard] [possible values: neovim, clipboard, none]
-  -t, --theme <theme>                Sets code syntax highlighting theme. [env: OATMEAL_THEME=] [default: base16-onedark] [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
-      --theme-file <theme-file>      Absolute path to a TextMate tmTheme to use for code syntax highlighting. [env: OATMEAL_THEME_FILE=]
-      --ollama-url <ollama-url>      Ollama API URL when using the Ollama backend. [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
-      --openai-url <openai-url>      OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy. [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
-      --openai-token <openai-token>  OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
-  -h, --help                         Print help
+  -e, --editor <editor>                The editor to integrate with. [env: OATMEAL_EDITOR=] [default: clipboard] [possible values: neovim, clipboard, none]
+  -t, --theme <theme>                  Sets code syntax highlighting theme. [env: OATMEAL_THEME=] [default: base16-onedark] [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
+      --theme-file <theme-file>        Absolute path to a TextMate tmTheme to use for code syntax highlighting. [env: OATMEAL_THEME_FILE=]
+      --langchain-url <langchain-url>  LangChain Serve API URL when using the LangChain backend. [env: OATMEAL_LANGCHAIN_URL=] [default: http://localhost:8000]
+      --ollama-url <ollama-url>        Ollama API URL when using the Ollama backend. [env: OATMEAL_OLLAMA_URL=] [default: http://localhost:11434]
+      --openai-url <openai-url>        OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy. [env: OATMEAL_OPENAI_URL=] [default: https://api.openai.com]
+      --openai-token <openai-token>    OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
+  -h, --help                           Print help
 ```
 
 <!-- command-help-sessions end -->

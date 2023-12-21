@@ -2,9 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.0] - 2023-12-21
+
+[v0.9.2...v0.10.0](https://github.com/dustinblackman/oatmeal/compare/v0.9.2...v0.10.0)
+
+### ⛰️ Features
+
+- LangChain backend - ([7c32afe](https://github.com/dustinblackman/oatmeal/commit/7c32afe0edd47eb7b5d59339b08c00e1de262c6e))
+- Enable wayland clipboard support - ([2163d15](https://github.com/dustinblackman/oatmeal/commit/2163d1562bacfc7529e623c4032e0a29abd456e8))
+- [**breaking**] Default to first model in backend if none selected at start - ([1a92a77](https://github.com/dustinblackman/oatmeal/commit/1a92a7725a8af14e61a1f4f0744069c64203f8ce))
+
+### 🐛 Bug Fixes
+
+- Cargo publish - ([fb11ad4](https://github.com/dustinblackman/oatmeal/commit/fb11ad403df36c106b752bb7f3d79bec40491471))
+
+### 🚜 Refactor
+
+- Model boundaries - ([b489508](https://github.com/dustinblackman/oatmeal/commit/b48950885ab3539d72a3372ee6c0c34db6e4b8d3))
+
+### 📚 Documentation
+
+- Update OpenAI description - ([31044d3](https://github.com/dustinblackman/oatmeal/commit/31044d348ffdecf9cd79f24aef53ce58ade8fa27))
+
+### ⚙️ Miscellaneous Tasks
+
+- OpenSSL to rustls - ([dd20690](https://github.com/dustinblackman/oatmeal/commit/dd2069074e0df12024ca4fce39b41a97fd5e40df))
+- Run tests on all 3 major OS - ([eb730b2](https://github.com/dustinblackman/oatmeal/commit/eb730b2bd64d922a749e9705f000f0151acff1de))
+
 ## [0.9.2] - 2023-12-19
 
 [v0.9.1...v0.9.2](https://github.com/dustinblackman/oatmeal/compare/v0.9.1...v0.9.2)
+
+### ⛰️ Features
+
+- Release v0.9.2 - ([511313b](https://github.com/dustinblackman/oatmeal/commit/511313be5696616babba13773cba70bbbb506baa))
 
 ### 🐛 Bug Fixes
 
@@ -191,7 +222,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation
 
-- Re-add choco - ([bd12825](https://github.com/dustinblackman/oatmeal/commit/bd12825f7252ebc886a1af5650b89fc2c4fb35b5))
+- Readd choco - ([bd12825](https://github.com/dustinblackman/oatmeal/commit/bd12825f7252ebc886a1af5650b89fc2c4fb35b5))
 - Push users towards the editors section - ([bda11c4](https://github.com/dustinblackman/oatmeal/commit/bda11c4a959a98174c7ddf7f75c25f4f55b7d7d6))
 - Organize README - ([663d65b](https://github.com/dustinblackman/oatmeal/commit/663d65bb8200c48bb7b8cad55fba3e36c2c35740))
 

@@ -3,23 +3,18 @@ on: [push, pull_request]
 name: ci
 
 jobs:
-  build_and_test:
-    name: oatmeal
+  test_coverage:
+    name: oatmeal (ubuntu-latest)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
+      - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
         with:
           cache-directories: ".bin"
 
       - name: Install deps
         run: |
-          git submodule update --init --recursive
           cargo install cargo-run-bin
           cargo binstall --help >/dev/null
       - name: Setup nightly
@@ -27,10 +22,32 @@ jobs:
       - name: Lint
         run: cargo cmd lint
       - name: Test
-        run: cargo cmd test-coverage-lcov
+        run: |
+          cargo build
+          cargo cmd test-coverage-lcov
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./lcov.info
+
+  test:
+    name: oatmeal
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
+      - name: Install deps
+        run: |
+          cargo install cargo-run-bin
+      - name: Test
+        run: |
+          cargo build
+          cargo nextest run

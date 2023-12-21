@@ -81,12 +81,12 @@ pub trait Backend {
     async fn list_models<'a>(&'a self) -> Result<Vec<String>>;
 
     /// Requests completions from the backend. Completion results may be
-    /// streamed back to the UI by passing each should through a channel.
+    /// streamed back to the UI by passing each response through a channel.
     ///
     /// Upon receiving all results, a final `done` boolean
     /// is provided as the last message to the channel.
     ///
-    /// In order for a backend to maintain history, a context array must be
+    /// In order for a backend to maintain history, a context array may be
     /// provided by the backend. This can be passed alongside the `done`
     /// boolean, and will be provided on the next prompt to the backend.
     async fn get_completion<'a>(

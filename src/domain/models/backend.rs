@@ -16,6 +16,7 @@ use super::Event;
 #[derive(Clone, Debug, PartialEq, Eq, EnumIter, EnumVariantNames, strum::Display)]
 #[strum(serialize_all = "lowercase")]
 pub enum BackendName {
+    LangChain,
     Ollama,
     OpenAI,
 }

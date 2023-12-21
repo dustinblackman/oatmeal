@@ -1330,6 +1330,7 @@ dependencies = [
  "futures",
  "glob-match",
  "insta",
+ "itertools",
  "mockito",
  "once_cell",
  "ratatui",

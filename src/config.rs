@@ -11,6 +11,7 @@ pub enum ConfigKey {
     BackendHealthCheckTimeout,
     Editor,
     Model,
+    LangChainURL,
     OllamaURL,
     OpenAiToken,
     OpenAiURL,

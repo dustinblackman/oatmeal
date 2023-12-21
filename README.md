@@ -124,7 +124,7 @@ mv ./target/release/oatmeal /usr/local/bin/
 ## Usage
 
 Oatmeal allows customizing configuration either through command line parameters, or more permanently with environment
-variables. By default, Ollama is the selected backend, `llama2:latest` as the default model, and the `clipboard` integration for an editor.
+variables. By default, Ollama is the selected backend, and the `clipboard` integration for an editor.
 See `oatmeal --help`, `/help` in chat, or the output below to get all the details.
 
 <!-- command-help start -->
@@ -206,6 +206,7 @@ The following model backends are supported:
 
 - [OpenAI](https://chat.openai.com) (Or any compatible proxy/API)
 - [Ollama](https://github.com/jmorganca/ollama)
+- [LangChain/LangServe](https://python.langchain.com/docs/langserve) (Experimental)
 
 ### Editors
 

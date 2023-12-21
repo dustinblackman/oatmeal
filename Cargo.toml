@@ -47,6 +47,7 @@ dhat = { version = "=0.3.2", optional = true }
 dialoguer = { version = "=0.10.4", default-features = false, features = ["editor"] }
 dirs = "=5.0.1"
 futures = "=0.3.28"
+itertools = "=0.11.0"
 once_cell = "=1.18.0"
 ratatui = "=0.24.0"
 reqwest = { version = "=0.11.22", default-features = false, features = ["stream", "json", "gzip", "native-tls-vendored"] }

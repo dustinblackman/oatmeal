@@ -305,6 +305,15 @@ fn build() -> Command {
                 .global(true),
         )
         .arg(
+            Arg::new("langchain-url")
+                .long("langchain-url")
+                .env("OATMEAL_LANGCHAIN_URL")
+                .num_args(1)
+                .help("LangChain Serve API URL when using the LangChain backend.")
+                .default_value("http://localhost:8000")
+                .global(true),
+        )
+        .arg(
             Arg::new("ollama-url")
                 .long("ollama-url")
                 .env("OATMEAL_OLLAMA_URL")
@@ -452,6 +461,10 @@ pub async fn parse() -> Result<bool> {
     Config::set(
         ConfigKey::OpenAiURL,
         matches.get_one::<String>("openai-url").unwrap(),
+    );
+    Config::set(
+        ConfigKey::LangChainURL,
+        matches.get_one::<String>("langchain-url").unwrap(),
     );
 
     let mut user = env::var("USER").unwrap_or_else(|_| return "".to_string());

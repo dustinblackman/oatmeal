@@ -1,3 +1,4 @@
+pub mod langchain;
 pub mod ollama;
 pub mod openai;
 use anyhow::bail;
@@ -10,6 +11,10 @@ pub struct BackendManager {}
 
 impl BackendManager {
     pub fn get(name: BackendName) -> Result<BackendBox> {
+        if name == BackendName::LangChain {
+            return Ok(Box::<langchain::LangChain>::default());
+        }
+
         if name == BackendName::Ollama {
             return Ok(Box::<ollama::Ollama>::default());
         }

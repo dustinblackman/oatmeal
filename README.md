@@ -67,7 +67,7 @@ sudo apt-get install oatmeal
 
 ```sh
 dnf config-manager --add-repo https://yum.dustinblackman.com/config.repo
-dnf install oatmeal
+dnf install --nogpgcheck oatmeal
 ```
 
 ### Nix

@@ -78,6 +78,9 @@ nfpms:
         dst: /usr/share/doc/oatmeal/copyright/THIRDPARTY.html
         file_info:
           mode: 0644
+    rpm:
+      signature:
+        key_file: "{{ .Env.RPM_KEY }}"
 
 aurs:
   - name: oatmeal-bin

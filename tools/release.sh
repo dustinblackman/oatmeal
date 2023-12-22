@@ -58,7 +58,7 @@ cargo gha gh run download -D dist-gh "$GH_RUN_ID"
 fd -t f . './dist-gh' | grep -v -i -E '(dwp|dSYM|pdb)' | xargs -L1 chmod +x
 
 # Release to Github
-AUR_KEY=$(cat ~/.ssh/aur) cargo gha goreleaser --clean
+AUR_KEY=$(cat ~/.ssh/aur) RPM_KEY="$HOME/.gpg/yum-private.key" cargo gha goreleaser --clean
 cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | cargo gha gh release edit "v$OM_VERSION" --notes-file -
 
 # Release to package managers not supported by GoReleaser.

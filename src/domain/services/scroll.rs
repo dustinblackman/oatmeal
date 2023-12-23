@@ -39,12 +39,20 @@ impl Scroll {
         }
     }
 
-    pub fn last(&mut self) {
-        self.position = 0;
+    fn get_position_as_if_last(&self) -> usize {
+        let mut position = 0;
         if self.list_length > self.viewport_length {
-            self.position = self.list_length - self.viewport_length;
+            position = self.list_length - self.viewport_length;
         }
+        return position;
+    }
 
+    pub fn is_position_at_last(&self) -> bool {
+        return self.position == self.get_position_as_if_last()
+    }
+
+    pub fn last(&mut self) {
+        self.position = self.get_position_as_if_last();
         self.scrollbar_state.last();
     }
 

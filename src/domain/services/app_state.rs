@@ -287,10 +287,11 @@ impl<'a> AppState<'a> {
         self.bubble_list
             .set_messages(&self.messages, self.last_known_width);
 
+        let scrollbar_at_bottom = self.scroll.is_position_at_last();
         self.scroll
             .set_state(self.bubble_list.len(), self.last_known_height);
 
-        if self.waiting_for_backend {
+        if self.waiting_for_backend && scrollbar_at_bottom {
             self.scroll.last();
         }
     }

@@ -11,7 +11,6 @@ exclude = [
   ".github/",
   ".dprint.json",
   ".goreleaser.yml",
-  ".insta.yaml",
   ".rustfmt.toml",
   "cliff.toml",
   "committed.toml",
@@ -177,7 +176,7 @@ release = '''
 '''
 
 insta = '''set -e
-  cargo insta test || cargo insta review
+  cargo insta test --bins --test-runner nextest || cargo insta review
 '''
 
 setup = '''set -e

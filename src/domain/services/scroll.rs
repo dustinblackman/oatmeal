@@ -48,7 +48,7 @@ impl Scroll {
     }
 
     pub fn is_position_at_last(&self) -> bool {
-        return self.position == self.get_position_as_if_last()
+        return self.position == self.get_position_as_if_last();
     }
 
     pub fn last(&mut self) {

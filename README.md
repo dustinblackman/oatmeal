@@ -124,7 +124,7 @@ mv ./target/release/oatmeal /usr/local/bin/
 
 ## Usage
 
-The following shows the availabe options to start a chat session. By default, Ollama is the selected backend, and the `clipboard` integration for an editor.
+The following shows the availabe options to start a chat session. By default when running `oatmeal`, Ollama is the selected backend, and the `clipboard` integration for an editor.
 See `oatmeal --help`, `/help` in chat, or the output below to get all the details.
 
 <!-- command-help start -->

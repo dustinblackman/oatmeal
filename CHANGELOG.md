@@ -2,12 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.0] - 2023-12-23
+
+[v0.10.0...v0.11.0](https://github.com/dustinblackman/oatmeal/compare/v0.10.0...v0.11.0)
+
+### ⛰️ Features
+
+- Config File - ([641f872](https://github.com/dustinblackman/oatmeal/commit/641f872c37fbaa8f1715cefb595822d11483f2e4))
+
+### 🐛 Bug Fixes
+
+- Lint - ([eabcc62](https://github.com/dustinblackman/oatmeal/commit/eabcc62326b7908229dfb63ff95936b3d4c55048))
+- Only autoscroll if scrollbar is at bottom - ([8b75352](https://github.com/dustinblackman/oatmeal/commit/8b753526033dfd540e82098dd84847816054f314))
+- Drop unused deps - ([0e58a63](https://github.com/dustinblackman/oatmeal/commit/0e58a63b782093f882db05d92f4a7c19a8efcb43))
+- Third party linting - ([4e9fe2b](https://github.com/dustinblackman/oatmeal/commit/4e9fe2bb292c3e4b25ce5c7cfa2b9f320675763a))
+
+### 📚 Documentation
+
+- Fix rpm install - ([d34fb12](https://github.com/dustinblackman/oatmeal/commit/d34fb12205519cf88c08e0fdfd7f91d244a7cff4))
+- Fix typos in Backend trait - ([8114dc0](https://github.com/dustinblackman/oatmeal/commit/8114dc036d26792cac31d12297c69e862fdd121d))
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix insta command - ([b1b76f4](https://github.com/dustinblackman/oatmeal/commit/b1b76f41a0304ec81892664b9891b3cebe752637))
+- Sign RPM files - ([898c4a0](https://github.com/dustinblackman/oatmeal/commit/898c4a0330a27a89e7246fc2bfa536c7d86a67de))
+
 ## [0.10.0] - 2023-12-21
 
 [v0.9.2...v0.10.0](https://github.com/dustinblackman/oatmeal/compare/v0.9.2...v0.10.0)
 
 ### ⛰️ Features
 
+- Release v0.10.0 - ([2774550](https://github.com/dustinblackman/oatmeal/commit/277455076473265eb48818ecfde41e030ca633e2))
 - LangChain backend - ([7c32afe](https://github.com/dustinblackman/oatmeal/commit/7c32afe0edd47eb7b5d59339b08c00e1de262c6e))
 - Enable wayland clipboard support - ([2163d15](https://github.com/dustinblackman/oatmeal/commit/2163d1562bacfc7529e623c4032e0a29abd456e8))
 - [**breaking**] Default to first model in backend if none selected at start - ([1a92a77](https://github.com/dustinblackman/oatmeal/commit/1a92a7725a8af14e61a1f4f0744069c64203f8ce))

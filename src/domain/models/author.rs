@@ -1,8 +1,8 @@
-use serde_derive::Deserialize;
-use serde_derive::Serialize;
+use serde::Deserialize;
+use serde::Serialize;
 
-use crate::config::Config;
-use crate::config::ConfigKey;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Author {

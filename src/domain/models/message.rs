@@ -1,8 +1,8 @@
 #[cfg(test)]
 #[path = "message_test.rs"]
 mod tests;
-use serde_derive::Deserialize;
-use serde_derive::Serialize;
+use serde::Deserialize;
+use serde::Serialize;
 
 use super::Author;
 

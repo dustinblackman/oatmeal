@@ -11,14 +11,14 @@ use anyhow::Result;
 use async_trait::async_trait;
 use futures::stream::TryStreamExt;
 use itertools::Itertools;
-use serde_derive::Deserialize;
-use serde_derive::Serialize;
+use serde::Deserialize;
+use serde::Serialize;
 use tokio::io::AsyncBufReadExt;
 use tokio::sync::mpsc;
 use tokio_util::io::StreamReader;
 
-use crate::config::Config;
-use crate::config::ConfigKey;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
 use crate::domain::models::BackendName;

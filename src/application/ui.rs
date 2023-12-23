@@ -19,8 +19,8 @@ use ratatui::widgets::ScrollbarOrientation;
 use ratatui::Terminal;
 use tokio::sync::mpsc;
 
-use crate::config::Config;
-use crate::config::ConfigKey;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 use crate::domain::models::Action;
 use crate::domain::models::Author;
 use crate::domain::models::BackendName;

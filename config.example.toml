@@ -1,0 +1,32 @@
+# The initial backend hosting a model to connect to. [possible values: langchain, ollama, openai]
+backend = "ollama"
+
+# Time to wait in milliseconds before timing out when doing a healthcheck for a backend.
+backend-health-check-timeout = 1000
+
+# The editor to integrate with. [possible values: neovim, clipboard, none]
+editor = "clipboard"
+
+# The initial model on a backend to consume. Defaults to the first model available from the backend if not set.
+# model = ""
+
+# LangChain Serve API URL when using the LangChain backend.
+lang-chain-url = "http://localhost:8000"
+
+# Ollama API URL when using the Ollama backend.
+ollama-url = "http://localhost:11434"
+
+# OpenAI API token when using the OpenAI backend.
+# open-ai-token = ""
+
+# OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy.
+open-ai-url = "https://api.openai.com"
+
+# Sets code syntax highlighting theme. [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
+theme = "base16-onedark"
+
+# Absolute path to a TextMate tmTheme to use for code syntax highlighting.
+# theme-file = ""
+
+# Your user name displayed in all chat bubbles.
+# username = ""

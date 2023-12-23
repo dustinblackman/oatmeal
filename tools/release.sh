@@ -27,6 +27,8 @@ git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
 cargo build
 cargo cmd build-completions
 cargo xtask update-readme
+rm -f config.example.toml
+./target/debug/oatmeal config default >config.example.toml
 cargo bin dprint fmt
 
 # Override release commit with updated readme.

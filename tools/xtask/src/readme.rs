@@ -1,44 +1,43 @@
+use std::env;
 use std::fs;
 use std::io::Write;
 use std::process;
 
+fn cmd(args: Vec<&str>) -> String {
+    let mut child = process::Command::new("./target/debug/oatmeal");
+    for arg in args {
+        child.arg(arg);
+    }
+
+    for (key, _) in env::vars() {
+        if key.starts_with("OATMEAL_") {
+            child.env(key, "");
+        }
+    }
+
+    return String::from_utf8(child.env("NO_COLOR", "1").output().unwrap().stdout).unwrap();
+}
+
 pub fn update() {
-    let output_help = String::from_utf8(
-        process::Command::new("./target/debug/oatmeal")
-            .arg("--help")
-            .env("NO_COLOR", "1")
-            .env("OATMEAL_THEME", "")
-            .env("OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT", "")
-            .output()
-            .unwrap()
-            .stdout,
-    )
-    .unwrap();
+    let output_help = cmd(vec!["--help"]);
+    let output_help_sessions = cmd(vec!["sessions", "--help"])
+        .split("Options:")
+        .next()
+        .unwrap()
+        .trim()
+        .to_string();
+    let output_config = cmd(vec!["config", "--help"])
+        .split("Options:")
+        .next()
+        .unwrap()
+        .trim()
+        .to_string();
+    let version_res = cmd(vec!["--version"]);
 
-    let output_help_sessions = String::from_utf8(
-        process::Command::new("./target/debug/oatmeal")
-            .arg("sessions")
-            .arg("--help")
-            .env("NO_COLOR", "1")
-            .env("OATMEAL_THEME", "")
-            .env("OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT", "")
-            .output()
-            .unwrap()
-            .stdout,
-    )
-    .unwrap();
-
-    let version_res = String::from_utf8(
-        process::Command::new("./target/debug/oatmeal")
-            .arg("--version")
-            .output()
-            .unwrap()
-            .stdout,
-    )
-    .unwrap();
     let version = version_res.split(' ').collect::<Vec<&str>>()[1];
 
     let mut readme = fs::read_to_string("./README.md").unwrap();
+
     let start_help = readme.find("<!-- command-help start -->").unwrap();
     let end_help = readme.find("<!-- command-help end -->").unwrap();
     readme.replace_range(
@@ -50,7 +49,14 @@ pub fn update() {
     let end_help_sessions = readme.find("<!-- command-help-sessions end -->").unwrap();
     readme.replace_range(
         start_help_sessions..end_help_sessions,
-        &format!("<!-- command-help-sessions start -->\n```\n{output_help_sessions}```\n"),
+        &format!("<!-- command-help-sessions start -->\n```\n{output_help_sessions}\n```\n"),
+    );
+
+    let start_help_config = readme.find("<!-- command-config start -->").unwrap();
+    let end_help_config = readme.find("<!-- command-config end -->").unwrap();
+    readme.replace_range(
+        start_help_config..end_help_config,
+        &format!("<!-- command-config start -->\n```\n{output_config}\n```\n"),
     );
 
     let start_choco = readme.find("<!-- choco-install start -->").unwrap();
@@ -61,6 +67,8 @@ pub fn update() {
             "<!-- choco-install start -->\n```sh\nchoco install oatmeal --version={version}```\n"
         ),
     );
+
+    readme = readme.replace(&env::var("HOME").unwrap(), "~");
 
     let mut f = fs::File::create("./README.md").unwrap();
     f.write_all(readme.as_bytes()).unwrap();

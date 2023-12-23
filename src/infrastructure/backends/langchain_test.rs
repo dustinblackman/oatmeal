@@ -6,8 +6,8 @@ use tokio::sync::mpsc;
 
 use super::CompletionResponse;
 use super::LangChain;
-use crate::config::Config;
-use crate::config::ConfigKey;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
 use crate::domain::models::BackendPrompt;

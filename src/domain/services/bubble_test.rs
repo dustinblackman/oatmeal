@@ -4,8 +4,8 @@ use test_utils::insta_snapshot;
 
 use super::Bubble;
 use super::BubbleAlignment;
-use crate::config::Config;
-use crate::config::ConfigKey;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 use crate::domain::models::Author;
 use crate::domain::models::Message;
 use crate::domain::services::Themes;

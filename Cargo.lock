@@ -1208,7 +1208,6 @@ dependencies = [
  "ratatui",
  "reqwest",
  "serde",
- "serde_derive",
  "serde_json",
  "serde_yaml",
  "strum",
@@ -1217,6 +1216,7 @@ dependencies = [
  "test_utils",
  "tokio",
  "tokio-util",
+ "toml_edit",
  "tracing",
  "tracing-appender",
  "tracing-subscriber",
@@ -2169,6 +2169,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "toml_datetime"
+version = "0.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3550f4e9685620ac18a50ed434eb3aec30db8ba93b0287467bca5826ea25baf1"
+
+[[package]]
+name = "toml_edit"
+version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d34d383cd00a163b4a5b85053df514d45bc330f6de7737edfe0a93311d1eaa03"
+dependencies = [
+ "indexmap 2.1.0",
+ "toml_datetime",
+ "winnow",
+]
+
+[[package]]
 name = "tower-service"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2709,6 +2726,15 @@ name = "windows_x86_64_msvc"
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed94fce61571a4006852b7389a063ab983c02eb1bb37b47f8272ce92d06d9538"
+
+[[package]]
+name = "winnow"
+version = "0.5.30"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9b5c3db89721d50d0e2a673f5043fc4722f76dcc352d7b1ab8b8288bed4ed2c5"
+dependencies = [
+ "memchr",
+]
 
 [[package]]
 name = "winreg"

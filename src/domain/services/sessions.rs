@@ -9,8 +9,8 @@ use tokio::fs;
 use tokio::io::AsyncWriteExt;
 use uuid::Uuid;
 
-use crate::config::Config;
-use crate::config::ConfigKey;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 use crate::domain::models::Author;
 use crate::domain::models::EditorContext;
 use crate::domain::models::Message;

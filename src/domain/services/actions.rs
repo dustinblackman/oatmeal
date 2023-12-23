@@ -5,8 +5,8 @@ use tokio::sync::mpsc;
 use tokio::task::JoinHandle;
 
 use super::clipboard::ClipboardService;
-use crate::config::Config;
-use crate::config::ConfigKey;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 use crate::domain::models::AcceptType;
 use crate::domain::models::Action;
 use crate::domain::models::Author;

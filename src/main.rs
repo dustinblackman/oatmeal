@@ -2,7 +2,7 @@
 #![allow(clippy::needless_return)]
 
 mod application;
-mod config;
+mod configuration;
 mod domain;
 mod infrastructure;
 
@@ -10,8 +10,6 @@ use std::env;
 use std::process;
 
 use anyhow::Error;
-use config::Config;
-use config::ConfigKey;
 use domain::models::Action;
 use domain::models::BackendName;
 use domain::models::Event;
@@ -23,6 +21,8 @@ use yansi::Paint;
 
 use crate::application::cli;
 use crate::application::ui;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 use crate::domain::services::actions::ActionsService;
 
 #[cfg(feature = "dhat-heap")]

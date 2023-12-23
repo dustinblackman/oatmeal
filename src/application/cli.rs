@@ -1,6 +1,8 @@
 use std::env;
 use std::io;
+use std::path;
 
+use anyhow::bail;
 use anyhow::Result;
 use clap::builder::PossibleValuesParser;
 use clap::value_parser;
@@ -14,10 +16,12 @@ use clap_complete::Shell;
 use dialoguer::theme::ColorfulTheme;
 use dialoguer::Select;
 use strum::VariantNames;
+use tokio::fs;
+use tokio::io::AsyncWriteExt;
 use yansi::Paint;
 
-use crate::config::Config;
-use crate::config::ConfigKey;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 use crate::domain::models::BackendName;
 use crate::domain::models::EditorName;
 use crate::domain::models::Session;
@@ -78,6 +82,27 @@ async fn print_sessions_list() -> Result<()> {
     return Ok(());
 }
 
+async fn create_config_file() -> Result<()> {
+    let config_file_path_str = Config::default(ConfigKey::ConfigFile);
+    let config_file_path = path::PathBuf::from(&config_file_path_str);
+    if config_file_path.exists() {
+        bail!(format!(
+            "Config file already exists at {config_file_path_str}"
+        ));
+    }
+
+    if !config_file_path.parent().unwrap().exists() {
+        fs::create_dir_all(config_file_path.parent().unwrap()).await?;
+    }
+
+    let mut file = fs::File::create(config_file_path).await?;
+    file.write_all(Config::serialize_default(build()).as_bytes())
+        .await?;
+
+    println!("Created default config file at {config_file_path_str}");
+    return Ok(());
+}
+
 async fn load_config_from_session(session_id: &str) -> Result<()> {
     let session = Sessions::default().load(session_id).await?;
     Config::set(ConfigKey::Backend, &session.state.backend_name);
@@ -115,6 +140,34 @@ async fn load_config_from_session_interactive() -> Result<()> {
     return Ok(());
 }
 
+fn subcommand_completions() -> Command {
+    return Command::new("completions")
+        .about("Generates shell completions.")
+        .arg(
+            clap::Arg::new("shell")
+                .short('s')
+                .long("shell")
+                .help("Which shell to generate completions for.")
+                .action(ArgAction::Set)
+                .value_parser(value_parser!(Shell))
+                .required(true),
+        );
+}
+
+fn subcommand_config() -> Command {
+    return Command::new("config")
+        .about("Configuration file options.")
+        .subcommand(
+            Command::new("create").about("Saves the default config file to the configuration file path. This command will fail if the file exists already.")
+        )
+        .subcommand(
+            Command::new("default").about("Outputs the default configuration file to stdout.")
+        )
+        .subcommand(
+            Command::new("path").about("Returns the default path for the configuration file.")
+        );
+}
+
 fn subcommand_debug() -> Command {
     return Command::new("debug")
         .about("Debug helpers for Oatmeal")
@@ -130,20 +183,6 @@ fn subcommand_debug() -> Command {
         )
         .subcommand(
             Command::new("enum-config").about("List all config keys as strings.")
-        );
-}
-
-fn subcommand_completions() -> Command {
-    return Command::new("completions")
-        .about("Generates shell completions")
-        .arg(
-            clap::Arg::new("shell")
-                .short('s')
-                .long("shell")
-                .help("Which shell to generate completions for.")
-                .action(ArgAction::Set)
-                .value_parser(value_parser!(Shell))
-                .required(true),
         );
 }
 
@@ -171,31 +210,32 @@ fn subcommand_sessions_delete() -> Command {
 }
 
 fn arg_backend() -> Arg {
-    return Arg::new("backend")
+    return Arg::new(ConfigKey::Backend.to_string())
         .short('b')
-        .long("backend")
+        .long(ConfigKey::Backend.to_string())
         .env("OATMEAL_BACKEND")
         .num_args(1)
-        .help("The initial backend hosting a model to connect to.")
-        .value_parser(PossibleValuesParser::new(BackendName::VARIANTS))
-        .default_value("ollama");
+        .help(format!(
+            "The initial backend hosting a model to connect to. [default: {}]",
+            Config::default(ConfigKey::Backend)
+        ))
+        .value_parser(PossibleValuesParser::new(BackendName::VARIANTS));
 }
 
 fn arg_backend_health_check_timeout() -> Arg {
-    return Arg::new("backend-health-check-timeout")
-        .long("backend-health-check-timeout")
+    return Arg::new(ConfigKey::BackendHealthCheckTimeout.to_string())
+        .long(ConfigKey::BackendHealthCheckTimeout.to_string())
         .env("OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT")
         .num_args(1)
         .help(
-            "Time to wait in milliseconds before timing out when doing a healthcheck for a backend.",
-        )
-        .default_value("1000");
+            format!("Time to wait in milliseconds before timing out when doing a healthcheck for a backend. [default: {}]", Config::default(ConfigKey::BackendHealthCheckTimeout)),
+        );
 }
 
 fn arg_model() -> Arg {
-    return Arg::new("model")
+    return Arg::new(ConfigKey::Model.to_string())
         .short('m')
-        .long("model")
+        .long(ConfigKey::Model.to_string())
         .env("OATMEAL_MODEL")
         .num_args(1)
         .help("The initial model on a backend to consume. Defaults to the first model available from the backend if not set.");
@@ -203,7 +243,7 @@ fn arg_model() -> Arg {
 
 fn subcommand_chat() -> Command {
     return Command::new("chat")
-        .about("Start a new chat session")
+        .about("Start a new chat session.")
         .arg(arg_backend())
         .arg(arg_backend_health_check_timeout())
         .arg(arg_model());
@@ -211,7 +251,7 @@ fn subcommand_chat() -> Command {
 
 fn subcommand_sessions() -> Command {
     return Command::new("sessions")
-        .about("Manage past chat sessions")
+        .about("Manage past chat sessions.")
         .arg_required_else_help(true)
         .subcommand(Command::new("dir").about("Print the sessions cache directory path."))
         .subcommand(Command::new("list").about("List all previous sessions with their ids and models."))
@@ -219,7 +259,7 @@ fn subcommand_sessions() -> Command {
             Command::new("open")
                 .about("Open a previous session by ID. Omit passing any session ID to load an interactive selection.")
                 .arg(
-                    clap::Arg::new("session-id")
+                    clap::Arg::new(ConfigKey::SessionID.to_string())
                         .short('i')
                         .long("id")
                         .help("Session ID")
@@ -229,7 +269,7 @@ fn subcommand_sessions() -> Command {
         .subcommand(subcommand_sessions_delete());
 }
 
-fn build() -> Command {
+pub fn build() -> Command {
     let commands_text = help_text()
         .split('\n')
         .map(|line| {
@@ -267,36 +307,44 @@ fn build() -> Command {
         .arg_required_else_help(false)
         .subcommand(subcommand_chat())
         .subcommand(subcommand_completions())
+        .subcommand(subcommand_config())
         .subcommand(subcommand_debug())
         .subcommand(subcommand_sessions())
         .arg(arg_backend())
         .arg(arg_backend_health_check_timeout())
         .arg(arg_model())
         .arg(
-            Arg::new("editor")
+            Arg::new(ConfigKey::ConfigFile.to_string())
+                .short('c')
+                .long(ConfigKey::ConfigFile.to_string())
+                .env("OATMEAL_CONFIG_FILE")
+                .num_args(1)
+                .help(format!("Path to configuration file [default: {}]", Config::default(ConfigKey::ConfigFile)))
+                .global(true)
+        )
+        .arg(
+            Arg::new(ConfigKey::Editor.to_string())
                 .short('e')
-                .long("editor")
+                .long(ConfigKey::Editor.to_string())
                 .env("OATMEAL_EDITOR")
                 .num_args(1)
-                .help("The editor to integrate with.")
+                .help(format!("The editor to integrate with. [default: {}]", Config::default(ConfigKey::Editor)))
                 .value_parser(PossibleValuesParser::new(EditorName::VARIANTS))
-                .default_value("clipboard")
                 .global(true),
         )
         .arg(
-            Arg::new("theme")
+            Arg::new(ConfigKey::Theme.to_string())
                 .short('t')
-                .long("theme")
+                .long(ConfigKey::Theme.to_string())
                 .env("OATMEAL_THEME")
                 .num_args(1)
-                .help("Sets code syntax highlighting theme.")
+                .help(format!("Sets code syntax highlighting theme. [default: {}]", Config::default(ConfigKey::Theme)))
                 .value_parser(PossibleValuesParser::new(themes))
-                .default_value("base16-onedark")
                 .global(true),
         )
         .arg(
-            Arg::new("theme-file")
-                .long("theme-file")
+            Arg::new(ConfigKey::ThemeFile.to_string())
+                .long(ConfigKey::ThemeFile.to_string())
                 .env("OATMEAL_THEME_FILE")
                 .num_args(1)
                 .help(
@@ -305,35 +353,32 @@ fn build() -> Command {
                 .global(true),
         )
         .arg(
-            Arg::new("langchain-url")
-                .long("langchain-url")
+            Arg::new(ConfigKey::LangChainURL.to_string())
+                .long(ConfigKey::LangChainURL.to_string())
                 .env("OATMEAL_LANGCHAIN_URL")
                 .num_args(1)
-                .help("LangChain Serve API URL when using the LangChain backend.")
-                .default_value("http://localhost:8000")
+                .help(format!("LangChain Serve API URL when using the LangChain backend. [default: {}]", Config::default(ConfigKey::LangChainURL)))
                 .global(true),
         )
         .arg(
-            Arg::new("ollama-url")
-                .long("ollama-url")
+            Arg::new(ConfigKey::OllamaURL.to_string())
+                .long(ConfigKey::OllamaURL.to_string())
                 .env("OATMEAL_OLLAMA_URL")
                 .num_args(1)
-                .help("Ollama API URL when using the Ollama backend.")
-                .default_value("http://localhost:11434")
+                .help(format!("Ollama API URL when using the Ollama backend. [default: {}]", Config::default(ConfigKey::OllamaURL)))
                 .global(true),
         )
         .arg(
-            Arg::new("openai-url")
-                .long("openai-url")
+            Arg::new(ConfigKey::OpenAiURL.to_string())
+                .long(ConfigKey::OpenAiURL.to_string())
                 .env("OATMEAL_OPENAI_URL")
                 .num_args(1)
-                .help("OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy.")
-                .default_value("https://api.openai.com")
+                .help(format!("OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy. [default: {}]", Config::default(ConfigKey::OpenAiURL)))
                 .global(true),
         )
         .arg(
-            Arg::new("openai-token")
-                .long("openai-token")
+            Arg::new(ConfigKey::OpenAiToken.to_string())
+                .long(ConfigKey::OpenAiToken.to_string())
                 .env("OATMEAL_OPENAI_TOKEN")
                 .num_args(1)
                 .help("OpenAI API token when using the OpenAI backend.")
@@ -372,25 +417,32 @@ pub async fn parse() -> Result<bool> {
             }
         }
         Some(("chat", subcmd_matches)) => {
-            Config::set(
-                ConfigKey::Backend,
-                subcmd_matches.get_one::<String>("backend").unwrap(),
-            );
-            Config::set(
-                ConfigKey::BackendHealthCheckTimeout,
-                matches
-                    .get_one::<String>("backend-health-check-timeout")
-                    .unwrap(),
-            );
-            Config::set(
-                ConfigKey::Model,
-                subcmd_matches.get_one::<String>("model").unwrap(),
-            );
+            Config::load(build(), vec![&matches, subcmd_matches]).await?;
         }
         Some(("completions", subcmd_matches)) => {
             if let Some(completions) = subcmd_matches.get_one::<Shell>("shell").copied() {
                 let mut app = build();
                 print_completions(completions, &mut app);
+            }
+        }
+        Some(("config", subcmd_matches)) => {
+            match subcmd_matches.subcommand() {
+                Some(("create", _)) => {
+                    create_config_file().await?;
+                    return Ok(false);
+                }
+                Some(("default", _)) => {
+                    println!("{}", Config::serialize_default(build()));
+                    return Ok(false);
+                }
+                Some(("path", _)) => {
+                    println!("{}", Config::default(ConfigKey::ConfigFile));
+                    return Ok(false);
+                }
+                _ => {
+                    subcommand_config().print_long_help()?;
+                    return Ok(false);
+                }
             }
         }
         Some(("sessions", subcmd_matches)) => {
@@ -405,6 +457,7 @@ pub async fn parse() -> Result<bool> {
                     return Ok(false);
                 }
                 Some(("open", open_matches)) => {
+                    Config::load(build(), vec![&matches, open_matches]).await?;
                     if let Some(session_id) = open_matches.get_one::<String>("session-id") {
                         load_config_from_session(session_id).await?;
                     } else {
@@ -430,66 +483,9 @@ pub async fn parse() -> Result<bool> {
             }
         }
         _ => {
-            Config::set(
-                ConfigKey::Backend,
-                matches.get_one::<String>("backend").unwrap(),
-            );
-            Config::set(
-                ConfigKey::BackendHealthCheckTimeout,
-                matches
-                    .get_one::<String>("backend-health-check-timeout")
-                    .unwrap(),
-            );
-            if let Some(model) = matches.get_one::<String>("model") {
-                Config::set(ConfigKey::Model, model);
-            }
+            Config::load(build(), vec![&matches]).await?;
         }
     }
-
-    Config::set(
-        ConfigKey::Editor,
-        matches.get_one::<String>("editor").unwrap(),
-    );
-    Config::set(
-        ConfigKey::Theme,
-        matches.get_one::<String>("theme").unwrap(),
-    );
-    Config::set(
-        ConfigKey::OllamaURL,
-        matches.get_one::<String>("ollama-url").unwrap(),
-    );
-    Config::set(
-        ConfigKey::OpenAiURL,
-        matches.get_one::<String>("openai-url").unwrap(),
-    );
-    Config::set(
-        ConfigKey::LangChainURL,
-        matches.get_one::<String>("langchain-url").unwrap(),
-    );
-
-    let mut user = env::var("USER").unwrap_or_else(|_| return "".to_string());
-    if user.is_empty() {
-        user = "User".to_string();
-    }
-    Config::set(ConfigKey::Username, &user);
-
-    if let Some(theme_file) = matches.get_one::<String>("theme-file") {
-        Config::set(ConfigKey::ThemeFile, theme_file);
-    }
-
-    if let Some(openai_token) = matches.get_one::<String>("openai-token") {
-        Config::set(ConfigKey::OpenAiToken, openai_token);
-    }
-
-    tracing::debug!(
-        username = Config::get(ConfigKey::Username),
-        backend = Config::get(ConfigKey::Backend),
-        editor = Config::get(ConfigKey::Editor),
-        model = Config::get(ConfigKey::Model),
-        theme = Config::get(ConfigKey::Theme),
-        theme_file = Config::get(ConfigKey::ThemeFile),
-        "config"
-    );
 
     return Ok(true);
 }

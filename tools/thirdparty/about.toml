@@ -32,13 +32,6 @@ license = "MIT"
 path = "LICENSE-MIT"
 checksum = "a72561f47c1f665535930f606739d9098a6186802d5e2e8ec491faf00f4add5b"
 
-[core-graphics-types.clarify]
-license = "MIT"
-
-[[core-graphics-types.clarify.git]]
-path = "LICENSE-MIT"
-checksum = "62065228e42caebca7e7d7db1204cbb867033de5982ca4009928915e4095f3a3"
-
 [onig.clarify]
 license = "MIT"
 

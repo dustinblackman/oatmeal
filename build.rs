@@ -181,6 +181,20 @@ fn get_syntaxes() -> Result<()> {
             files: vec!["LICENSE", "*.sublime-syntax"],
             keep_folders: false
         },
+        SyntaxDownload {
+            name: "elixir-sublime-syntax",
+            url:
+                "https://github.com/princemaple/elixir-sublime-syntax/archive/4fb01891dd17434dde42887bc821917a30f4e010.tar.gz",
+            files: vec!["LICENSE", "*.sublime-syntax"],
+            keep_folders: false
+        },
+        SyntaxDownload {
+            name: "sublime-text-gleam",
+            url:
+                "https://github.com/digitalcora/sublime-text-gleam/archive/0b032f78c9c4aec1c598da1d25c67ca21fa8c381.tar.gz",
+            files: vec!["LICENSE", "package/*.sublime-syntax"],
+            keep_folders: false
+        },
     ];
 
     for download in downloads {

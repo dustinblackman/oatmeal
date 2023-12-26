@@ -1,6 +1,7 @@
 project_name: oatmeal
 builds:
   - main: ./tools/goreleaser.go
+    id: default
     goos:
       - darwin
       - linux
@@ -9,15 +10,39 @@ builds:
       - amd64
       - arm64
     hooks:
-      post: ./tools/goreleaser-dist.sh {{ .Target }}
+      post: ./tools/goreleaser-dist.sh default {{ .Target }}
+  - main: ./tools/goreleaser.go
+    id: musl
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    hooks:
+      post: ./tools/goreleaser-dist.sh musl {{ .Target }}
 checksum:
   name_template: "checksums.txt"
 snapshot:
   name_template: "{{ .Tag }}-next"
+
 archives:
-  - format_overrides:
+  - builds:
+      - default
+    format_overrides:
       - goos: windows
         format: zip
+    files:
+      - completions/*
+      - LICENSE
+      - THIRDPARTY.html
+
+  - id: musl
+    builds:
+      - musl
+    name_template: >-
+        {{ .ProjectName }}_{{ .Version }}_{{ .Os }}-musl_
+        {{- if eq .Arch "amd64" }}amd64
+        {{- else }}{{ .Arch }}{{ end }}
     files:
       - completions/*
       - LICENSE
@@ -28,7 +53,9 @@ signs:
     args: ["-u", "6A34CFEE77FE8257C3BB92FE24C3FC5D6987904B", "--output", "${signature}", "--detach-sign", "${artifact}"]
 
 brews:
-  - repository:
+  - ids:
+      - default
+    repository:
       owner: dustinblackman
       name: homebrew-tap
     folder: Formula
@@ -50,7 +77,9 @@ scoops:
     license: MIT
 
 nfpms:
-  - homepage: https://github.com/dustinblackman/oatmeal
+  - builds:
+      - default
+    homepage: https://github.com/dustinblackman/oatmeal
     description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
     maintainer: Dustin Blackman
     vendor: Dustin Blackman
@@ -82,8 +111,41 @@ nfpms:
       signature:
         key_file: "{{ .Env.RPM_KEY }}"
 
+  - builds:
+    - musl
+    id: musl
+    homepage: https://github.com/dustinblackman/oatmeal
+    description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
+    maintainer: Dustin Blackman
+    vendor: Dustin Blackman
+    formats:
+      - apk
+    contents:
+      - src: ./completions/oatmeal.bash
+        dst: /usr/share/bash-completion/completions/oatmeal
+        file_info:
+          mode: 0644
+      - src: ./completions/oatmeal.fish
+        dst: /usr/share/fish/completions/oatmeal.fish
+        file_info:
+          mode: 0644
+      - src: ./completions/oatmeal.zsh
+        dst: /usr/share/zsh/vendor-completions/_oatmeal
+        file_info:
+          mode: 0644
+      - src: ./LICENSE
+        dst: /usr/share/doc/oatmeal/copyright/LICENSE
+        file_info:
+          mode: 0644
+      - src: ./THIRDPARTY.html
+        dst: /usr/share/doc/oatmeal/copyright/THIRDPARTY.html
+        file_info:
+          mode: 0644
+
 aurs:
-  - name: oatmeal-bin
+  - ids:
+      - default
+    name: oatmeal-bin
     homepage: https://github.com/dustinblackman/oatmeal
     description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
     maintainers:

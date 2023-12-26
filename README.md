@@ -15,6 +15,7 @@
   - [Fedora / CentOS](#fedora--centos)
   - [Nix](#nix)
   - [Arch Linux](#arch-linux)
+  - [Alpine Linux](#alpine-linux)
   - [Windows](#windows)
   - [Cargo](#cargo)
   - [Manual](#manual)
@@ -81,6 +82,14 @@ nix-env -f '<nixpkgs>' -iA nur.repos.dustinblackman.oatmeal
 
 ```sh
 yay -S oatmeal-bin
+```
+
+### Alpine Linux
+
+```sh
+curl -s -o /etc/apk/keys/apk.dustinblackman.com.pub https://apk.dustinblackman.com/key.pub
+echo "https://apk.dustinblackman.com/edge/main" | tee -a /etc/apk/repositories
+apk add --no-cache oatmeal
 ```
 
 ### Windows

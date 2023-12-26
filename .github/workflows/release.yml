@@ -51,6 +51,60 @@ jobs:
             target/aarch64-unknown-linux-gnu/release/oatmeal
             target/aarch64-unknown-linux-gnu/release/oatmeal.dwp
 
+  linux-amd-musl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.11.0
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
+      - name: Build
+        run: |
+          rustup target add x86_64-unknown-linux-musl
+          cargo install cargo-run-bin
+          cargo zigbuild --release --target x86_64-unknown-linux-musl
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: x86_64-unknown-linux-musl
+          path: |
+            target/x86_64-unknown-linux-musl/release/oatmeal
+            target/x86_64-unknown-linux-musl/release/oatmeal.dwp
+
+  linux-arm-musl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.11.0
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: ".bin"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-unknown-linux-musl
+      - name: Build
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-aarch64-linux-gnu
+          rustup target add aarch64-unknown-linux-musl
+          cargo install cargo-run-bin
+          cargo zigbuild --release --target aarch64-unknown-linux-musl
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: aarch64-unknown-linux-musl
+          path: |
+            target/aarch64-unknown-linux-musl/release/oatmeal
+            target/aarch64-unknown-linux-musl/release/oatmeal.dwp
+
   macos-amd:
     runs-on: macos-latest
     steps:

@@ -66,6 +66,7 @@ cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | 
 # Release to package managers not supported by GoReleaser.
 cargo publish
 tools/apt.sh "$OM_VERSION" "$(realpath dist)"
+tools/apk.sh "$OM_VERSION" "$(realpath dist)"
 tools/nur.sh "$OM_VERSION" "$(realpath dist)"
 tools/yum.sh "$OM_VERSION" "$(realpath dist)"
 tools/choco.sh "$OM_VERSION" "$(realpath dist)"
@@ -75,7 +76,9 @@ ls dist-gh | while read f; do cp LICENSE THIRDPARTY.html "dist-gh/$f/"; done
 tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_darwin_arm64.tar.gz" dist-gh/aarch64-apple-darwin/
 tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_windows_arm64.tar.gz" dist-gh/aarch64-pc-windows-msvc/
 tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux_arm64.tar.gz" dist-gh/aarch64-unknown-linux-gnu/
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux-musl_arm64.tar.gz" dist-gh/aarch64-unknown-linux-musl/
 tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_darwin_amd64.tar.gz" dist-gh/x86_64-apple-darwin/
 tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_windows_amd64.tar.gz" dist-gh/x86_64-pc-windows-msvc/
 tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux_amd64.tar.gz" dist-gh/x86_64-unknown-linux-gnu/
+tar --strip-components=2 -czf "dist/DEBUG-${OM_VERSION}_linux-musl_amd64.tar.gz" dist-gh/x86_64-unknown-linux-musl/
 ls dist | grep DEBUG | while read f; do cargo gha gh release upload "v$OM_VERSION" "dist/$f"; done

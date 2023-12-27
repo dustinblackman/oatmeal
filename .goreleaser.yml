@@ -198,7 +198,7 @@ nix:
       name: nur
     homepage: https://github.com/dustinblackman/oatmeal
     description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
-    path: pkgs/oatmeat.nix
+    path: pkgs/oatmeal.nix
     license: mit
     extra_install: |-
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/oatmeal
@@ -254,7 +254,7 @@ dockers:
 
   - image_templates:
       - "ghcr.io/dustinblackman/oatmeal:v{{ .Version }}-arm64"
-      - "ghcr.io/dustinblackman/oatmeat:latest-arm64"
+      - "ghcr.io/dustinblackman/oatmeal:latest-arm64"
     ids:
       - musl
     goarch: arm64

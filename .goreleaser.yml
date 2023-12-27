@@ -209,6 +209,24 @@ nix:
       installManPage ./manpages/oatmeal.1.gz
       installShellCompletion ./completions/*
 
+winget:
+  - name: oatmeal
+    publisher: dustinblackman
+    license: MIT
+    homepage: https://github.com/dustinblackman/oatmeal
+    short_description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
+    repository:
+      owner: dustinblackman
+      name: winget-pkgs
+      branch: "dustinblackman-{{.Version}}"
+      pull_request:
+        enabled: true
+        draft: true
+        base:
+          owner: microsoft
+          name: winget-pkgs
+          branch: master
+
 dockers:
   - image_templates:
       - "ghcr.io/dustinblackman/oatmeal:v{{ .Version }}-amd64"

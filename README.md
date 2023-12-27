@@ -18,6 +18,7 @@
   - [Alpine Linux](#alpine-linux)
   - [Windows](#windows)
   - [Cargo](#cargo)
+  - [Docker](#docker)
   - [Manual](#manual)
   - [Source](#source)
 - [Usage](#Usage)
@@ -115,6 +116,12 @@ scoop install oatmeal
 
 ```sh
 cargo install oatmeal --locked
+```
+
+### Docker
+
+```sh
+docker run --rm -it ghcr.io/dustinblackman/oatmeal:latest
 ```
 
 ### Manual

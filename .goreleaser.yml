@@ -1,4 +1,7 @@
 project_name: oatmeal
+changelog:
+  use: github-native
+
 builds:
   - main: ./tools/goreleaser.go
     id: default
@@ -20,6 +23,7 @@ builds:
       - arm64
     hooks:
       post: ./tools/goreleaser-dist.sh musl {{ .Target }}
+
 checksum:
   name_template: "checksums.txt"
 snapshot:
@@ -205,5 +209,59 @@ nix:
       installManPage ./manpages/oatmeal.1.gz
       installShellCompletion ./completions/*
 
-changelog:
-  use: github-native
+dockers:
+  - image_templates:
+      - "ghcr.io/dustinblackman/oatmeal:v{{ .Version }}-amd64"
+      - "ghcr.io/dustinblackman/oatmeal:latest-amd64"
+    ids:
+      - musl
+    goarch: arm64
+    dockerfile: Dockerfile
+    use: buildx
+    extra_files:
+      - LICENSE
+      - THIRDPARTY.html
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--builder=desktop-linux"
+      - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/dustinblackman/oatmeal/main/README.md"
+      - "--label=io.artifacthub.package.license=MIT"
+      - "--label=org.opencontainers.image.description=Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+
+  - image_templates:
+      - "ghcr.io/dustinblackman/oatmeal:v{{ .Version }}-arm64"
+      - "ghcr.io/dustinblackman/oatmeat:latest-arm64"
+    ids:
+      - musl
+    goarch: arm64
+    dockerfile: Dockerfile
+    use: buildx
+    extra_files:
+      - LICENSE
+      - THIRDPARTY.html
+    build_flag_templates:
+      - "--platform=linux/arm64"
+      - "--builder=desktop-linux"
+      - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/dustinblackman/oatmeal/main/README.md"
+      - "--label=io.artifacthub.package.license=MIT"
+      - "--label=org.opencontainers.image.description=Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+
+docker_manifests:
+  - name_template: "ghcr.io/dustinblackman/oatmeal:v{{ .Version }}"
+    image_templates:
+      - "ghcr.io/dustinblackman/oatmeal:v{{ .Version }}-amd64"
+      - "ghcr.io/dustinblackman/oatmeal:v{{ .Version }}-arm64"
+  - name_template: "ghcr.io/dustinblackman/oatmeal:latest"
+    image_templates:
+      - "ghcr.io/dustinblackman/oatmeal:latest-amd64"
+      - "ghcr.io/dustinblackman/oatmeal:latest-arm64"

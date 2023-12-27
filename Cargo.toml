@@ -128,7 +128,7 @@ similar.opt-level = 3
 targets = ["aarch64-apple-darwin"]
 
 [package.metadata.gha.assets]
-goreleaser_goreleaser = { tag = "v1.21.2", owner_repo = "goreleaser/goreleaser", binaries = ["goreleaser"], target_archives = { aarch64-apple-darwin = "goreleaser_Darwin_arm64.tar.gz" } }
+goreleaser_goreleaser = { tag = "v1.23.0", owner_repo = "goreleaser/goreleaser", binaries = ["goreleaser"], target_archives = { aarch64-apple-darwin = "goreleaser_Darwin_arm64.tar.gz" } }
 cli_cli = { tag = "v2.38.0", owner_repo = "cli/cli", binaries = ["gh"], target_archives = { aarch64-apple-darwin = "gh_{NOVTAG}_macOS_arm64.zip" } }
 
 [package.metadata.commands]

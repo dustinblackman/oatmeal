@@ -2,12 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.0] - 2023-12-27
+
+[v0.11.0...v0.12.0](https://github.com/dustinblackman/oatmeal/compare/v0.11.0...v0.12.0)
+
+### ⛰️ Features
+
+- Add elixir and gleam syntaxes - ([e00ef39](https://github.com/dustinblackman/oatmeal/commit/e00ef3962676aa105e0c9215624593965e7ec6e4))
+
+### 🐛 Bug Fixes
+
+- Goreleaser - ([1f97b9e](https://github.com/dustinblackman/oatmeal/commit/1f97b9e37f3220335741cbdde2bd1a12f421f717))
+- Manpages - ([37d0de8](https://github.com/dustinblackman/oatmeal/commit/37d0de8d9cf7bd043382b4a6a32f5f5e9eb74efc))
+
+### 📚 Documentation
+
+- Update first run description - ([cf94035](https://github.com/dustinblackman/oatmeal/commit/cf94035101a259ecd939024c95f060e2e62038c8))
+- Update usage - ([92d7ca8](https://github.com/dustinblackman/oatmeal/commit/92d7ca863279c295d250a5d44b72e5b0a20a35d2))
+- Remove nogpg flag from dnf install - ([7954ed1](https://github.com/dustinblackman/oatmeal/commit/7954ed1e0cfac828316a9d76620a9a49506a58cf))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add musl to thirdparty - ([8c1d0af](https://github.com/dustinblackman/oatmeal/commit/8c1d0af4af026f7466115a5ad3d381d7fd59e202))
+- Add winget - ([dfe7b72](https://github.com/dustinblackman/oatmeal/commit/dfe7b723a3245a9f72b43d14be7fa0d15e0ecb99))
+- Add docker images - ([7b0a178](https://github.com/dustinblackman/oatmeal/commit/7b0a178d0c5fedbe220866c5c309f10c9923565e))
+- Improve nix installs - ([1978618](https://github.com/dustinblackman/oatmeal/commit/197861869bbefe322a0ca15081e122175995628d))
+- Add manpages - ([9383c46](https://github.com/dustinblackman/oatmeal/commit/9383c4681ceba018b0467e148d68ff926ec6f60b))
+- Add alpine linux to releases - ([05cf1d0](https://github.com/dustinblackman/oatmeal/commit/05cf1d0a502acaf8e4cc0d222b6688008c965d5e))
+
 ## [0.11.0] - 2023-12-23
 
 [v0.10.0...v0.11.0](https://github.com/dustinblackman/oatmeal/compare/v0.10.0...v0.11.0)
 
 ### ⛰️ Features
 
+- Release v0.11.0 - ([47d55f3](https://github.com/dustinblackman/oatmeal/commit/47d55f316c263c7cda4907af3674e4ca11094c47))
 - Config File - ([641f872](https://github.com/dustinblackman/oatmeal/commit/641f872c37fbaa8f1715cefb595822d11483f2e4))
 
 ### 🐛 Bug Fixes

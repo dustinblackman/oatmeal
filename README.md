@@ -100,7 +100,7 @@ apk add --no-cache oatmeal
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.11.0
+choco install oatmeal --version=0.12.0
 ```
 
 <!-- choco-install end -->
@@ -148,8 +148,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.11.0
-Commit: v0.11.0
+Version: 0.12.0
+Commit: v0.12.0
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 

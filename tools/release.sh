@@ -72,7 +72,6 @@ cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | 
 cargo publish
 tools/apt.sh "$OM_VERSION" "$(realpath dist)"
 tools/apk.sh "$OM_VERSION" "$(realpath dist)"
-tools/nur.sh "$OM_VERSION" "$(realpath dist)"
 tools/yum.sh "$OM_VERSION" "$(realpath dist)"
 tools/choco.sh "$OM_VERSION" "$(realpath dist)"
 

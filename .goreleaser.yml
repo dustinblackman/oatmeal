@@ -184,5 +184,26 @@ aurs:
       # man pages
       install -Dm644 "./manpages/oatmeal.1.gz" "${pkgdir}/usr/share/man/man1/oatmeal.1.gz"
 
+nix:
+  - name: oatmeal
+    ids:
+      - default
+    repository:
+      owner: dustinblackman
+      name: nur
+    homepage: https://github.com/dustinblackman/oatmeal
+    description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
+    path: pkgs/oatmeat.nix
+    license: mit
+    extra_install: |-
+      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/oatmeal
+
+      mkdir -p $out/share/doc/oatmeal/copyright
+      mv LICENSE $out/share/doc/oatmeal/copyright/
+      mv THIRDPARTY.html $out/share/doc/oatmeal/copyright/
+
+      installManPage ./manpages/oatmeal.1.gz
+      installShellCompletion ./completions/*
+
 changelog:
   use: github-native

@@ -73,7 +73,6 @@ cargo gha gh pr list -R microsoft/winget-pkgs -A dustinblackman --state open --j
 # Release to package managers not supported by GoReleaser.
 cargo publish
 tools/apt.sh "$OM_VERSION" "$(realpath dist)"
-tools/apk.sh "$OM_VERSION" "$(realpath dist)"
 tools/yum.sh "$OM_VERSION" "$(realpath dist)"
 tools/choco.sh "$OM_VERSION" "$(realpath dist)"
 

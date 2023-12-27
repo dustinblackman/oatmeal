@@ -65,6 +65,7 @@ cargo gha gh run download -D dist-gh "$GH_RUN_ID"
 fd -t f . './dist-gh' | grep -v -i -E '(dwp|dSYM|pdb)' | xargs -L1 chmod +x
 
 # Release to Github
+echo "$GITHUB_TOKEN" | docker login ghcr.io -u dustinblackman --password-stdin
 AUR_KEY=$(cat ~/.ssh/aur) RPM_KEY="$HOME/.gpg/yum-private.key" cargo gha goreleaser --clean
 cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | cargo gha gh release edit "v$OM_VERSION" --notes-file -
 cargo gha gh pr list -R microsoft/winget-pkgs -A dustinblackman --state open --json number | jq -rc '.[] | .number' | while read f; do open "https://github.com/microsoft/winget-pkgs/pull/$f"; done

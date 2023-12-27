@@ -82,6 +82,24 @@ async fn print_sessions_list() -> Result<()> {
     return Ok(());
 }
 
+async fn manpages() -> Result<()> {
+    #[cfg(feature = "manpages")]
+    {
+        let man = clap_mangen::Man::new(build());
+        let mut buffer: Vec<u8> = Default::default();
+        man.render(&mut buffer)?;
+
+        let mut file = fs::File::create("./manpages/oatmeal.1").await?;
+        file.write_all(&buffer).await?;
+
+        println!("Wrote manpages to ./manpages/oatmeal.1");
+
+        return Ok(());
+    }
+
+    bail!("Man pages feature not enabled.");
+}
+
 async fn create_config_file() -> Result<()> {
     let config_file_path_str = Config::default(ConfigKey::ConfigFile);
     let config_file_path = path::PathBuf::from(&config_file_path_str);
@@ -169,7 +187,7 @@ fn subcommand_config() -> Command {
 }
 
 fn subcommand_debug() -> Command {
-    return Command::new("debug")
+    let cmd = Command::new("debug")
         .about("Debug helpers for Oatmeal")
         .hide(true)
         .subcommand(
@@ -184,6 +202,13 @@ fn subcommand_debug() -> Command {
         .subcommand(
             Command::new("enum-config").about("List all config keys as strings.")
         );
+
+    #[cfg(feature = "manpages")]
+    {
+        cmd = cmd.subcommand(Command::new("manpages").about("Generates manpages"));
+    }
+
+    return cmd;
 }
 
 fn subcommand_sessions_delete() -> Command {
@@ -394,27 +419,27 @@ pub async fn parse() -> Result<bool> {
             match debug_matches.subcommand() {
                 Some(("syntaxes", _)) => {
                     println!("{}", Syntaxes::list().join("\n"));
-                    return Ok(false);
                 }
                 Some(("themes", _)) => {
                     println!("{}", Themes::list().join("\n"));
-                    return Ok(false);
                 }
                 Some(("log-path", _)) => {
                     let log_path = dirs::cache_dir().unwrap().join("oatmeal/debug.log");
                     println!("{}", log_path.to_str().unwrap());
-                    return Ok(false);
                 }
                 Some(("enum-config", _)) => {
                     let res = ConfigKey::VARIANTS.join("\n");
                     println!("{}", res);
-                    return Ok(false);
+                }
+                Some(("manpages", _)) => {
+                    manpages().await?;
                 }
                 _ => {
                     subcommand_debug().print_long_help()?;
-                    return Ok(false);
                 }
             }
+
+            return Ok(false);
         }
         Some(("chat", subcmd_matches)) => {
             Config::load(build(), vec![&matches, subcmd_matches]).await?;

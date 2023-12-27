@@ -40,11 +40,12 @@ archives:
     builds:
       - musl
     name_template: >-
-        {{ .ProjectName }}_{{ .Version }}_{{ .Os }}-musl_
-        {{- if eq .Arch "amd64" }}amd64
-        {{- else }}{{ .Arch }}{{ end }}
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}-musl_
+      {{- if eq .Arch "amd64" }}amd64
+      {{- else }}{{ .Arch }}{{ end }}
     files:
       - completions/*
+      - manpages/*
       - LICENSE
       - THIRDPARTY.html
 
@@ -67,6 +68,7 @@ brews:
       bash_completion.install "completions/oatmeal.bash" => "oatmeal"
       zsh_completion.install "completions/oatmeal.zsh" => "_oatmeal"
       fish_completion.install "completions/oatmeal.fish"
+      man1.install "manpages/oatmeal.1.gz"
 
 scoops:
   - repository:
@@ -99,6 +101,10 @@ nfpms:
         dst: /usr/share/zsh/vendor-completions/_oatmeal
         file_info:
           mode: 0644
+      - src: ./manpages/oatmeal.1.gz
+        dst: /usr/share/man/man1/oatmeal.1.gz
+        file_info:
+          mode: 0644
       - src: ./LICENSE
         dst: /usr/share/doc/oatmeal/copyright/LICENSE
         file_info:
@@ -112,7 +118,7 @@ nfpms:
         key_file: "{{ .Env.RPM_KEY }}"
 
   - builds:
-    - musl
+      - musl
     id: musl
     homepage: https://github.com/dustinblackman/oatmeal
     description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
@@ -131,6 +137,10 @@ nfpms:
           mode: 0644
       - src: ./completions/oatmeal.zsh
         dst: /usr/share/zsh/vendor-completions/_oatmeal
+        file_info:
+          mode: 0644
+      - src: ./manpages/oatmeal.1.gz
+        dst: /usr/share/man/man1/oatmeal.1.gz
         file_info:
           mode: 0644
       - src: ./LICENSE
@@ -170,6 +180,9 @@ aurs:
       install -Dm644 "./completions/oatmeal.bash" "${pkgdir}/usr/share/bash-completion/completions/oatmeal"
       install -Dm644 "./completions/oatmeal.zsh" "${pkgdir}/usr/share/zsh/site-functions/_oatmeal"
       install -Dm644 "./completions/oatmeal.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/oatmeal.fish"
+
+      # man pages
+      install -Dm644 "./manpages/oatmeal.1.gz" "${pkgdir}/usr/share/man/man1/oatmeal.1.gz"
 
 changelog:
   use: github-native

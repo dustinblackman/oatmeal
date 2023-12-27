@@ -4,6 +4,7 @@ target/
 .bin/
 .gha/
 completions/
+manpages/
 .cache/
 *.html
 .DS_Store

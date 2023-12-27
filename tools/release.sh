@@ -29,7 +29,7 @@ cargo cmd build-completions
 rm -rf manpages
 mkdir manpages
 ./target/debug/oatmeal debug manpages
-gzip -k manpages/oatmeal.1
+cat manpages/oatmeal.1 | gzip -c -9 >manpages/oatmeal.1.gz
 rm manpages/oatmeal.1
 cargo xtask update-readme
 rm -f config.example.toml

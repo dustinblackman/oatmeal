@@ -37,6 +37,7 @@ archives:
         format: zip
     files:
       - completions/*
+      - manpages/*
       - LICENSE
       - THIRDPARTY.html
 

@@ -187,8 +187,8 @@ fn subcommand_config() -> Command {
 }
 
 fn subcommand_debug() -> Command {
-    let cmd = Command::new("debug")
-        .about("Debug helpers for Oatmeal")
+    let mut cmd = Command::new("debug");
+    cmd = cmd.about("Debug helpers for Oatmeal")
         .hide(true)
         .subcommand(
             Command::new("syntaxes").about("List all supported code highlighting languages.")

@@ -194,6 +194,17 @@ fn subcommand_debug() -> Command {
             Command::new("syntaxes").about("List all supported code highlighting languages.")
         )
         .subcommand(
+            Command::new("resolve-syntax")
+                .about("Resolves a string to a given highlighting syntax")
+                .arg(
+                    clap::Arg::new("entry")
+                        .short('s')
+                        .long("entry")
+                        .help("Entry to resolve")
+                        .required(true),
+                )
+        )
+        .subcommand(
             Command::new("themes").about("List all supported code highlighting themes.")
         )
         .subcommand(
@@ -419,6 +430,11 @@ pub async fn parse() -> Result<bool> {
             match debug_matches.subcommand() {
                 Some(("syntaxes", _)) => {
                     println!("{}", Syntaxes::list().join("\n"));
+                }
+                Some(("resolve-syntax", rs_matches)) => {
+                    let entry = rs_matches.get_one::<String>("entry").unwrap();
+                    let res = Syntaxes::get(entry);
+                    println!("{:?}", res);
                 }
                 Some(("themes", _)) => {
                     println!("{}", Themes::list().join("\n"));

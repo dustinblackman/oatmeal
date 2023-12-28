@@ -2,12 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.12.0] - 2023-12-27
+## 0.12.0
 
-[v0.11.0...v0.12.0](https://github.com/dustinblackman/oatmeal/compare/v0.11.0...v0.12.0)
+_2023-12-28_ - [v0.11.0...v0.12.0](https://github.com/dustinblackman/oatmeal/compare/v0.11.0...v0.12.0)
 
 ### ⛰️ Features
 
+- Release v0.12.0 - ([c00e155](https://github.com/dustinblackman/oatmeal/commit/c00e15582a977863bd7911588f3a6f180fcb78d3))
 - Add elixir and gleam syntaxes - ([e00ef39](https://github.com/dustinblackman/oatmeal/commit/e00ef3962676aa105e0c9215624593965e7ec6e4))
 
 ### 🐛 Bug Fixes
@@ -30,9 +31,9 @@ All notable changes to this project will be documented in this file.
 - Add manpages - ([9383c46](https://github.com/dustinblackman/oatmeal/commit/9383c4681ceba018b0467e148d68ff926ec6f60b))
 - Add alpine linux to releases - ([05cf1d0](https://github.com/dustinblackman/oatmeal/commit/05cf1d0a502acaf8e4cc0d222b6688008c965d5e))
 
-## [0.11.0] - 2023-12-23
+## 0.11.0
 
-[v0.10.0...v0.11.0](https://github.com/dustinblackman/oatmeal/compare/v0.10.0...v0.11.0)
+_2023-12-23_ - [v0.10.0...v0.11.0](https://github.com/dustinblackman/oatmeal/compare/v0.10.0...v0.11.0)
 
 ### ⛰️ Features
 
@@ -56,9 +57,9 @@ All notable changes to this project will be documented in this file.
 - Fix insta command - ([b1b76f4](https://github.com/dustinblackman/oatmeal/commit/b1b76f41a0304ec81892664b9891b3cebe752637))
 - Sign RPM files - ([898c4a0](https://github.com/dustinblackman/oatmeal/commit/898c4a0330a27a89e7246fc2bfa536c7d86a67de))
 
-## [0.10.0] - 2023-12-21
+## 0.10.0
 
-[v0.9.2...v0.10.0](https://github.com/dustinblackman/oatmeal/compare/v0.9.2...v0.10.0)
+_2023-12-21_ - [v0.9.2...v0.10.0](https://github.com/dustinblackman/oatmeal/compare/v0.9.2...v0.10.0)
 
 ### ⛰️ Features
 
@@ -84,9 +85,9 @@ All notable changes to this project will be documented in this file.
 - OpenSSL to rustls - ([dd20690](https://github.com/dustinblackman/oatmeal/commit/dd2069074e0df12024ca4fce39b41a97fd5e40df))
 - Run tests on all 3 major OS - ([eb730b2](https://github.com/dustinblackman/oatmeal/commit/eb730b2bd64d922a749e9705f000f0151acff1de))
 
-## [0.9.2] - 2023-12-19
+## 0.9.2
 
-[v0.9.1...v0.9.2](https://github.com/dustinblackman/oatmeal/compare/v0.9.1...v0.9.2)
+_2023-12-19_ - [v0.9.1...v0.9.2](https://github.com/dustinblackman/oatmeal/compare/v0.9.1...v0.9.2)
 
 ### ⛰️ Features
 
@@ -100,9 +101,9 @@ All notable changes to this project will be documented in this file.
 
 - Add more in depth sessions shell function - ([c160fdb](https://github.com/dustinblackman/oatmeal/commit/c160fdba720cbc5b00d1cb7b83456bb8d7e1042b))
 
-## [0.9.1] - 2023-12-15
+## 0.9.1
 
-[v0.9.0...v0.9.1](https://github.com/dustinblackman/oatmeal/compare/v0.9.0...v0.9.1)
+_2023-12-15_ - [v0.9.0...v0.9.1](https://github.com/dustinblackman/oatmeal/compare/v0.9.0...v0.9.1)
 
 ### ⛰️ Features
 
@@ -120,9 +121,9 @@ All notable changes to this project will be documented in this file.
 
 - Test binaries in actions, move zig setup - ([5b14c72](https://github.com/dustinblackman/oatmeal/commit/5b14c721b4bc84f61e2b86ab4087ed3f3dbe8ad2))
 
-## [0.9.0] - 2023-12-13
+## 0.9.0
 
-[v0.8.2...v0.9.0](https://github.com/dustinblackman/oatmeal/compare/v0.8.2...v0.9.0)
+_2023-12-13_ - [v0.8.2...v0.9.0](https://github.com/dustinblackman/oatmeal/compare/v0.8.2...v0.9.0)
 
 ### ⛰️ Features
 
@@ -145,9 +146,9 @@ All notable changes to this project will be documented in this file.
 - Lint - ([68b526d](https://github.com/dustinblackman/oatmeal/commit/68b526df8f212fdd9f6c0c09aae5790e5614d2c1))
 - Add repository link to cargo.toml ([#20](https://github.com/dustinblackman/oatmeal/issues/20)) - ([c243771](https://github.com/dustinblackman/oatmeal/commit/c243771ba958b36b9382748353515586296c4a79))
 
-## [0.8.2] - 2023-12-11
+## 0.8.2
 
-[v0.8.1...v0.8.2](https://github.com/dustinblackman/oatmeal/compare/v0.8.1...v0.8.2)
+_2023-12-11_ - [v0.8.1...v0.8.2](https://github.com/dustinblackman/oatmeal/compare/v0.8.1...v0.8.2)
 
 ### ⛰️ Features
 
@@ -157,9 +158,9 @@ All notable changes to this project will be documented in this file.
 
 - Use default viewport length for scrollbar - ([c47f61c](https://github.com/dustinblackman/oatmeal/commit/c47f61c5a990ec52d6495979da9f9d893cbeb35d))
 
-## [0.8.1] - 2023-12-11
+## 0.8.1
 
-[v0.8.0...v0.8.1](https://github.com/dustinblackman/oatmeal/compare/v0.8.0...v0.8.1)
+_2023-12-11_ - [v0.8.0...v0.8.1](https://github.com/dustinblackman/oatmeal/compare/v0.8.0...v0.8.1)
 
 ### ⛰️ Features
 
@@ -174,9 +175,9 @@ All notable changes to this project will be documented in this file.
 
 - Reimplement writing to frame manually - ([227f369](https://github.com/dustinblackman/oatmeal/commit/227f3691c2d2c1661280e98df3d7748ac25a5d13))
 
-## [0.8.0] - 2023-12-10
+## 0.8.0
 
-[v0.7.3...v0.8.0](https://github.com/dustinblackman/oatmeal/compare/v0.7.3...v0.8.0)
+_2023-12-10_ - [v0.7.3...v0.8.0](https://github.com/dustinblackman/oatmeal/compare/v0.7.3...v0.8.0)
 
 ### ⛰️ Features
 
@@ -207,9 +208,9 @@ All notable changes to this project will be documented in this file.
 - Shrink linux binary sizes - ([285d503](https://github.com/dustinblackman/oatmeal/commit/285d503f5e88dfc5442d286083814ede05309034))
 - Add hidden debug subcommands - ([5420bef](https://github.com/dustinblackman/oatmeal/commit/5420bef1b06498813e45c3cf728aee88739b7861))
 
-## [0.7.3] - 2023-12-07
+## 0.7.3
 
-[v0.7.2...v0.7.3](https://github.com/dustinblackman/oatmeal/compare/v0.7.2...v0.7.3)
+_2023-12-07_ - [v0.7.2...v0.7.3](https://github.com/dustinblackman/oatmeal/compare/v0.7.2...v0.7.3)
 
 ### ⛰️ Features
 
@@ -219,9 +220,9 @@ All notable changes to this project will be documented in this file.
 
 - Improve error message on panics - ([475647b](https://github.com/dustinblackman/oatmeal/commit/475647b6d046a80b9527a7af1825c721fdbcc28f))
 
-## [0.7.2] - 2023-12-07
+## 0.7.2
 
-[v0.7.1...v0.7.2](https://github.com/dustinblackman/oatmeal/compare/v0.7.1...v0.7.2)
+_2023-12-07_ - [v0.7.1...v0.7.2](https://github.com/dustinblackman/oatmeal/compare/v0.7.1...v0.7.2)
 
 ### ⛰️ Features
 
@@ -239,9 +240,9 @@ All notable changes to this project will be documented in this file.
 
 - Add username to config log - ([c1ba105](https://github.com/dustinblackman/oatmeal/commit/c1ba10520b66573a380f66a77dbf8b3cdb96bea2))
 
-## [0.7.1] - 2023-12-06
+## 0.7.1
 
-[v0.7.0...v0.7.1](https://github.com/dustinblackman/oatmeal/compare/v0.7.0...v0.7.1)
+_2023-12-06_ - [v0.7.0...v0.7.1](https://github.com/dustinblackman/oatmeal/compare/v0.7.0...v0.7.1)
 
 ### ⛰️ Features
 
@@ -259,9 +260,9 @@ All notable changes to this project will be documented in this file.
 
 - Add more debug logging - ([1719146](https://github.com/dustinblackman/oatmeal/commit/1719146b42130a745ddbf522e9c172692308fcaf))
 
-## [0.7.0] - 2023-12-05
+## 0.7.0
 
-[v0.6.1...v0.7.0](https://github.com/dustinblackman/oatmeal/compare/v0.6.1...v0.7.0)
+_2023-12-05_ - [v0.6.1...v0.7.0](https://github.com/dustinblackman/oatmeal/compare/v0.6.1...v0.7.0)
 
 ### ⛰️ Features
 
@@ -285,9 +286,9 @@ All notable changes to this project will be documented in this file.
 
 - Add basic logging in backend infra - ([1cfbbd4](https://github.com/dustinblackman/oatmeal/commit/1cfbbd4ae1bcae11ae3fe6b1ba975a4a2cde3842))
 
-## [0.6.1] - 2023-12-03
+## 0.6.1
 
-[v0.6.0...v0.6.1](https://github.com/dustinblackman/oatmeal/compare/v0.6.0...v0.6.1)
+_2023-12-03_ - [v0.6.0...v0.6.1](https://github.com/dustinblackman/oatmeal/compare/v0.6.0...v0.6.1)
 
 ### ⛰️ Features
 
@@ -304,9 +305,9 @@ All notable changes to this project will be documented in this file.
 - Use cargo-run-bin on ci - ([5687058](https://github.com/dustinblackman/oatmeal/commit/568705814b0c6d121b07a519a9e3b5f445514ddb))
 - Remove choco until first version is approved - ([b610af8](https://github.com/dustinblackman/oatmeal/commit/b610af8e37a4594bf77e045fa04f66179c1f5d34))
 
-## [0.6.0] - 2023-12-02
+## 0.6.0
 
-[v0.5.5...v0.6.0](https://github.com/dustinblackman/oatmeal/compare/v0.5.5...v0.6.0)
+_2023-12-02_ - [v0.5.5...v0.6.0](https://github.com/dustinblackman/oatmeal/compare/v0.5.5...v0.6.0)
 
 ### ⛰️ Features
 
@@ -323,9 +324,9 @@ All notable changes to this project will be documented in this file.
 - Add automated release triggers - ([48517d4](https://github.com/dustinblackman/oatmeal/commit/48517d4519f2800764cb337f8f804d45b555199e))
 - Lock zig version - ([852590c](https://github.com/dustinblackman/oatmeal/commit/852590c25e0db5ec9d0b0c292e3d3eae37c53789))
 
-## [0.5.5] - 2023-11-30
+## 0.5.5
 
-[v0.5.4...v0.5.5](https://github.com/dustinblackman/oatmeal/compare/v0.5.4...v0.5.5)
+_2023-11-30_ - [v0.5.4...v0.5.5](https://github.com/dustinblackman/oatmeal/compare/v0.5.4...v0.5.5)
 
 ### ⛰️ Features
 
@@ -339,9 +340,9 @@ All notable changes to this project will be documented in this file.
 
 - Move to faster builds - ([fff0c59](https://github.com/dustinblackman/oatmeal/commit/fff0c59bba82f002b51b7a7bab58ce209accf259))
 
-## [0.5.4] - 2023-11-30
+## 0.5.4
 
-[v0.5.3...v0.5.4](https://github.com/dustinblackman/oatmeal/compare/v0.5.3...v0.5.4)
+_2023-11-30_ - [v0.5.3...v0.5.4](https://github.com/dustinblackman/oatmeal/compare/v0.5.3...v0.5.4)
 
 ### ⛰️ Features
 
@@ -362,9 +363,9 @@ All notable changes to this project will be documented in this file.
 - Approve new licenses - ([4af72e4](https://github.com/dustinblackman/oatmeal/commit/4af72e4bfe564ae6a214f724182375f55f0ec2cf))
 - Ratatui 0.24.0 - ([cdcdd22](https://github.com/dustinblackman/oatmeal/commit/cdcdd220318f9ed84dd5e11811ec06f625190c63))
 
-## [0.5.3] - 2023-11-26
+## 0.5.3
 
-[v0.5.2...v0.5.3](https://github.com/dustinblackman/oatmeal/compare/v0.5.2...v0.5.3)
+_2023-11-26_ - [v0.5.2...v0.5.3](https://github.com/dustinblackman/oatmeal/compare/v0.5.2...v0.5.3)
 
 ### ⛰️ Features
 
@@ -378,9 +379,9 @@ All notable changes to this project will be documented in this file.
 
 - AppState business logic - ([f3c223e](https://github.com/dustinblackman/oatmeal/commit/f3c223eadaac158c5ed9b2b2c9db520c39416435))
 
-## [0.5.2] - 2023-11-26
+## 0.5.2
 
-[v0.5.1...v0.5.2](https://github.com/dustinblackman/oatmeal/compare/v0.5.1...v0.5.2)
+_2023-11-26_ - [v0.5.1...v0.5.2](https://github.com/dustinblackman/oatmeal/compare/v0.5.1...v0.5.2)
 
 ### ⛰️ Features
 
@@ -390,9 +391,9 @@ All notable changes to this project will be documented in this file.
 
 - Release pipeline - ([be9d9ca](https://github.com/dustinblackman/oatmeal/commit/be9d9ca3b4cbaec47ada550ecfb3b3b897723d76))
 
-## [0.5.1] - 2023-11-25
+## 0.5.1
 
-[v0.5.0...v0.5.1](https://github.com/dustinblackman/oatmeal/compare/v0.5.0...v0.5.1)
+_2023-11-25_ - [v0.5.0...v0.5.1](https://github.com/dustinblackman/oatmeal/compare/v0.5.0...v0.5.1)
 
 ### ⛰️ Features
 
@@ -408,9 +409,9 @@ All notable changes to this project will be documented in this file.
 - Update README.md - ([6c147d0](https://github.com/dustinblackman/oatmeal/commit/6c147d0860404ccc69bf381d010f349eff05b83d))
 - Update README.md - ([d629f1e](https://github.com/dustinblackman/oatmeal/commit/d629f1e711b01f9bfdf9373aa24ab2cb40124e63))
 
-## [0.5.0] - 2023-11-23
+## 0.5.0
 
-[v0.4.0...v0.5.0](https://github.com/dustinblackman/oatmeal/compare/v0.4.0...v0.5.0)
+_2023-11-23_ - [v0.4.0...v0.5.0](https://github.com/dustinblackman/oatmeal/compare/v0.4.0...v0.5.0)
 
 ### ⛰️ Features
 
@@ -434,9 +435,9 @@ All notable changes to this project will be documented in this file.
 
 - Lock deps - ([5403868](https://github.com/dustinblackman/oatmeal/commit/54038688481b7487d70f12c0e4fbb4a8bd353b6c))
 
-## [0.4.0] - 2023-11-22
+## 0.4.0
 
-[v0.3.0...v0.4.0](https://github.com/dustinblackman/oatmeal/compare/v0.3.0...v0.4.0)
+_2023-11-22_ - [v0.3.0...v0.4.0](https://github.com/dustinblackman/oatmeal/compare/v0.3.0...v0.4.0)
 
 ### ⛰️ Features
 
@@ -456,9 +457,9 @@ All notable changes to this project will be documented in this file.
 
 - Fix typos - ([871edac](https://github.com/dustinblackman/oatmeal/commit/871edaca0b5822e35c0f340bcdb357f12df6cd68))
 
-## [0.3.0] - 2023-11-21
+## 0.3.0
 
-[v0.2.5...v0.3.0](https://github.com/dustinblackman/oatmeal/compare/v0.2.5...v0.3.0)
+_2023-11-21_ - [v0.2.5...v0.3.0](https://github.com/dustinblackman/oatmeal/compare/v0.2.5...v0.3.0)
 
 ### ⛰️ Features
 
@@ -484,9 +485,9 @@ All notable changes to this project will be documented in this file.
 - Test before releasing - ([c143cba](https://github.com/dustinblackman/oatmeal/commit/c143cbac6c6711d19cfc54c4228d0d2c77c60c35))
 - Refactor events service - ([e9261f5](https://github.com/dustinblackman/oatmeal/commit/e9261f5ae41a3217626212efb0442dd370edabdb))
 
-## [0.2.5] - 2023-11-16
+## 0.2.5
 
-[v0.2.4...v0.2.5](https://github.com/dustinblackman/oatmeal/compare/v0.2.4...v0.2.5)
+_2023-11-16_ - [v0.2.4...v0.2.5](https://github.com/dustinblackman/oatmeal/compare/v0.2.4...v0.2.5)
 
 ### ⛰️ Features
 
@@ -498,9 +499,9 @@ All notable changes to this project will be documented in this file.
 - Trait docs - ([2b2abe5](https://github.com/dustinblackman/oatmeal/commit/2b2abe5e8548fd43296d7b5453733b003d688036))
 - Goreleaser deprecations - ([d7cc1c3](https://github.com/dustinblackman/oatmeal/commit/d7cc1c3c373142921f409befc1f754456265893f))
 
-## [0.2.4] - 2023-11-11
+## 0.2.4
 
-[v0.2.3...v0.2.4](https://github.com/dustinblackman/oatmeal/compare/v0.2.3...v0.2.4)
+_2023-11-11_ - [v0.2.3...v0.2.4](https://github.com/dustinblackman/oatmeal/compare/v0.2.3...v0.2.4)
 
 ### ⛰️ Features
 
@@ -514,9 +515,9 @@ All notable changes to this project will be documented in this file.
 
 - Update banner - ([48c78b5](https://github.com/dustinblackman/oatmeal/commit/48c78b54387e9a95dab4a86e396a32885196ccee))
 
-## [0.2.3] - 2023-11-10
+## 0.2.3
 
-[v0.2.2...v0.2.3](https://github.com/dustinblackman/oatmeal/compare/v0.2.2...v0.2.3)
+_2023-11-10_ - [v0.2.2...v0.2.3](https://github.com/dustinblackman/oatmeal/compare/v0.2.2...v0.2.3)
 
 ### ⛰️ Features
 
@@ -526,9 +527,9 @@ All notable changes to this project will be documented in this file.
 
 - Homebrew tap - ([c39b273](https://github.com/dustinblackman/oatmeal/commit/c39b273205a6147d453e390052df2e641208fb77))
 
-## [0.2.2] - 2023-11-10
+## 0.2.2
 
-[v0.2.1...v0.2.2](https://github.com/dustinblackman/oatmeal/compare/v0.2.1...v0.2.2)
+_2023-11-10_ - [v0.2.1...v0.2.2](https://github.com/dustinblackman/oatmeal/compare/v0.2.1...v0.2.2)
 
 ### ⛰️ Features
 
@@ -544,9 +545,9 @@ All notable changes to this project will be documented in this file.
 
 - Clean docs - ([b34a8ba](https://github.com/dustinblackman/oatmeal/commit/b34a8baea10d5ad7308ee6792213b248a01bda38))
 
-## [0.2.1] - 2023-11-09
+## 0.2.1
 
-[v0.2.0...v0.2.1](https://github.com/dustinblackman/oatmeal/compare/v0.2.0...v0.2.1)
+_2023-11-09_ - [v0.2.0...v0.2.1](https://github.com/dustinblackman/oatmeal/compare/v0.2.0...v0.2.1)
 
 ### ⛰️ Features
 
@@ -559,9 +560,9 @@ All notable changes to this project will be documented in this file.
 - Changelog generation - ([e466672](https://github.com/dustinblackman/oatmeal/commit/e466672fdcdd213cff9673840b81e558f71e8e04))
 - Add docker check before releasing - ([8669d0a](https://github.com/dustinblackman/oatmeal/commit/8669d0a7756130a929cf13c590d6e550422e5ae6))
 
-## [0.2.0] - 2023-11-09
+## 0.2.0
 
-[v0.1.0...v0.2.0](https://github.com/dustinblackman/oatmeal/compare/v0.1.0...v0.2.0)
+_2023-11-09_ - [v0.1.0...v0.2.0](https://github.com/dustinblackman/oatmeal/compare/v0.1.0...v0.2.0)
 
 ### ⛰️ Features
 
@@ -587,9 +588,9 @@ All notable changes to this project will be documented in this file.
 
 - Toml lint - ([8466a81](https://github.com/dustinblackman/oatmeal/commit/8466a815bdd9aebaae23d38de389d17d730e5292))
 
-## [0.1.0] - 2023-11-08
+## 0.1.0
 
-[...v0.1.0](https://github.com/dustinblackman/oatmeal/compare/...v0.1.0)
+_2023-11-08_ - [...v0.1.0](https://github.com/dustinblackman/oatmeal/compare/...v0.1.0)
 
 ### ⛰️ Features
 

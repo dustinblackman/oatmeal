@@ -15,12 +15,12 @@ All notable changes to this project will be documented in this file.\n
 # https://keats.github.io/tera/docs/#introduction
 body = """
 {% if version %}\
-    ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+    ## {{ version | trim_start_matches(pat="v") }}
 {% else %}\
     ## [unreleased]
 {% endif %}\
 
-[{{ previous.version }}...{{ version }}](<REPO>/compare/{{ previous.version }}...{{ version }})
+_{{ timestamp | date(format="%Y-%m-%d") }}_ - [{{ previous.version }}...{{ version }}](<REPO>/compare/{{ previous.version }}...{{ version }})
 
 {% macro commit(commit) -%}
     - {% if commit.scope %}*({{ commit.scope }})* {% endif %}{% if commit.breaking %}[**breaking**] {% endif %}\

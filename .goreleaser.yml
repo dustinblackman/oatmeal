@@ -196,6 +196,7 @@ nix:
     repository:
       owner: dustinblackman
       name: nur-packages
+    skip_upload: true
     homepage: https://github.com/dustinblackman/oatmeal
     description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
     path: pkgs/oatmeal.nix

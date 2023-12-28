@@ -205,8 +205,8 @@ nix:
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/oatmeal
 
       mkdir -p $out/share/doc/oatmeal/copyright
-      mv LICENSE $out/share/doc/oatmeal/copyright/
-      mv THIRDPARTY.html $out/share/doc/oatmeal/copyright/
+      cp LICENSE $out/share/doc/oatmeal/copyright/
+      cp THIRDPARTY.html $out/share/doc/oatmeal/copyright/
 
       installManPage ./manpages/oatmeal.1.gz
       installShellCompletion ./completions/*

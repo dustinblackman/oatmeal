@@ -67,7 +67,7 @@ impl<'a> Bubble<'_> {
         };
     }
 
-    pub fn style_confg() -> BubbleConfig {
+    pub fn style_config() -> BubbleConfig {
         return BubbleConfig {
             // Unicode character border + padding.
             bubble_padding: 8,
@@ -84,35 +84,10 @@ impl<'a> Bubble<'_> {
         let mut in_codeblock = false;
         let mut lines: Vec<Line> = vec![];
 
-        let (message_lines, max_line_length) = self.get_message_lines();
+        let max_line_length = self.get_max_line_length();
 
-        for line in message_lines {
-            let line_length = line.len();
-            let (mut spans, formatted_line_length) =
-                self.format_line(line.to_string(), max_line_length);
-
-            if in_codeblock {
-                let highlighted_spans: Vec<Span> = highlight
-                    .highlight_line(&line, &SYNTAX_SET)
-                    .unwrap()
-                    .iter()
-                    .map(|segment| {
-                        let (style, content) = segment;
-
-                        return Span::styled(
-                            content.to_string(),
-                            Style {
-                                fg: Syntaxes::translate_colour(style.foreground),
-                                ..Style::default()
-                            },
-                        );
-                    })
-                    .collect();
-
-                spans = self
-                    .format_spans(highlighted_spans, line_length, max_line_length)
-                    .0;
-            }
+        for line in self.message.text.lines() {
+            let mut spans = vec![];
 
             if line.trim().starts_with("```") {
                 let lang = line.trim().replace("```", "");
@@ -122,71 +97,139 @@ impl<'a> Bubble<'_> {
                     in_codeblock = true;
 
                     self.codeblock_counter += 1;
-                    spans = self
-                        .format_spans(
-                            vec![
-                                Span::from(line),
-                                Span::styled(
-                                    format!(" ({})", self.codeblock_counter),
-                                    Style {
-                                        fg: Some(Color::White),
-                                        ..Style::default()
-                                    },
-                                ),
-                            ],
-                            format!(" ({})", self.codeblock_counter).len() + line_length,
-                            max_line_length,
-                        )
-                        .0;
+                    spans = vec![
+                        Span::from(line.to_owned()),
+                        Span::styled(
+                            format!(" ({})", self.codeblock_counter),
+                            Style {
+                                fg: Some(Color::White),
+                                ..Style::default()
+                            },
+                        ),
+                    ];
                 } else {
                     in_codeblock = false;
                 }
+            } else if in_codeblock {
+                // Highlighting doesn't work accurately unless each line is postfixed with '\n',
+                // especially when dealing with multi-line code comments.
+                let line_nl = format!("{line}\n");
+                let highlighted = highlight.highlight_line(&line_nl, &SYNTAX_SET).unwrap();
+
+                spans = highlighted
+                    .iter()
+                    .enumerate()
+                    .map(|(idx, segment)| {
+                        let (style, content) = segment;
+                        let mut text = content.to_string();
+                        if idx == highlighted.len() - 1 {
+                            text = text.trim_end().to_string();
+                        }
+
+                        return Span::styled(
+                            text,
+                            Style {
+                                fg: Syntaxes::translate_colour(style.foreground),
+                                ..Style::default()
+                            },
+                        );
+                    })
+                    .collect();
             }
 
-            let bubble_padding =
-                repeat_from_subtractions(" ", vec![self.window_max_width, formatted_line_length]);
-
-            if self.alignment == BubbleAlignment::Left {
-                spans.push(Span::from(bubble_padding));
-                lines.push(Line::from(spans));
-            } else {
-                let mut line_spans = vec![Span::from(bubble_padding)];
-                line_spans.extend(spans);
-                lines.push(Line::from(line_spans));
+            if spans.is_empty() {
+                spans = vec![Span::styled(line.to_owned(), Style::default())];
             }
+
+            let mut split_spans = vec![];
+            let mut line_char_count = 0;
+
+            for span in spans {
+                if span.content.len() + line_char_count <= max_line_length {
+                    line_char_count += span.content.len();
+                    split_spans.push(span);
+                    continue;
+                }
+
+                let mut word_set: Vec<&str> = vec![];
+
+                for word in span.content.split(' ') {
+                    if word.len() + line_char_count > max_line_length {
+                        split_spans.push(Span::styled(word_set.join(" "), span.style));
+                        lines.push(self.spans_to_line(split_spans, max_line_length));
+
+                        split_spans = vec![];
+                        word_set = vec![];
+                        line_char_count = 0;
+                    }
+
+                    word_set.push(word);
+                    line_char_count += word.len() + 1;
+                }
+
+                split_spans.push(Span::styled(word_set.join(" "), span.style));
+            }
+
+            lines.push(self.spans_to_line(split_spans, max_line_length));
         }
 
         return self.wrap_lines_in_buddle(lines, max_line_length);
     }
 
-    fn get_message_lines(&self) -> (Vec<String>, usize) {
+    fn spans_to_line(&self, mut spans: Vec<Span<'a>>, max_line_length: usize) -> Line<'a> {
+        let line_str_len: usize = spans.iter().map(|e| return e.content.len()).sum();
+        let fill = repeat_from_subtractions(" ", vec![max_line_length, line_str_len]);
+        let formatted_line_length =
+            line_str_len + fill.len() + Bubble::style_config().bubble_padding;
+
+        let mut wrapped_spans = vec![self.highlight_span("│ ".to_string())];
+        wrapped_spans.append(&mut spans);
+        wrapped_spans.push(self.highlight_span(format!("{fill} │")));
+
+        let outer_bubble_padding =
+            repeat_from_subtractions(" ", vec![self.window_max_width, formatted_line_length]);
+
+        if self.alignment == BubbleAlignment::Left {
+            wrapped_spans.push(Span::from(outer_bubble_padding));
+            return Line::from(wrapped_spans);
+        }
+
+        let mut line_spans = vec![Span::from(outer_bubble_padding)];
+        line_spans.extend(wrapped_spans);
+
+        return Line::from(line_spans);
+    }
+
+    fn get_max_line_length(&self) -> usize {
+        let style_config = Bubble::style_config();
         // Add a minimum 4% of padding on the side.
         let min_bubble_padding_length = ((self.window_max_width as f32
-            * Bubble::style_confg().outer_padding_percentage)
+            * style_config.outer_padding_percentage)
             .ceil()) as usize;
 
         // Border elements + minimum bubble padding.
-        let line_border_width =
-            Bubble::style_confg().border_elements_length + min_bubble_padding_length;
+        let line_border_width = style_config.border_elements_length + min_bubble_padding_length;
 
-        let message_lines = self
+        let mut max_line_length = self
             .message
-            .as_string_lines(self.window_max_width - line_border_width);
-
-        let mut max_line_length = message_lines
-            .iter()
+            .text
+            .lines()
             .map(|line| {
                 return line.len();
             })
             .max()
             .unwrap();
 
+        if max_line_length > (self.window_max_width - line_border_width) {
+            max_line_length = self.window_max_width - line_border_width;
+        }
+
         let username = &self.message.author.to_string();
         if max_line_length < username.len() {
             max_line_length = username.len();
         }
 
-        return (message_lines, max_line_length);
+        return max_line_length;
     }
 
     fn wrap_lines_in_buddle(&self, lines: Vec<Line<'a>>, max_line_length: usize) -> Vec<Line<'a>> {
@@ -200,7 +243,7 @@ impl<'a> Bubble<'_> {
             vec![
                 self.window_max_width,
                 max_line_length,
-                Bubble::style_confg().bubble_padding,
+                Bubble::style_config().bubble_padding,
             ],
         );
 
@@ -229,27 +272,6 @@ impl<'a> Bubble<'_> {
             res.push(self.highlight_line(format!("{bar_bubble_padding}{bottom_bar}")));
             return res;
         }
-    }
-
-    fn format_spans(
-        &self,
-        mut spans: Vec<Span<'a>>,
-        line_str_len: usize,
-        max_line_length: usize,
-    ) -> (Vec<Span<'a>>, usize) {
-        let fill = repeat_from_subtractions(" ", vec![max_line_length, line_str_len]);
-        // 8 is the unicode character border + padding.
-        let formatted_line_length = line_str_len + fill.len() + 8;
-
-        let mut spans_res = vec![self.highlight_span("│ ".to_string())];
-        spans_res.append(&mut spans);
-        spans_res.push(self.highlight_span(format!("{fill} │").to_string()));
-        return (spans_res, formatted_line_length);
-    }
-
-    fn format_line(&self, line: String, max_line_length: usize) -> (Vec<Span<'a>>, usize) {
-        let line_len = line.len();
-        return self.format_spans(vec![Span::from(line)], line_len, max_line_length);
     }
 
     fn highlight_span(&self, text: String) -> Span<'a> {

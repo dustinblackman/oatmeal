@@ -61,6 +61,9 @@ fn it_provides_first_second_codeblock() {
         }
     }
 
+    // Hello World.
+
+    // This is a really long line that pushes the boundaries of 50 characters across the screen, resulting in a code comment block where the line is wrapped to the next line. Cool right?
     function printNumbers() {
         let numbers = [];
         for (let i = 0; i <= 10; i++) {
@@ -81,6 +84,9 @@ fn it_provides_first_second_third_codeblock() {
         }
     }
 
+    // Hello World.
+
+    // This is a really long line that pushes the boundaries of 50 characters across the screen, resulting in a code comment block where the line is wrapped to the next line. Cool right?
     function printNumbers() {
         let numbers = [];
         for (let i = 0; i <= 10; i++) {

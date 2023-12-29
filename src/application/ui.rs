@@ -47,7 +47,7 @@ fn is_line_width_sufficient(line_width: u16) -> bool {
         .max()
         .unwrap();
 
-    let bubble_style = Bubble::style_confg();
+    let bubble_style = Bubble::style_config();
     let min_width =
         (author_lengths + bubble_style.bubble_padding + bubble_style.border_elements_length) as i32;
     let trimmed_line_width =

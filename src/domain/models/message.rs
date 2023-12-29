@@ -44,37 +44,6 @@ impl Message {
         self.text += &text.replace('\t', "  ");
     }
 
-    pub fn as_string_lines(&self, line_max_width: usize) -> Vec<String> {
-        let mut lines: Vec<String> = Vec::new();
-
-        for full_line in self.text.split('\n') {
-            // TODO may not need this.
-            if full_line.trim().is_empty() {
-                lines.push(" ".to_string());
-                continue;
-            }
-
-            let mut char_count = 0;
-            let mut current_lines: Vec<&str> = vec![];
-
-            for word in full_line.split(' ') {
-                if word.len() + char_count + 1 > line_max_width {
-                    lines.push(current_lines.join(" ").trim_end().to_string());
-                    current_lines = vec![word];
-                    char_count = word.len() + 1;
-                } else {
-                    current_lines.push(word);
-                    char_count += word.len() + 1;
-                }
-            }
-            if !current_lines.is_empty() {
-                lines.push(current_lines.join(" ").trim_end().to_string());
-            }
-        }
-
-        return lines;
-    }
-
     pub fn codeblocks(&self) -> Vec<String> {
         let mut codeblocks: Vec<String> = vec![];
         let mut current_codeblock: Vec<&str> = vec![];

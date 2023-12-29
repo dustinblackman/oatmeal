@@ -232,5 +232,5 @@ profile-flamegraph = '''set -e
 '''
 
 top = '''
-  top -pid $(ps aux | grep 'target\/debug\/oatmeal' | awk '{print $2}')
+  top -pid $(ps aux | grep 'target\/release\/oatmeal' | awk '{print $2}')
 '''

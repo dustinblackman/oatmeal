@@ -2,9 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.12.1
+
+_2023-12-29_ - [v0.12.0...v0.12.1](https://github.com/dustinblackman/oatmeal/compare/v0.12.0...v0.12.1)
+
+### 🐛 Bug Fixes
+
+- Code highlighting with word wrapping - ([d9f1787](https://github.com/dustinblackman/oatmeal/commit/d9f1787acd429b53738230a92d2fc870af647a54))
+- Nix installer - ([d3eefcb](https://github.com/dustinblackman/oatmeal/commit/d3eefcb80f7955f21393a77af543923e7a8103fb))
+- NUR releases - ([709c4fc](https://github.com/dustinblackman/oatmeal/commit/709c4fc5f5e9d4fbd4583edb92c40ac7a4868ddf))
+
+### 📚 Documentation
+
+- Update changelog format for deeplinking - ([d376f9c](https://github.com/dustinblackman/oatmeal/commit/d376f9cec05f29ae352b10186cbfb8326f2125a6))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add syntax debugging - ([ff40cc6](https://github.com/dustinblackman/oatmeal/commit/ff40cc6fcea99c6b37ad6d24cb33f477a2cc123b))
+- Add missing links for winget - ([8c61964](https://github.com/dustinblackman/oatmeal/commit/8c61964ca53a76f9fba9ab6cafdb8c61175cd341))
+- Drop alpine linux repo for now - ([7abc74d](https://github.com/dustinblackman/oatmeal/commit/7abc74d6bf4cd4d8db490af9059a83b243260538))
+
 ## 0.12.0
 
-_2023-12-28_ - [v0.11.0...v0.12.0](https://github.com/dustinblackman/oatmeal/compare/v0.11.0...v0.12.0)
+_2023-12-27_ - [v0.11.0...v0.12.0](https://github.com/dustinblackman/oatmeal/compare/v0.11.0...v0.12.0)
 
 ### ⛰️ Features
 

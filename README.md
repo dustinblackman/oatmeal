@@ -15,6 +15,7 @@
   - [Fedora / CentOS](#fedora--centos)
   - [Nix](#nix)
   - [Arch Linux](#arch-linux)
+  - [Alpine Linux](#alpine-linux)
   - [Windows](#windows)
   - [Cargo](#cargo)
   - [Docker](#docker)
@@ -83,6 +84,18 @@ nix-env -f '<nixpkgs>' -iA nur.repos.dustinblackman.oatmeal
 ```sh
 yay -S oatmeal-bin
 ```
+
+### Alpine Linux
+
+<!-- alpine-install start -->
+
+```sh
+arch=$(uname -a | grep -q aarch64 && echo 'arm64' || echo 'amd64')
+curl -L -o oatmeal.apk "https://github.com/dustinblackman/oatmeal/releases/download/v0.12.1/oatmeal_0.12.1_linux_${arch}.apk"
+apk add --allow-untrusted ./oatmeal.apk
+```
+
+<!-- alpine-install end -->
 
 ### Windows
 

@@ -34,7 +34,7 @@ pub fn update() {
         .to_string();
     let version_res = cmd(vec!["--version"]);
 
-    let version = version_res.split(' ').collect::<Vec<&str>>()[1];
+    let version = version_res.split(' ').collect::<Vec<&str>>()[1].trim();
 
     let mut readme = fs::read_to_string("./README.md").unwrap();
 
@@ -64,8 +64,23 @@ pub fn update() {
     readme.replace_range(
         start_choco..end_choco,
         &format!(
-            "<!-- choco-install start -->\n```sh\nchoco install oatmeal --version={version}```\n"
+            "<!-- choco-install start -->\n```sh\nchoco install oatmeal --version={version}\n```\n"
         ),
+    );
+
+    let start_alpine = readme.find("<!-- alpine-install start -->").unwrap();
+    let end_alpine = readme.find("<!-- alpine-install end -->").unwrap();
+    readme.replace_range(
+        start_alpine..end_alpine,
+        &format!(r#"
+<!-- alpine-install start -->
+
+```sh
+arch=$(uname -a | grep -q aarch64 && echo 'arm64' || echo 'amd64')
+curl -L -o oatmeal.apk "https://github.com/dustinblackman/oatmeal/releases/download/v{version}/oatmeal_{version}_linux_${{arch}}.apk"
+apk add --allow-untrusted ./oatmeal.apk
+```
+"#)
     );
 
     readme = readme.replace(&env::var("HOME").unwrap(), "~");

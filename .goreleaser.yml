@@ -35,11 +35,12 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
-    files:
-      - completions/*
-      - manpages/*
-      - LICENSE
-      - THIRDPARTY.html
+    <<: &archive_defaults
+      files:
+        - completions/*
+        - manpages/*
+        - LICENSE
+        - THIRDPARTY.html
 
   - id: musl
     builds:
@@ -48,11 +49,7 @@ archives:
       {{ .ProjectName }}_{{ .Version }}_{{ .Os }}-musl_
       {{- if eq .Arch "amd64" }}amd64
       {{- else }}{{ .Arch }}{{ end }}
-    files:
-      - completions/*
-      - manpages/*
-      - LICENSE
-      - THIRDPARTY.html
+    <<: *archive_defaults
 
 signs:
   - artifacts: checksum
@@ -86,76 +83,49 @@ scoops:
 nfpms:
   - builds:
       - default
-    homepage: https://github.com/dustinblackman/oatmeal
-    description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
-    maintainer: Dustin Blackman
-    vendor: Dustin Blackman
     formats:
       - deb
       - rpm
-    contents:
-      - src: ./completions/oatmeal.bash
-        dst: /usr/share/bash-completion/completions/oatmeal
-        file_info:
-          mode: 0644
-      - src: ./completions/oatmeal.fish
-        dst: /usr/share/fish/completions/oatmeal.fish
-        file_info:
-          mode: 0644
-      - src: ./completions/oatmeal.zsh
-        dst: /usr/share/zsh/vendor-completions/_oatmeal
-        file_info:
-          mode: 0644
-      - src: ./manpages/oatmeal.1.gz
-        dst: /usr/share/man/man1/oatmeal.1.gz
-        file_info:
-          mode: 0644
-      - src: ./LICENSE
-        dst: /usr/share/doc/oatmeal/copyright/LICENSE
-        file_info:
-          mode: 0644
-      - src: ./THIRDPARTY.html
-        dst: /usr/share/doc/oatmeal/copyright/THIRDPARTY.html
-        file_info:
-          mode: 0644
     rpm:
       signature:
         key_file: "{{ .Env.RPM_KEY }}"
+    <<: &nfpms_defaults
+      homepage: https://github.com/dustinblackman/oatmeal
+      description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
+      maintainer: Dustin Blackman
+      vendor: Dustin Blackman
+      contents:
+        - src: ./completions/oatmeal.bash
+          dst: /usr/share/bash-completion/completions/oatmeal
+          file_info:
+            mode: 0644
+        - src: ./completions/oatmeal.fish
+          dst: /usr/share/fish/completions/oatmeal.fish
+          file_info:
+            mode: 0644
+        - src: ./completions/oatmeal.zsh
+          dst: /usr/share/zsh/vendor-completions/_oatmeal
+          file_info:
+            mode: 0644
+        - src: ./manpages/oatmeal.1.gz
+          dst: /usr/share/man/man1/oatmeal.1.gz
+          file_info:
+            mode: 0644
+        - src: ./LICENSE
+          dst: /usr/share/doc/oatmeal/copyright/LICENSE
+          file_info:
+            mode: 0644
+        - src: ./THIRDPARTY.html
+          dst: /usr/share/doc/oatmeal/copyright/THIRDPARTY.html
+          file_info:
+            mode: 0644
 
   - builds:
       - musl
     id: musl
-    homepage: https://github.com/dustinblackman/oatmeal
-    description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
-    maintainer: Dustin Blackman
-    vendor: Dustin Blackman
     formats:
       - apk
-    contents:
-      - src: ./completions/oatmeal.bash
-        dst: /usr/share/bash-completion/completions/oatmeal
-        file_info:
-          mode: 0644
-      - src: ./completions/oatmeal.fish
-        dst: /usr/share/fish/completions/oatmeal.fish
-        file_info:
-          mode: 0644
-      - src: ./completions/oatmeal.zsh
-        dst: /usr/share/zsh/vendor-completions/_oatmeal
-        file_info:
-          mode: 0644
-      - src: ./manpages/oatmeal.1.gz
-        dst: /usr/share/man/man1/oatmeal.1.gz
-        file_info:
-          mode: 0644
-      - src: ./LICENSE
-        dst: /usr/share/doc/oatmeal/copyright/LICENSE
-        file_info:
-          mode: 0644
-      - src: ./THIRDPARTY.html
-        dst: /usr/share/doc/oatmeal/copyright/THIRDPARTY.html
-        file_info:
-          mode: 0644
+    <<: *nfpms_defaults
 
 aurs:
   - ids:

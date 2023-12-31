@@ -29,14 +29,14 @@ fn hash(url: String) -> Result<String> {
     return Ok(hash);
 }
 
-pub fn update() -> Result<()> {
+pub fn update(force: bool) -> Result<()> {
     let toml_str = fs::read_to_string("./assets.toml")?;
     let mut doc = toml_str.parse::<Document>()?;
 
     for key in ["syntaxes", "themes"] {
         for entry in doc[key].as_array_of_tables_mut().unwrap().iter_mut() {
             let nix_hash = entry["nix-hash"].as_str().unwrap();
-            if !nix_hash.is_empty() {
+            if !nix_hash.is_empty() && !force {
                 continue;
             }
 

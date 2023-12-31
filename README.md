@@ -378,11 +378,12 @@ The following steps should be completed to add an editor:
 #### Adding syntax highlighting for a language
 
 Syntax highlighting language selection is a tad manual where several languages must be curated and then added to
-[`build.rs`](./build.rs).
+[`assets.toml`](./assets.toml).
 
 1. Google to find a `.sublime-syntax` project on Github for your language. [bat](https://github.com/sharkdp/bat/tree/master/assets/syntaxes/02_Extra) has many!
-2. Update the `get_syntaxes()` function in [`build.rs`](./build.rs) to include the new repo. Make sure to set the URL to
-   a commit locked `.tar.gz` file, and to include the license in the files vector.
+2. Update [`assets.toml`](./assets.toml) to include the new repo. Make sure to include the license in the files array.
+   You can leave `nix-hash` as an empty string, and it'll be updated by a maintainer later. Or if you have docker
+   installed, you can run `cargo xtask hash-assets`.
 3. `rm -rf .caches && cargo build`
 4. Test to see highlighting works.
 

@@ -1229,6 +1229,7 @@ dependencies = [
  "test_utils",
  "tokio",
  "tokio-util",
+ "toml",
  "toml_edit",
  "tracing",
  "tracing-appender",
@@ -1236,6 +1237,7 @@ dependencies = [
  "tui-textarea",
  "uuid",
  "vergen",
+ "walkdir",
  "yansi",
 ]
 
@@ -2823,6 +2825,10 @@ checksum = "0fcb9cbac069e033553e8bb871be2fbdffcab578eb25bd0f7c508cedc6dcd75a"
 [[package]]
 name = "xtask"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "toml_edit",
+]
 
 [[package]]
 name = "yaml-rust"

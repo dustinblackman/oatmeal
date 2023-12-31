@@ -72,7 +72,7 @@ sd '__BETTERTLS_LICENSE__' "$(curl -s -L https://raw.githubusercontent.com/rustl
 sd '__CHROMIUM_LICENSE__' "$(curl -s -L https://raw.githubusercontent.com/rustls/webpki/7f0632ba67f99292600d8d47ea6f898bd72a4e8a/third-party/chromium/LICENSE)" "$PROGDIR/../../THIRDPARTY.html"
 
 # Themes
-sd '__BASE16_TEXTMATE__' "$(cat "$PROGDIR"/../../.cache/themes/LICENSE.md | awk 'NR > 1')" "$PROGDIR/../../THIRDPARTY.html"
+sd '__BASE16_TEXTMATE__' "$(cat "$PROGDIR"/../../.cache/themes/chriskempson-base16-textmate/LICENSE.md | awk 'NR > 1')" "$PROGDIR/../../THIRDPARTY.html"
 
 # Syntaxes
 SYNTAXES=$(find "$PROGDIR"/../../.cache/syntaxes | grep -i LICENSE | sort | while read f; do

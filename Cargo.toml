@@ -31,7 +31,7 @@ dhat-heap = ["dep:dhat"]
 members = ["tools/xtask"]
 
 [dependencies]
-anyhow = { version = "=1.0.75", features = ["backtrace"] }
+anyhow = { version = "=1.0.78", features = ["backtrace"] }
 arboard = { version = "=3.2.1", default-features = false, features = ["wayland-data-control"] }
 async-trait = "=0.1.74"
 base64 = "=0.21.5"
@@ -57,8 +57,8 @@ serde_json = "=1.0.107"
 serde_yaml = "=0.9.27"
 strum = { version = "=0.25.0", features = ["derive"] }
 syntect = { version = "=5.1.0", default-features = false, features = ["parsing", "plist-load", "regex-onig"] }
-tokio = { version = "=1.33.0", features = ["fs", "macros", "rt-multi-thread", "sync", "process"] }
-tokio-util = "=0.7.9"
+tokio = { version = "=1.35.1", features = ["fs", "macros", "rt-multi-thread", "sync", "process"] }
+tokio-util = "=0.7.10"
 toml_edit = "=0.21.0"
 tracing = { version = "=0.1.40", default-features = false, features = ["std", "log"] }
 tracing-appender = "=0.2.3"
@@ -78,7 +78,7 @@ mockito = "=1.2.0"
 test_utils = { path = "./test/utils" }
 
 [build-dependencies]
-anyhow = "=1.0.75"
+anyhow = "=1.0.78"
 bincode = "=1.3.3"
 flate2 = "=1.0.28"
 glob-match = "=0.2.1"

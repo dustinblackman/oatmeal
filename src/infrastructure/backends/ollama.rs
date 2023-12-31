@@ -6,7 +6,6 @@ use std::time::Duration;
 
 use anyhow::bail;
 use anyhow::Result;
-use async_trait::async_trait;
 use futures::stream::TryStreamExt;
 use serde::Deserialize;
 use serde::Serialize;
@@ -66,13 +65,11 @@ impl Default for Ollama {
     }
 }
 
-#[async_trait]
 impl Backend for Ollama {
     fn name(&self) -> BackendName {
         return BackendName::Ollama;
     }
 
-    #[allow(clippy::implicit_return)]
     async fn health_check(&self) -> Result<()> {
         let res = reqwest::Client::new()
             .get(&self.url)
@@ -94,7 +91,6 @@ impl Backend for Ollama {
         return Ok(());
     }
 
-    #[allow(clippy::implicit_return)]
     async fn list_models(&self) -> Result<Vec<String>> {
         let res = reqwest::Client::new()
             .get(format!("{url}/api/tags", url = self.url))
@@ -116,7 +112,6 @@ impl Backend for Ollama {
         return Ok(models);
     }
 
-    #[allow(clippy::implicit_return)]
     async fn get_completion<'a>(
         &self,
         prompt: BackendPrompt,

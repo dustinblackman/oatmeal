@@ -5,5 +5,5 @@ edition = "2021"
 publish = false
 
 [dependencies]
-anyhow = "=1.0.75"
+anyhow = "=1.0.78"
 toml_edit = "=0.21.0"

@@ -3,7 +3,6 @@
 mod tests;
 
 use anyhow::Result;
-use async_trait::async_trait;
 use strum::EnumIter;
 use strum::EnumVariantNames;
 use strum::IntoEnumIterator;
@@ -67,7 +66,6 @@ pub struct BackendResponse {
     pub context: Option<String>,
 }
 
-#[async_trait]
 pub trait Backend {
     /// Returns the name of the backend
     fn name(&self) -> BackendName;

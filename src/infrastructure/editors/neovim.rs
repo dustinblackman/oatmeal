@@ -3,7 +3,6 @@ use std::str;
 
 use anyhow::bail;
 use anyhow::Result;
-use async_trait::async_trait;
 use base64::engine::general_purpose::STANDARD as b64;
 use base64::Engine;
 use serde::Deserialize;
@@ -87,13 +86,11 @@ async fn run_lua_command(func: &str) -> Result<String> {
 #[derive(Default)]
 pub struct Neovim {}
 
-#[async_trait]
 impl Editor for Neovim {
     fn name(&self) -> EditorName {
         return EditorName::Neovim;
     }
 
-    #[allow(clippy::implicit_return)]
     async fn health_check(&self) -> Result<()> {
         if env::var("NVIM").is_err() {
             bail!("Not running within a Neovim terminal")
@@ -102,7 +99,6 @@ impl Editor for Neovim {
         return Ok(());
     }
 
-    #[allow(clippy::implicit_return)]
     async fn get_context(&self) -> Result<Option<EditorContext>> {
         let json_str = run_lua_command("oatmeal_get_context()").await?;
         if json_str.trim() == "[]" {
@@ -113,13 +109,11 @@ impl Editor for Neovim {
         return Ok(Some(ctx.into()));
     }
 
-    #[allow(clippy::implicit_return)]
     async fn clear_context(&self) -> Result<()> {
         run_lua_command("oatmeal_clear_context()").await?;
         return Ok(());
     }
 
-    #[allow(clippy::implicit_return)]
     async fn send_codeblock<'a>(
         &self,
         context: EditorContext,

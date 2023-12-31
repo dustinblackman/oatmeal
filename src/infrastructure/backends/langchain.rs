@@ -8,7 +8,6 @@ use std::time::Duration;
 use anyhow::anyhow;
 use anyhow::bail;
 use anyhow::Result;
-use async_trait::async_trait;
 use futures::stream::TryStreamExt;
 use itertools::Itertools;
 use serde::Deserialize;
@@ -65,13 +64,11 @@ impl Default for LangChain {
     }
 }
 
-#[async_trait]
 impl Backend for LangChain {
     fn name(&self) -> BackendName {
         return BackendName::LangChain;
     }
 
-    #[allow(clippy::implicit_return)]
     async fn health_check(&self) -> Result<()> {
         if self.url.is_empty() {
             bail!("LangChain URL is not defined");
@@ -97,7 +94,6 @@ impl Backend for LangChain {
         return Ok(());
     }
 
-    #[allow(clippy::implicit_return)]
     async fn list_models(&self) -> Result<Vec<String>> {
         let res = reqwest::Client::new()
             .get(format!("{url}/openapi.json", url = self.url))
@@ -125,7 +121,6 @@ impl Backend for LangChain {
         return Ok(models);
     }
 
-    #[allow(clippy::implicit_return)]
     async fn get_completion<'a>(
         &self,
         prompt: BackendPrompt,

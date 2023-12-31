@@ -6,7 +6,6 @@ use std::time::Duration;
 
 use anyhow::bail;
 use anyhow::Result;
-use async_trait::async_trait;
 use futures::stream::TryStreamExt;
 use serde::Deserialize;
 use serde::Serialize;
@@ -82,7 +81,6 @@ impl Default for OpenAI {
     }
 }
 
-#[async_trait]
 impl Backend for OpenAI {
     fn name(&self) -> BackendName {
         return BackendName::OpenAI;
@@ -123,7 +121,6 @@ impl Backend for OpenAI {
         return Ok(());
     }
 
-    #[allow(clippy::implicit_return)]
     async fn list_models(&self) -> Result<Vec<String>> {
         let res = reqwest::Client::new()
             .get(format!("{url}/v1/models", url = self.url))
@@ -146,7 +143,6 @@ impl Backend for OpenAI {
         return Ok(models);
     }
 
-    #[allow(clippy::implicit_return)]
     async fn get_completion<'a>(
         &self,
         prompt: BackendPrompt,

@@ -5,7 +5,6 @@ mod tests;
 use std::fmt;
 
 use anyhow::Result;
-use async_trait::async_trait;
 use strum::EnumIter;
 use strum::EnumVariantNames;
 use strum::IntoEnumIterator;
@@ -74,7 +73,6 @@ File: {file_path}
     }
 }
 
-#[async_trait]
 pub trait Editor {
     /// Returns the name of the editor.
     fn name(&self) -> EditorName;

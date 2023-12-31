@@ -110,7 +110,7 @@ samply = { version = "0.11.0" }
 
 [profile.release]
 codegen-units = 1
-debug = "limited"
+debug = 1 # Limited
 lto = true
 opt-level = 3
 split-debuginfo = "packed"

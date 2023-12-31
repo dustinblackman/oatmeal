@@ -82,24 +82,6 @@ async fn print_sessions_list() -> Result<()> {
     return Ok(());
 }
 
-async fn manpages() -> Result<()> {
-    #[cfg(feature = "manpages")]
-    {
-        let man = clap_mangen::Man::new(build());
-        let mut buffer: Vec<u8> = Default::default();
-        man.render(&mut buffer)?;
-
-        let mut file = fs::File::create("./manpages/oatmeal.1").await?;
-        file.write_all(&buffer).await?;
-
-        println!("Wrote manpages to ./manpages/oatmeal.1");
-
-        return Ok(());
-    }
-
-    bail!("Man pages feature not enabled.");
-}
-
 async fn create_config_file() -> Result<()> {
     let config_file_path_str = Config::default(ConfigKey::ConfigFile);
     let config_file_path = path::PathBuf::from(&config_file_path_str);
@@ -213,11 +195,6 @@ fn subcommand_debug() -> Command {
         .subcommand(
             Command::new("enum-config").about("List all config keys as strings.")
         );
-
-    #[cfg(feature = "manpages")]
-    {
-        cmd = cmd.subcommand(Command::new("manpages").about("Generates manpages"));
-    }
 
     return cmd;
 }
@@ -345,6 +322,7 @@ pub fn build() -> Command {
         .subcommand(subcommand_completions())
         .subcommand(subcommand_config())
         .subcommand(subcommand_debug())
+        .subcommand(Command::new("manpages").about("Generates manpages and outputs to stdout."))
         .subcommand(subcommand_sessions())
         .arg(arg_backend())
         .arg(arg_backend_health_check_timeout())
@@ -447,9 +425,6 @@ pub async fn parse() -> Result<bool> {
                     let res = ConfigKey::VARIANTS.join("\n");
                     println!("{}", res);
                 }
-                Some(("manpages", _)) => {
-                    manpages().await?;
-                }
                 _ => {
                     subcommand_debug().print_long_help()?;
                 }
@@ -485,6 +460,10 @@ pub async fn parse() -> Result<bool> {
                     return Ok(false);
                 }
             }
+        }
+        Some(("manpages", _)) => {
+            clap_mangen::Man::new(build()).render(&mut io::stdout())?;
+            return Ok(false);
         }
         Some(("sessions", subcmd_matches)) => {
             match subcmd_matches.subcommand() {

@@ -24,13 +24,9 @@ git commit -m "feat: Release v$OM_VERSION"
 git tag -a "v$OM_VERSION" -m "v$OM_VERSION"
 
 # Update readme, build completions, manpages.
-cargo build --features manpages
+cargo build
 cargo cmd build-completions
-rm -rf manpages
-mkdir manpages
-./target/debug/oatmeal debug manpages
-cat manpages/oatmeal.1 | gzip -c -9 >manpages/oatmeal.1.gz
-rm manpages/oatmeal.1
+rm -rf manpages && mkdir manpages && ./target/debug/oatmeal manpages | gzip -c -9 >manpages/oatmeal.1.gz
 cargo xtask update-readme
 rm -f config.example.toml
 ./target/debug/oatmeal config default >config.example.toml

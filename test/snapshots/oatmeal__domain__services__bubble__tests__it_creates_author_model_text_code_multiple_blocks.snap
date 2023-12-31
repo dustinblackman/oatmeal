@@ -3,7 +3,7 @@ source: src/domain/services/bubble_test.rs
 expression: lines_str
 ---
 '''
-╭codellama:latest─────────────────────────────╮
+╭model-1──────────────────────────────────────╮
 │ Here's how to print in Rust.                │
 │                                             │
 │ ```rust (10)                                │

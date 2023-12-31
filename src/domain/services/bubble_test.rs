@@ -17,7 +17,7 @@ fn create_lines(
     text: &str,
 ) -> Result<String> {
     Config::set(ConfigKey::Username, "testuser");
-    Config::set(ConfigKey::Model, "codellama:latest");
+    Config::set(ConfigKey::Model, "model-1");
 
     let message = Message::new(author, text);
     let theme = Themes::get("base16-seti", "")?;
@@ -84,7 +84,7 @@ fn print_numbers() {
     let lines_str = create_lines(Author::Model, BubbleAlignment::Left, 0, text)?;
 
     insta::assert_snapshot!(lines_str, @r###"
-    ╭codellama:latest──────────────╮              
+    ╭model-1───────────────────────╮              
     │ Here's how to print in Rust. │              
     │                              │              
     │ ```rust (1)                  │              
@@ -113,9 +113,9 @@ fn it_creates_author_model_text_code_multiple_blocks() -> Result<()> {
 fn it_creates_author_model_text() -> Result<()> {
     let lines_str = create_lines(Author::Model, BubbleAlignment::Left, 0, "Hi there!")?;
     insta::assert_snapshot!(lines_str, @r###"
-    ╭codellama:latest──╮                          
-    │ Hi there!        │                          
-    ╰──────────────────╯                          
+    ╭model-1────╮                                 
+    │ Hi there! │                                 
+    ╰───────────╯                                 
     "###);
 
     return Ok(());

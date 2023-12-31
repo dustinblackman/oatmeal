@@ -46,7 +46,8 @@ crossterm = { version = "=0.27.0", features = ["bracketed-paste", "event-stream"
 dashmap = "=5.5.3"
 dhat = { version = "=0.3.2", optional = true }
 dialoguer = { version = "=0.10.4", default-features = false, features = ["editor"] }
-dirs = "=5.0.1"
+dirs = "=5.0.0"
+dirs-sys = "=0.4.0" # Pinned sub dependency to avoid poor choices in later versions.
 futures = "=0.3.28"
 itertools = "=0.11.0"
 once_cell = "=1.18.0"
@@ -70,9 +71,6 @@ yansi = "=0.5.1"
 # Fix for cargo-about
 [target.'cfg(target_os="macos")'.dependencies]
 errno = "=0.3.5"
-
-[patch.crates-io]
-dirs-sys = { git = 'https://github.com/dustinblackman/dirs-sys-rs', rev = "5d460f956c7ef21615c3d3169233ae0fe0eb00d4" }
 
 [dev-dependencies]
 cargo-husky = { version = "=1.5.0", default-features = false, features = ["user-hooks"] }

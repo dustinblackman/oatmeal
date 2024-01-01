@@ -31,11 +31,11 @@ use crate::domain::models::Loading;
 use crate::domain::models::Message;
 use crate::domain::models::SlashCommand;
 use crate::domain::models::TextArea;
-use crate::domain::services::Sessions;
 use crate::domain::services::events::EventsService;
 use crate::domain::services::AppState;
 use crate::domain::services::AppStateProps;
 use crate::domain::services::Bubble;
+use crate::domain::services::Sessions;
 use crate::infrastructure::backends::BackendManager;
 use crate::infrastructure::editors::EditorManager;
 

@@ -91,7 +91,7 @@ yay -S oatmeal-bin
 
 ```sh
 arch=$(uname -a | grep -q aarch64 && echo 'arm64' || echo 'amd64')
-curl -L -o oatmeal.apk "https://github.com/dustinblackman/oatmeal/releases/download/v0.12.1/oatmeal_0.12.1_linux_${arch}.apk"
+curl -L -o oatmeal.apk "https://github.com/dustinblackman/oatmeal/releases/download/v0.12.2/oatmeal_0.12.2_linux_${arch}.apk"
 apk add --allow-untrusted ./oatmeal.apk
 ```
 
@@ -104,7 +104,7 @@ apk add --allow-untrusted ./oatmeal.apk
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.12.1
+choco install oatmeal --version=0.12.2
 ```
 
 <!-- choco-install end -->
@@ -152,8 +152,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.12.1
-Commit: v0.12.1
+Version: 0.12.2
+Commit: v0.12.2
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 
@@ -161,6 +161,7 @@ Commands:
   chat         Start a new chat session.
   completions  Generates shell completions.
   config       Configuration file options.
+  manpages     Generates manpages and outputs to stdout.
   sessions     Manage past chat sessions.
   help         Print this message or the help of the given subcommand(s)
 

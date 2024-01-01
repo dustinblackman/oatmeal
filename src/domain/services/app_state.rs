@@ -32,7 +32,7 @@ pub struct AppStateProps {
     pub theme_name: String,
     pub theme_file: String,
     pub session_id: Option<String>,
-    pub sessions_service: Sessions
+    pub sessions_service: Sessions,
 }
 
 pub struct AppState<'a> {
@@ -301,7 +301,8 @@ impl<'a> AppState<'a> {
     }
 
     pub async fn save_session(&self) -> Result<()> {
-       self.sessions_service.save(
+        self.sessions_service
+            .save(
                 &self.session_id,
                 &self.backend_context,
                 &self.editor_context,

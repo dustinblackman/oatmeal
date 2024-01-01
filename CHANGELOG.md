@@ -2,9 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.12.2
+
+_2024-01-01_ - [v0.12.1...v0.12.2](https://github.com/dustinblackman/oatmeal/compare/v0.12.1...v0.12.2)
+
+### ⛰️ Features
+
+- Move manpages to main cli - ([f5aab04](https://github.com/dustinblackman/oatmeal/commit/f5aab048841b91a3db4e749e74b4652848b7f5e1))
+
+### 🐛 Bug Fixes
+
+- Cargo test - ([c5be6f8](https://github.com/dustinblackman/oatmeal/commit/c5be6f84bb9097d0ff2cfbd182f0290c78a66692))
+- Dirs sub dependency fork - ([5c2359b](https://github.com/dustinblackman/oatmeal/commit/5c2359be48b9ed1c2b45b936063eddd867aa578f))
+
+### 📚 Documentation
+
+- Update issue reporting - ([0a8ce5f](https://github.com/dustinblackman/oatmeal/commit/0a8ce5f919e745a7bbdc59f3187c1216959475ef))
+- Add alpine linux install - ([87e0a97](https://github.com/dustinblackman/oatmeal/commit/87e0a97d1f87dfd780b854abd8c48d712a17fb2e))
+
+### 🧪 Testing
+
+- Isolate session tests - ([892753b](https://github.com/dustinblackman/oatmeal/commit/892753be505307f34e43346659de501d16a7942a))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add force arg to hash assets - ([dfabd4f](https://github.com/dustinblackman/oatmeal/commit/dfabd4fbc84a374affb581019f20d5a4a666a43d))
+- Move assets to separate toml file ([#32](https://github.com/dustinblackman/oatmeal/issues/32)) - ([865c435](https://github.com/dustinblackman/oatmeal/commit/865c4350313b8bc2c58d42588d38602eaa44580a))
+- Shrink .goreleaser.yml - ([895a6d1](https://github.com/dustinblackman/oatmeal/commit/895a6d17c384566ba0d9bbae698c531f72893bd0))
+
 ## 0.12.1
 
 _2023-12-29_ - [v0.12.0...v0.12.1](https://github.com/dustinblackman/oatmeal/compare/v0.12.0...v0.12.1)
+
+### ⛰️ Features
+
+- Release v0.12.1 - ([8c18cf4](https://github.com/dustinblackman/oatmeal/commit/8c18cf4ab389fc881fdbc96c00c777bf4a25a45e))
 
 ### 🐛 Bug Fixes
 

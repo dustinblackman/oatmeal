@@ -331,14 +331,14 @@ function oatmeal-sessions() {
 
 ### Report an issue
 
-On each Oatmeal release there is a separate download to helps in reporting issues to really drill down in to what the
+On each Oatmeal release there is a separate download to help in reporting issues to really drill down in to what the
 problem is! If you've run in to a problem, I'd really help appreciate solving it.
 
 1. Head over to [releases](https://github.com/dustinblackman/oatmeal/releases) and download the DEBUG package for the
    latest release of Oatmeal.
 2. Extract the contents of the archive, and `cd` in your terminal inside the archive.
 3. Run your command with the arguments provided in the error message prefixing with `RUST_BACKTRACE=1 ./oatmeal **ARGS-HERE**`
-4. Copy/paste the output and [open an issue](https://github.com/dustinblackman/oatmeal/issues/new).
+4. Copy/paste the output and [open an issue](https://github.com/dustinblackman/oatmeal/issues/new). Include any screenshots you believe will be helpful!
 
 ### Development
 

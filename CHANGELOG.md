@@ -2,12 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.12.3
+
+_2024-01-01_ - [v0.12.2...v0.12.3](https://github.com/dustinblackman/oatmeal/compare/v0.12.2...v0.12.3)
+
+### ⚙️ Miscellaneous Tasks
+
+- Add env for debug log dir - ([c0defb6](https://github.com/dustinblackman/oatmeal/commit/c0defb6ca81559eb5921d6a31aad14e805bd8c1d))
+
 ## 0.12.2
 
 _2024-01-01_ - [v0.12.1...v0.12.2](https://github.com/dustinblackman/oatmeal/compare/v0.12.1...v0.12.2)
 
 ### ⛰️ Features
 
+- Release v0.12.2 - ([91a3e97](https://github.com/dustinblackman/oatmeal/commit/91a3e973a4b7b12039949da16d7c04df950924ab))
 - Move manpages to main cli - ([f5aab04](https://github.com/dustinblackman/oatmeal/commit/f5aab048841b91a3db4e749e74b4652848b7f5e1))
 
 ### 🐛 Bug Fixes

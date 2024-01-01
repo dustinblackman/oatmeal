@@ -69,8 +69,15 @@ async fn main() {
     #[cfg(feature = "dhat-heap")]
     let _profiler = dhat::Profiler::new_heap();
 
-    let file_appender =
-        tracing_appender::rolling::never(dirs::cache_dir().unwrap().join("oatmeal"), "debug.log");
+    let debug_log_dir = env::var("OATMEAL_LOG_DIR").unwrap_or_else(|_| {
+        return dirs::cache_dir()
+            .unwrap()
+            .join("oatmeal")
+            .to_string_lossy()
+            .to_string();
+    });
+
+    let file_appender = tracing_appender::rolling::never(debug_log_dir, "debug.log");
     let (writer, _guard) = tracing_appender::non_blocking(file_appender);
     if env::var("RUST_LOG")
         .unwrap_or_else(|_| return "".to_string())

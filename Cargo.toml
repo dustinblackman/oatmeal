@@ -75,6 +75,7 @@ errno = "=0.3.5"
 cargo-husky = { version = "=1.5.0", default-features = false, features = ["user-hooks"] }
 insta = { version = "=1.34.0", features = ["toml", "yaml"] }
 mockito = "=1.2.0"
+tempfile = "=3.8.1"
 test_utils = { path = "./test/utils" }
 
 [build-dependencies]

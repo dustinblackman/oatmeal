@@ -31,6 +31,7 @@ use crate::domain::models::Loading;
 use crate::domain::models::Message;
 use crate::domain::models::SlashCommand;
 use crate::domain::models::TextArea;
+use crate::domain::services::Sessions;
 use crate::domain::services::events::EventsService;
 use crate::domain::services::AppState;
 use crate::domain::services::AppStateProps;
@@ -285,6 +286,7 @@ pub async fn start(
         theme_name: Config::get(ConfigKey::Theme),
         theme_file: Config::get(ConfigKey::ThemeFile),
         session_id,
+        sessions_service: Sessions::default(),
     };
 
     start_loop(&mut terminal, app_state_pros, tx, rx).await?;

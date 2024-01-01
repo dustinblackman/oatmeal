@@ -36,6 +36,7 @@ impl Default for AppState<'static> {
             messages: vec![],
             session_id: "test".to_string(),
             scroll: Scroll::default(),
+            sessions_service: Sessions::default(),
             waiting_for_backend: false,
         };
     }
@@ -257,6 +258,7 @@ mod init {
     async fn it_inits_and_reloads_from_session() -> Result<()> {
         let backend = BackendManager::get(BackendName::Ollama)?;
         let editor = EditorManager::get(EditorName::None)?;
+        let sessions_dir = tempfile::tempdir()?.into_path();
 
         let app_state = AppState::new(AppStateProps {
             backend,
@@ -265,6 +267,7 @@ mod init {
             theme_name: "base16-onedark".to_string(),
             theme_file: "".to_string(),
             session_id: None,
+            sessions_service: Sessions::new(sessions_dir.clone()),
         })
         .await?;
         app_state.save_session().await?;
@@ -280,9 +283,10 @@ mod init {
             theme_name: "base16-onedark".to_string(),
             theme_file: "".to_string(),
             session_id: Some(session_id.to_string()),
+            sessions_service: Sessions::new(sessions_dir.clone()),
         })
         .await?;
-        Sessions::default().delete(&session_id).await?;
+        Sessions::new(sessions_dir).delete(&session_id).await?;
 
         return Ok(());
     }

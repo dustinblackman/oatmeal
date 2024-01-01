@@ -32,6 +32,7 @@ pub struct AppStateProps {
     pub theme_name: String,
     pub theme_file: String,
     pub session_id: Option<String>,
+    pub sessions_service: Sessions
 }
 
 pub struct AppState<'a> {
@@ -45,6 +46,7 @@ pub struct AppState<'a> {
     pub messages: Vec<Message>,
     pub scroll: Scroll,
     pub session_id: String,
+    pub sessions_service: Sessions,
     pub waiting_for_backend: bool,
 }
 
@@ -72,6 +74,7 @@ impl<'a> AppState<'a> {
             messages: vec![],
             scroll: Scroll::default(),
             session_id: Sessions::create_id(),
+            sessions_service: props.sessions_service,
             waiting_for_backend: false,
         };
 
@@ -114,7 +117,7 @@ impl<'a> AppState<'a> {
 
     async fn from_session(props: AppStateProps) -> Result<AppState<'a>> {
         let session_id = props.session_id.clone().unwrap().to_string();
-        let session = Sessions::default().load(&session_id).await?;
+        let session = props.sessions_service.load(&session_id).await?;
         let theme = Themes::get(&props.theme_name, &props.theme_file)?;
 
         let mut app_state = AppState {
@@ -128,6 +131,7 @@ impl<'a> AppState<'a> {
             messages: session.state.messages,
             scroll: Scroll::default(),
             session_id,
+            sessions_service: props.sessions_service,
             waiting_for_backend: false,
         };
 
@@ -297,8 +301,7 @@ impl<'a> AppState<'a> {
     }
 
     pub async fn save_session(&self) -> Result<()> {
-        Sessions::default()
-            .save(
+       self.sessions_service.save(
                 &self.session_id,
                 &self.backend_context,
                 &self.editor_context,

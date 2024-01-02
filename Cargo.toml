@@ -96,7 +96,7 @@ cargo-about = { version = "0.6.0" }
 cargo-binstall = { version = "1.4.3" }
 cargo-cmd = { version = "0.3.1" }
 cargo-deny = { version = "0.14.2" }
-cargo-gha = { version = "0.4.6" }
+cargo-gha = { version = "1.0.2" }
 cargo-insta = { version = "1.34.0" }
 cargo-llvm-cov = { version = "0.5.25" }
 cargo-nextest = { version = "0.9.59", locked = true }
@@ -128,9 +128,17 @@ similar.opt-level = 3
 [package.metadata.gha]
 targets = ["aarch64-apple-darwin"]
 
-[package.metadata.gha.assets]
-goreleaser_goreleaser = { tag = "v1.23.0", owner_repo = "goreleaser/goreleaser", binaries = ["goreleaser"], target_archives = { aarch64-apple-darwin = "goreleaser_Darwin_arm64.tar.gz" } }
-cli_cli = { tag = "v2.38.0", owner_repo = "cli/cli", binaries = ["gh"], target_archives = { aarch64-apple-darwin = "gh_{NOVTAG}_macOS_arm64.zip" } }
+[[package.metadata.gha.assets]]
+owner_repo = "goreleaser/goreleaser"
+tag = "v1.23.0"
+binaries = ["goreleaser"]
+target_archives = { aarch64-apple-darwin = "goreleaser_Darwin_arm64.tar.gz" }
+
+[[package.metadata.gha.assets]]
+owner_repo = "cli/cli"
+tag = "v2.40.1"
+binaries = ["gh"]
+target_archives = { aarch64-apple-darwin = "gh_{NOVTAG}_macOS_arm64.zip" }
 
 [package.metadata.commands]
 build-completions = '''set -e

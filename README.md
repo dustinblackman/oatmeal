@@ -116,6 +116,12 @@ scoop bucket add dustinblackman https://github.com/dustinblackman/scoop-bucket.g
 scoop install oatmeal
 ```
 
+**Winget**
+
+```sh
+winget install -e --id dustinblackman.oatmeal
+```
+
 ### Cargo
 
 ```sh

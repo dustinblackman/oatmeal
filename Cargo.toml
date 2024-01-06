@@ -93,7 +93,7 @@ walkdir = { version = "=2.4.0" }
 
 [package.metadata.bin]
 cargo-about = { version = "0.6.0" }
-cargo-binstall = { version = "1.4.3" }
+cargo-binstall = { version = "1.4.9", git = "https://github.com/dustinblackman/cargo-binstall", rev = "e51db613bfda636c253a0af43269275a4abee2c5" }
 cargo-cmd = { version = "0.3.1" }
 cargo-deny = { version = "0.14.2" }
 cargo-gha = { version = "1.0.2" }

@@ -15,3 +15,6 @@ nextest = ["bin", "cargo-nextest"]
 watch = ["bin", "cargo-watch"]
 xwin = ["bin", "cargo-xwin"]
 zigbuild = ["bin", "cargo-zigbuild"]
+
+[env]
+BINSTALL_STRATEGIES = "crate-meta-data,compile"

@@ -190,6 +190,8 @@ winget:
     copyright_url: https://github.com/dustinblackman/oatmeal/blob/main/LICENSE
     release_notes_url: https://github.com/dustinblackman/oatmeal/blob/main/CHANGELOG.md
     short_description: Terminal UI to chat with large language models (LLM) using backends such as Ollama, and direct integrations with your favourite editor like Neovim!
+    dependencies:
+      - package_identifier: Microsoft.VCRedist.2015+.x64
     repository:
       owner: dustinblackman
       name: winget-pkgs

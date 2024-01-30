@@ -53,12 +53,13 @@ struct CompletionRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 struct CompletionDeltaResponse {
-    content: String,
+    content: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 struct CompletionChoiceResponse {
     delta: CompletionDeltaResponse,
+    finish_reason: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -202,7 +203,19 @@ impl Backend for OpenAI {
             let ores: CompletionResponse = serde_json::from_str(&cleaned_line).unwrap();
             tracing::debug!(body = ?ores, "Completion response");
 
-            let text = ores.choices[0].delta.content.to_string();
+            let choice = &ores.choices[0];
+            if choice.finish_reason.is_some() {
+                break;
+            }
+            if choice.delta.content.is_none() {
+                continue;
+            }
+
+            let text = choice.delta.content.clone().unwrap().to_string();
+            if text.is_empty() {
+                continue;
+            }
+
             last_message += &text;
             let msg = BackendResponse {
                 author: Author::Model,

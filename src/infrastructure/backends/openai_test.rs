@@ -102,20 +102,29 @@ async fn it_gets_completions() -> Result<()> {
     let first_line = serde_json::to_string(&CompletionResponse {
         choices: vec![CompletionChoiceResponse {
             delta: CompletionDeltaResponse {
-                content: "Hello ".to_string(),
+                content: Some("Hello ".to_string()),
             },
+            finish_reason: None,
         }],
     })?;
 
     let second_line = serde_json::to_string(&CompletionResponse {
         choices: vec![CompletionChoiceResponse {
             delta: CompletionDeltaResponse {
-                content: "World".to_string(),
+                content: Some("World".to_string()),
             },
+            finish_reason: None,
         }],
     })?;
 
-    let body = [first_line, second_line].join("\n");
+    let third_line = serde_json::to_string(&CompletionResponse {
+        choices: vec![CompletionChoiceResponse {
+            delta: CompletionDeltaResponse { content: None },
+            finish_reason: Some("stop".to_string()),
+        }],
+    })?;
+
+    let body = [first_line, second_line, third_line].join("\n");
     let prompt = BackendPrompt {
         text: "Say hi to the world".to_string(),
         backend_context: serde_json::to_string(&vec![MessageRequest {

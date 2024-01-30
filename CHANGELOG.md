@@ -2,9 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.12.4
+
+_2024-01-30_ - [v0.12.3...v0.12.4](https://github.com/dustinblackman/oatmeal/compare/v0.12.3...v0.12.4)
+
+### 🐛 Bug Fixes
+
+- OpenAI finish response parsing - ([ec3b054](https://github.com/dustinblackman/oatmeal/commit/ec3b054fe27ae717071d259c520c4669e636ec8d))
+- Winget installer dependency - ([d458274](https://github.com/dustinblackman/oatmeal/commit/d458274647afc05f1a50bde3b244e19c052e0117))
+
+### 📚 Documentation
+
+- Add winget - ([6d98843](https://github.com/dustinblackman/oatmeal/commit/6d9884377cef371e19a2b7141121b31e7253ed1b))
+
+### ⚙️ Miscellaneous Tasks
+
+- Update binstall - ([a7b20a3](https://github.com/dustinblackman/oatmeal/commit/a7b20a35aa7d4a2abf5536f41a96ddf918997bc2))
+- Update binstall - ([3049bd5](https://github.com/dustinblackman/oatmeal/commit/3049bd5fdec98b1b0b1386df6f305ade3eb64236))
+- Upgrade cargo-gha to latest - ([eda0fbb](https://github.com/dustinblackman/oatmeal/commit/eda0fbb6bc8c8c35fbf24378454f42c25373e91e))
+
 ## 0.12.3
 
 _2024-01-01_ - [v0.12.2...v0.12.3](https://github.com/dustinblackman/oatmeal/compare/v0.12.2...v0.12.3)
+
+### ⛰️ Features
+
+- Release v0.12.3 - ([4fcf937](https://github.com/dustinblackman/oatmeal/commit/4fcf9373c6fe24613ddf2f1ad95784af09b2a1c3))
 
 ### ⚙️ Miscellaneous Tasks
 

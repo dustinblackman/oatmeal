@@ -173,7 +173,7 @@ Commands:
 
 Options:
   -b, --backend <backend>
-          The initial backend hosting a model to connect to. [default: ollama] [env: OATMEAL_BACKEND=] [possible values: langchain, ollama, openai]
+          The initial backend hosting a model to connect to. [default: ollama] [env: OATMEAL_BACKEND=] [possible values: langchain, ollama, openai, gemini]
       --backend-health-check-timeout <backend-health-check-timeout>
           Time to wait in milliseconds before timing out when doing a healthcheck for a backend. [default: 1000] [env: OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT=]
   -m, --model <model>
@@ -194,6 +194,10 @@ Options:
           OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy. [default: https://api.openai.com] [env: OATMEAL_OPENAI_URL=]
       --open-ai-token <open-ai-token>
           OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
+      --gemini-url <gemini-url>
+          Gemini API URL when using the Gemini backend. [default: https://generativelanguage.googleapis.com] [env: OATMEAL_GEMINI_URL=]
+      --gemini-token <gemini-token>
+          Gemini API token when using the Gemini backend. [env: OATMEAL_GEMINI_TOKEN=]
   -h, --help
           Print help
   -V, --version
@@ -261,6 +265,7 @@ The following model backends are supported:
 - [OpenAI](https://chat.openai.com) (Or any compatible proxy/API)
 - [Ollama](https://github.com/jmorganca/ollama)
 - [LangChain/LangServe](https://python.langchain.com/docs/langserve) (Experimental)
+- [Gemini](https://gemini.google.com) (Experimental)
 
 ### Editors
 

@@ -224,6 +224,11 @@ impl Backend for Gemini {
 
             let ores: GenerateContentResponse =
                 serde_json::from_str(&format!("{{ {text} }}", text = cleaned_line)).unwrap();
+
+            if ores.text.is_empty() || ores.text == "" || ores.text == "\n" {
+                break;
+            }
+
             last_message += &ores.text;
             let msg = BackendResponse {
                 author: Author::Model,

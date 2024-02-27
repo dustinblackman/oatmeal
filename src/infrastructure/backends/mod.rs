@@ -1,3 +1,4 @@
+pub mod githubcopilot;
 pub mod langchain;
 pub mod ollama;
 pub mod openai;
@@ -21,6 +22,10 @@ impl BackendManager {
 
         if name == BackendName::OpenAI {
             return Ok(Box::<openai::OpenAI>::default());
+        }
+
+        if name == BackendName::GitHubCopilot {
+            return Ok(Box::<githubcopilot::GithubCopilot>::default());
         }
 
         bail!(format!("No backend implemented for {name}"))

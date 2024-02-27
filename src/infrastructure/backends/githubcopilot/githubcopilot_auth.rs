@@ -3,7 +3,6 @@ use anyhow::Result;
 use rand::Rng;
 use serde::Deserialize;
 use serde::Serialize;
-use std::fs::File;
 use std::io::Read;
 use std::io::Write;
 use std::iter;
@@ -13,9 +12,8 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tokio::sync::mpsc;
 
 use crate::domain::models::Author;
-use crate::domain::models::BackendPrompt;
-use crate::domain::models::BackendResponse;
 use crate::domain::models::Event;
+use crate::domain::models::Message;
 
 fn generate_hex_string(length: usize) -> String {
     const CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -62,7 +60,7 @@ struct GithubAccessTokenResponse {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 struct HostData {
-    #[serde(rename(serialize = "github_com", deserialize = "github.com"))]
+    #[serde(rename(serialize = "github.com", deserialize = "github.com"))]
     github_com: Option<GithubCom>,
 }
 
@@ -95,18 +93,21 @@ impl GithubAuth {
             let res = res.unwrap();
 
             let verification_uri = res.clone().verification_uri;
-            let msg = BackendResponse {
-                author: Author::Model,
-                text: format!(
-                    "Please go to {verification_uri} and enter the code {user_code}",
-                    verification_uri = verification_uri,
-                    user_code = res.clone().user_code,
-                ),
-                done: true,
-                context: None,
-            };
+            let text = format!(
+                "
+Please go to [{verification_uri}] and enter the code {user_code}
+```json
+{{ 
+     \"url\": \"{verification_uri}\",
+     \"code\": \"{user_code}\"
+}}
+```",
+                verification_uri = verification_uri,
+                user_code = res.clone().user_code,
+            );
 
-            tx.send(Event::BackendPromptResponse(msg))?;
+            let msg = Message::new(Author::Oatmeal, &text);
+            tx.send(Event::BackendMessage(msg))?;
 
             let device_code = res.clone().device_code;
             let mut token = GithubAuth::check_github_token(&device_code).await;
@@ -161,7 +162,10 @@ impl GithubAuth {
     fn get_cached_oauth_token() -> Result<String> {
         let home_dir = std::env::var("HOME").expect("HOME environment variable is not set");
         let file_path = Path::new(&home_dir).join(".config/github-copilot/hosts.json");
-        let mut file = File::open(file_path)?;
+        let mut file = std::fs::OpenOptions::new()
+            .read(true)
+            .open(file_path.clone())?;
+
         let mut contents = String::new();
         let _ = file.read_to_string(&mut contents);
 
@@ -243,14 +247,26 @@ impl GithubAuth {
     fn set_cached_oauth_token(user_login: String, token: String) -> Result<()> {
         let home_dir = std::env::var("HOME").expect("HOME environment variable is not set");
         let file_path = Path::new(&home_dir).join(".config/github-copilot/hosts.json");
-        let mut file = File::open(file_path)?;
+        let mut file = std::fs::OpenOptions::new()
+            .read(true)
+            .write(true)
+            .truncate(true)
+            .create(true)
+            .open(file_path.clone())?;
+
         let mut contents = String::new();
-        let _ = file.read_to_string(&mut contents)?;
+        let read_content = file.read_to_string(&mut contents);
+        if read_content.is_err() {
+            contents = "{ \"github.com\": {} }".to_string();
+        }
 
         let user = Some(user_login.clone());
         let oauth_token = Some(token.clone());
 
-        let mut json_data: HostData = serde_json::from_str(&contents)?;
+        let mut json_data: HostData = match serde_json::from_str(&contents) {
+            Ok(data) => data,
+            Err(_) => HostData { github_com: None },
+        };
 
         if json_data.github_com.is_none() {
             json_data.github_com = Some(GithubCom { user, oauth_token });
@@ -260,10 +276,18 @@ impl GithubAuth {
                 github_com.user = user;
             }
             github_com.oauth_token = oauth_token;
-
             json_data.github_com = Some(github_com);
         }
-        file.write(serde_json::to_string(&json_data)?.as_bytes())?;
+
+        let text = serde_json::to_string(&json_data)?;
+        let w = file.write_all(text.as_bytes());
+        if w.is_err() {
+            bail!(
+                "Something went wrong! {err}",
+                err = w.err().unwrap().to_string()
+            );
+        }
+        file.flush()?;
 
         return Ok(());
     }

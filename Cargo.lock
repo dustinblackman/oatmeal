@@ -1218,6 +1218,7 @@ dependencies = [
  "itertools",
  "mockito",
  "once_cell",
+ "rand",
  "ratatui",
  "reqwest",
  "serde",

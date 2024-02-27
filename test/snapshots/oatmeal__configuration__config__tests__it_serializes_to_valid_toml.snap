@@ -3,7 +3,7 @@ source: src/configuration/config_test.rs
 expression: res
 ---
 '''
-# The initial backend hosting a model to connect to. [possible values: langchain, ollama, openai]
+# The initial backend hosting a model to connect to. [possible values: langchain, ollama, openai, githubcopilot]
 backend = "ollama"
 
 # Time to wait in milliseconds before timing out when doing a healthcheck for a backend.

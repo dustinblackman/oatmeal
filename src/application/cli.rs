@@ -399,14 +399,6 @@ pub fn build() -> Command {
                 .global(true),
         )
         .arg(
-            Arg::new(ConfigKey::GeminiURL.to_string())
-                .long(ConfigKey::GeminiURL.to_string())
-                .env("OATMEAL_GEMINI_URL")
-                .num_args(1)
-                .help(format!("Google Gemini API URL when using the Gemini backend. [default: {}]", Config::default(ConfigKey::OpenAiURL)))
-                .global(true),
-        )
-        .arg(
             Arg::new(ConfigKey::GeminiToken.to_string())
                 .long(ConfigKey::GeminiToken.to_string())
                 .env("OATMEAL_GEMINI_TOKEN")

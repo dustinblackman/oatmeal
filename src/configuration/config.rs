@@ -34,7 +34,6 @@ pub enum ConfigKey {
     OpenAiToken,
     OpenAiURL,
     GeminiToken,
-    GeminiURL,
     SessionID,
     Theme,
     ThemeFile,
@@ -85,7 +84,6 @@ impl Config {
             ConfigKey::OpenAiToken => "",
             ConfigKey::OpenAiURL => "https://api.openai.com",
             ConfigKey::GeminiToken => "",
-            ConfigKey::GeminiURL => "https://generativelanguage.googleapis.com",
             ConfigKey::Theme => "base16-onedark",
             ConfigKey::ThemeFile => "",
 

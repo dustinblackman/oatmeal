@@ -88,7 +88,7 @@ pub struct Gemini {
 impl Default for Gemini {
     fn default() -> Gemini {
         return Gemini {
-            url: Config::get(ConfigKey::GeminiURL),
+            url: "https://generativelanguage.googleapis.com".to_string(),
             token: Config::get(ConfigKey::GeminiToken),
             timeout: Config::get(ConfigKey::BackendHealthCheckTimeout),
         };

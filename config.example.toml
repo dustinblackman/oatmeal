@@ -22,11 +22,8 @@ ollama-url = "http://localhost:11434"
 # OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy.
 open-ai-url = "https://api.openai.com"
 
-# OpenAI API token when using the OpenAI backend.
+# Gemini API token when using the OpenAI backend.
 # gemini-token = ""
-
-# OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy.
-gemini-url = "https://generativelanguage.googleapis.com"
 
 # Sets code syntax highlighting theme. [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
 theme = "base16-onedark"

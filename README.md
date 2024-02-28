@@ -194,8 +194,6 @@ Options:
           OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy. [default: https://api.openai.com] [env: OATMEAL_OPENAI_URL=]
       --open-ai-token <open-ai-token>
           OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
-      --gemini-url <gemini-url>
-          Gemini API URL when using the Gemini backend. [default: https://generativelanguage.googleapis.com] [env: OATMEAL_GEMINI_URL=]
       --gemini-token <gemini-token>
           Gemini API token when using the Gemini backend. [env: OATMEAL_GEMINI_TOKEN=]
   -h, --help

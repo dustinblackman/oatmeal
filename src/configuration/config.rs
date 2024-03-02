@@ -68,7 +68,12 @@ impl Config {
         let default_editor = EditorName::Clipboard.to_string();
 
         #[cfg(not(target_os = "macos"))]
-        let config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
+        let mut config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
+        if !config_path.exists() {
+            config_path = dirs::config_local_dir()
+                .unwrap()
+                .join("oatmeal/config.toml");
+        }
         #[cfg(target_os = "macos")]
         let config_path =
             path::PathBuf::from(env::var("HOME").unwrap()).join(".config/oatmeal/config.toml");

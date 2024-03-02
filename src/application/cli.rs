@@ -95,11 +95,12 @@ async fn create_config_file() -> Result<()> {
         fs::create_dir_all(config_file_path.parent().unwrap()).await?;
     }
 
-    let mut file = fs::File::create(config_file_path).await?;
+    let mut file = fs::File::create(config_file_path.clone()).await?;
     file.write_all(Config::serialize_default(build()).as_bytes())
         .await?;
 
-    println!("Created default config file at {config_file_path_str}");
+    let config_path_display = config_file_path.as_os_str().to_str().unwrap();
+    println!("Created default config file at {config_path_display}");
     return Ok(());
 }
 

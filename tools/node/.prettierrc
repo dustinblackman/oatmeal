@@ -1,0 +1,7 @@
+{
+  "plugins": ["prettier-plugin-toml"],
+  "printWidth": 100,
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "none"
+}

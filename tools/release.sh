@@ -16,7 +16,7 @@ cargo cmd thirdparty
 # Update change log.
 export OM_VERSION=$(cat Cargo.toml | grep version | head -n1 | awk -F '"' '{print $2}')
 cargo bin git-cliff -o CHANGELOG.md --tag "v$OM_VERSION"
-cargo bin dprint fmt
+cargo bin mise x -C tools/node -- npm run prettier-write
 
 # Add release commit
 git add .
@@ -30,7 +30,7 @@ rm -rf manpages && mkdir manpages && ./target/debug/oatmeal manpages | gzip -c -
 cargo xtask update-readme
 rm -f config.example.toml
 ./target/debug/oatmeal config default >config.example.toml
-cargo bin dprint fmt
+cargo bin mise x -C tools/node -- npm run prettier-write
 
 # Override release commit with updated readme.
 git add .
@@ -63,7 +63,10 @@ fd -t f . './dist-gh' | grep -v -i -E '(dwp|dSYM|pdb)' | xargs -L1 chmod +x
 # Release to Github
 echo "$GITHUB_TOKEN" | docker login ghcr.io -u dustinblackman --password-stdin
 AUR_KEY=$(cat ~/.ssh/aur) RPM_KEY="$HOME/.gpg/yum-private.key" cargo gha goreleaser --clean
-cargo bin git-cliff --latest --strip header | cargo bin dprint fmt --stdin md | cargo gha gh release edit "v$OM_VERSION" --notes-file -
+cargo bin git-cliff --latest --strip header >ghrelease.md
+cargo bin mise x -C tools/node -- npm run prettier-write
+cargo gha gh release edit "v$OM_VERSION" --notes-file ghrelease.md
+rm ghrelease.md
 cargo gha gh pr list -R microsoft/winget-pkgs -A dustinblackman --state open --json number | jq -rc '.[] | .number' | while read f; do open "https://github.com/microsoft/winget-pkgs/pull/$f"; done
 
 # Release to package managers not supported by GoReleaser.

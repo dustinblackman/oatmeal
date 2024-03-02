@@ -6,7 +6,7 @@ targets = [
   { triple = "x86_64-apple-darwin" },
   { triple = "aarch64-apple-darwin" },
   { triple = "x86_64-pc-windows-msvc" },
-  { triple = "aarch64-pc-windows-msvc" },
+  { triple = "aarch64-pc-windows-msvc" }
 ]
 
 [advisories]
@@ -16,24 +16,37 @@ git-fetch-with-cli = true
 unlicensed = "deny"
 copyleft = "deny"
 confidence-threshold = 0.93
-allow = [
-  "MIT",
-  "Apache-2.0",
-]
+allow = ["MIT", "Apache-2.0"]
 exceptions = [
-  { allow = ["Unicode-DFS-2016"], name = "unicode-ident" },
-  { allow = ["BSD-3-Clause"], name = "encoding_rs" },
-  { allow = ["BSL-1.0"], name = "clipboard-win" },
-  { allow = ["BSL-1.0"], name = "error-code" },
-  { allow = ["BSL-1.0"], name = "str-buf" },
-  { allow = ["MIT", "ISC", "OpenSSL"], name = "ring" },
-  { allow = ["ISC"], name = "rustls-webpki" },
-  { allow = ["ISC"], name = "untrusted" },
+  { allow = [
+    "Unicode-DFS-2016"
+  ], name = "unicode-ident" },
+  { allow = [
+    "BSD-3-Clause"
+  ], name = "encoding_rs" },
+  { allow = [
+    "BSL-1.0"
+  ], name = "clipboard-win" },
+  { allow = [
+    "BSL-1.0"
+  ], name = "error-code" },
+  { allow = [
+    "BSL-1.0"
+  ], name = "str-buf" },
+  { allow = [
+    "MIT",
+    "ISC",
+    "OpenSSL"
+  ], name = "ring" },
+  { allow = [
+    "ISC"
+  ], name = "rustls-webpki" },
+  { allow = [
+    "ISC"
+  ], name = "untrusted" }
 ]
 
 [[licenses.clarify]]
 name = "ring"
 expression = "MIT AND ISC AND OpenSSL"
-license-files = [
-  { path = "LICENSE", hash = 0xbd0eed23 },
-]
+license-files = [{ path = "LICENSE", hash = 0xbd0eed23 }]

@@ -67,7 +67,7 @@ impl Config {
         let default_backend = BackendName::Ollama.to_string();
         let default_editor = EditorName::Clipboard.to_string();
 
-        let mut config_path = path::PathBuf::default();
+        let mut config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
 
         #[cfg(target_os = "macos")]
         {

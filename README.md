@@ -91,7 +91,7 @@ yay -S oatmeal-bin
 
 ```sh
 arch=$(uname -a | grep -q aarch64 && echo 'arm64' || echo 'amd64')
-curl -L -o oatmeal.apk "https://github.com/dustinblackman/oatmeal/releases/download/v0.12.4/oatmeal_0.12.4_linux_${arch}.apk"
+curl -L -o oatmeal.apk "https://github.com/dustinblackman/oatmeal/releases/download/v0.12.5/oatmeal_0.12.5_linux_${arch}.apk"
 apk add --allow-untrusted ./oatmeal.apk
 ```
 
@@ -104,7 +104,7 @@ apk add --allow-untrusted ./oatmeal.apk
 <!-- choco-install start -->
 
 ```sh
-choco install oatmeal --version=0.12.4
+choco install oatmeal --version=0.12.5
 ```
 
 <!-- choco-install end -->
@@ -158,8 +158,8 @@ See `oatmeal --help`, `/help` in chat, or the output below to get all the detail
 ```
 Terminal UI to chat with large language models (LLM) using different model backends, and direct integrations with your favourite editors!
 
-Version: 0.12.4
-Commit: v0.12.4
+Version: 0.12.5
+Commit: v0.12.5
 
 Usage: oatmeal [OPTIONS] [COMMAND]
 

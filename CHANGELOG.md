@@ -2,9 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.12.5
+
+_2024-03-02_ - [v0.12.4...v0.12.5](https://github.com/dustinblackman/oatmeal/compare/v0.12.4...v0.12.5)
+
+### 🐛 Bug Fixes
+
+- Config paths - ([2ae187a](https://github.com/dustinblackman/oatmeal/commit/2ae187a14d52e6c8083a5bff18bddfd6889294bd))
+- Formatting and linting - ([f4c2efb](https://github.com/dustinblackman/oatmeal/commit/f4c2efb2e4e039213f1bbd88cfd6f0fd395a0eca))
+- Loading entire file when no code blocks are selected - ([3655871](https://github.com/dustinblackman/oatmeal/commit/3655871838d54b15e4f2888dd46712b15d8993be))
+- Config file log message on windows - ([d61375b](https://github.com/dustinblackman/oatmeal/commit/d61375bb0849770b42802f0040253c95900bb8f8))
+- Use xdg config dirs by default ([#46](https://github.com/dustinblackman/oatmeal/issues/46)) - ([f2110b5](https://github.com/dustinblackman/oatmeal/commit/f2110b5f3628681268e08c6b3fb2fc13e2c95f1f))
+
+### ⚙️ Miscellaneous Tasks
+
+- Merge branch 'fix-configs' - ([8aa838b](https://github.com/dustinblackman/oatmeal/commit/8aa838b9c4b8cc648e74a5a2dbd9724e8477f22b))
+- Cleanup CI titles - ([7ea8b00](https://github.com/dustinblackman/oatmeal/commit/7ea8b0079d0a22e9de7891b131bd639380cda047))
+- Drop dprint - ([6128438](https://github.com/dustinblackman/oatmeal/commit/6128438284ee88a73a1f65cd2d1a0dd59fd19db2))
+
 ## 0.12.4
 
 _2024-01-30_ - [v0.12.3...v0.12.4](https://github.com/dustinblackman/oatmeal/compare/v0.12.3...v0.12.4)
+
+### ⛰️ Features
+
+- Release v0.12.4 - ([7e70405](https://github.com/dustinblackman/oatmeal/commit/7e70405fb155c3f14d93d25a5559208c973831fa))
 
 ### 🐛 Bug Fixes
 

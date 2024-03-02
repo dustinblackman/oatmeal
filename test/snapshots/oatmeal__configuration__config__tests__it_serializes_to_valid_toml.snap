@@ -30,9 +30,6 @@ open-ai-url = "https://api.openai.com"
 # Google Gemini API token when using the Gemini backend.
 # gemini-token = ""
 
-# Google Gemini API URL when using the Gemini backend.
-gemini-url = "https://generativelanguage.googleapis.com"
-
 # Sets code syntax highlighting theme. [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
 theme = "base16-onedark"
 

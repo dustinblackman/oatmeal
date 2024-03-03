@@ -1,6 +1,5 @@
 use anyhow::bail;
 use anyhow::Result;
-use ratatui::backend;
 use test_utils::insta_snapshot;
 use tokio::sync::mpsc;
 

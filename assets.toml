@@ -88,6 +88,6 @@ files = [
   "Themes/base16-monokai.tmTheme",
   "Themes/base16-one-light.tmTheme",
   "Themes/base16-onedark.tmTheme",
-  "Themes/base16-seti.tmTheme",
+  "Themes/base16-seti.tmTheme"
 ]
 nix-hash = "sha256-reYGXrhhHNSp/1k6YJ2hxj4jnJQCDgy2Nzxse2PviTA="

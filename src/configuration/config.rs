@@ -67,11 +67,28 @@ impl Config {
         let default_backend = BackendName::Ollama.to_string();
         let default_editor = EditorName::Clipboard.to_string();
 
-        #[cfg(not(target_os = "macos"))]
-        let config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
+        let mut config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
+
         #[cfg(target_os = "macos")]
-        let config_path =
-            path::PathBuf::from(env::var("HOME").unwrap()).join(".config/oatmeal/config.toml");
+        {
+            config_path =
+                path::PathBuf::from(env::var("HOME").unwrap()).join(".config/oatmeal/config.toml");
+        }
+
+        #[cfg(target_os = "windows")]
+        {
+            config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
+        }
+
+        #[cfg(target_os = "linux")]
+        {
+            config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
+            if !config_path.exists() {
+                config_path = dirs::config_local_dir()
+                    .unwrap()
+                    .join("oatmeal/config.toml");
+            }
+        }
 
         let res = match key {
             ConfigKey::Backend => &default_backend,

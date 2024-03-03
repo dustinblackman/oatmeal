@@ -1,0 +1,16 @@
+{
+  "name": "oatmeal-node-tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prettier-check": "NODE_PATH=`pwd` prettier --check --config ./.prettierrc --ignore-path ./.prettierignore ../../",
+    "prettier-write": "NODE_PATH=`pwd` prettier --write --config ./.prettierrc --ignore-path ./.prettierignore ../../"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prettier": "3.2.2",
+    "prettier-plugin-toml": "2.0.1"
+  }
+}

@@ -56,7 +56,7 @@ impl EditorContext {
         let language = &self.language;
         let code = &self.code;
 
-        if code.is_empty() {
+        if code.is_empty() || self.end_line.is_none() {
             return format!("File: {file_path}");
         }
 

@@ -53,7 +53,15 @@ archives:
 
 signs:
   - artifacts: checksum
-    args: ["-u", "6A34CFEE77FE8257C3BB92FE24C3FC5D6987904B", "--output", "${signature}", "--detach-sign", "${artifact}"]
+    args:
+      [
+        "-u",
+        "6A34CFEE77FE8257C3BB92FE24C3FC5D6987904B",
+        "--output",
+        "${signature}",
+        "--detach-sign",
+        "${artifact}"
+      ]
 
 brews:
   - ids:

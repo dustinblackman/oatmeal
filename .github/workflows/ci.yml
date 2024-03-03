@@ -51,9 +51,9 @@ jobs:
         run: |
           cargo build
           cargo nextest run
-      - name: Validate binary runs
+      - name: Validate binary runs (unix)
         if: matrix.os != 'windows-latest'
         run: ./target/debug/oatmeal --help
-      - name: Validate binary runs
+      - name: Validate binary runs (windows)
         if: matrix.os == 'windows-latest'
         run: .\target\debug\oatmeal.exe --help

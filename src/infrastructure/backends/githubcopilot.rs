@@ -98,8 +98,7 @@ impl Backend for GithubCopilot {
             bail!("GithubCopilot URL is not defined");
         }
 
-        // OpenAi are trolls with their API where the index either returns a 404 or a
-        // 418. If using the official API, don't bother health checking it.
+        // Same as with OpenAI backend
         if self.url == "https://api.githubcopilot.com" {
             return Ok(());
         }

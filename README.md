@@ -173,7 +173,7 @@ Commands:
 
 Options:
   -b, --backend <backend>
-          The initial backend hosting a model to connect to. [default: ollama] [env: OATMEAL_BACKEND=] [possible values: langchain, ollama, openai]
+          The initial backend hosting a model to connect to. [default: ollama] [env: OATMEAL_BACKEND=] [possible values: langchain, ollama, openai, githubcopilot]
       --backend-health-check-timeout <backend-health-check-timeout>
           Time to wait in milliseconds before timing out when doing a healthcheck for a backend. [default: 1000] [env: OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT=]
   -m, --model <model>
@@ -261,6 +261,7 @@ The following model backends are supported:
 - [OpenAI](https://chat.openai.com) (Or any compatible proxy/API)
 - [Ollama](https://github.com/jmorganca/ollama)
 - [LangChain/LangServe](https://python.langchain.com/docs/langserve) (Experimental)
+- [Github Copilot Chat](https://github.com/features/copilot) (Experimental)
 
 ### Editors
 

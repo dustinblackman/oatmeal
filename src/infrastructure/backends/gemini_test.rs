@@ -120,6 +120,7 @@ async fn it_lists_models() -> Result<()> {
 
 #[tokio::test]
 async fn it_gets_completions() -> Result<()> {
+    Config::set(ConfigKey::Model, "model-1");
     let body = [
         "[",
         "\"contents\": [{",

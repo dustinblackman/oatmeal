@@ -17,13 +17,14 @@ RUN mkdir -p /tmp/build-cache/.cargo && \
 # Only install what is needed for general development.
 WORKDIR /tmp/build-cache
 RUN cargo install cargo-run-bin
-RUN cargo cmd setup-nightly
-RUN cargo bin committed --help
-RUN cargo bin mise --help
-RUN cargo deny --help
-RUN cargo insta --help
-RUN cargo nextest --help
-RUN cargo watch --help
+# Disabled for devpod bug report.
+# RUN cargo cmd setup-nightly
+# RUN cargo bin committed --help
+# RUN cargo bin mise --help
+# RUN cargo deny --help
+# RUN cargo insta --help
+# RUN cargo nextest --help
+# RUN cargo watch --help
 
 FROM rust:1.74.0-slim-bookworm
 

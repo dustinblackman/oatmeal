@@ -32,15 +32,7 @@ fn convert_err(err: reqwest::Error) -> std::io::Error {
 #[serde(rename_all = "camelCase")]
 struct Model {
     name: String,
-    // version: String,
-    // display_name: String,
-    // description: String,
-    // input_token_limit: u32,
-    // output_token_limit: u32,
     supported_generation_methods: Vec<String>,
-    // temperature: f64,
-    // top_p: f64,
-    // top_k: u32,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

@@ -37,6 +37,7 @@ fn to_res(action: Option<Event>) -> Result<BackendResponse> {
 
 #[tokio::test]
 async fn it_successfully_health_checks() {
+    Config::set(ConfigKey::Model, "model-1");
     let mut server = mockito::Server::new();
     let mock = server
         .mock("GET", "/v1beta/model-1?key=abc")
@@ -72,6 +73,7 @@ async fn it_successfully_health_checks_with_official_api() {
 
 #[tokio::test]
 async fn it_fails_health_checks() {
+    Config::set(ConfigKey::Model, "model-1");
     let mut server = mockito::Server::new();
     let mock = server
         .mock("GET", "/v1beta/model-1?key=abc")
@@ -91,21 +93,11 @@ async fn it_lists_models() -> Result<()> {
         models: vec![
             Model {
                 name: "first".to_string(),
-                // description: "First model".to_string(),
-                // display_name: "First model".to_string(),
-                // input_token_limit: 2048,
-                // version: "1.0".to_string(),
                 supported_generation_methods: vec!["generateContent".to_string()],
-                // output_token_limit: 2048,
             },
             Model {
                 name: "second".to_string(),
-                // description: "Second model".to_string(),
-                // display_name: "Second model".to_string(),
-                // input_token_limit: 2048,
-                // version: "1.0".to_string(),
                 supported_generation_methods: vec!["generateContent".to_string()],
-                // output_token_limit: 2048,
             },
         ],
     })?;

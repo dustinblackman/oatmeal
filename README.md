@@ -351,7 +351,9 @@ problem is! If you've run in to a problem, I'd really help appreciate solving it
 
 #### Setup
 
-The following will get you set up with all the necessary tooling to work on Oatmeal.
+[![Open in DevPod!](.github/devpod.svg)](https://devpod.sh/open#https://github.com/dustinblackman/oatmeal)
+
+Oatmeal comes with a ready made DevContainer that is compatiable with VSCode/Jetbrains/friends. It's recommended to use [DevPod](https://github.com/loft-sh/devpod) as it will take advantage of a prebuilt development image. However if you wish to develop fully local, the following will get you set up with all the necessary tooling.
 
 ```sh
 cargo install cargo-run-bin

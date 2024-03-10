@@ -1,0 +1,14 @@
+version: "3"
+services:
+  oatmeal:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: /bin/sh -c "trap :; TERM INT; sleep infinity & wait"
+    environment:
+      OATMEAL_OLLAMA_URL: http://host.docker.internal:11434
+    volumes:
+      - ..:/workspace
+      - cargo_target:/workspace/target
+volumes:
+  cargo_target:

@@ -1,0 +1,20 @@
+on: workflow_dispatch
+name: devpod
+jobs:
+  devpod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build
+        run: |
+          sudo curl -L -o /usr/local/bin/devpod https://github.com/loft-sh/devpod/releases/download/v0.5.4/devpod-linux-amd64
+          if [[ "$(sha256sum /usr/local/bin/devpod | awk '{print $1}')" != "7a2043e8dcc035e26dba3c984ffb3db68894f5a2fcadf33c1de0b92b7069b634" ]]; then
+            echo "Devpod checksum failed"
+            exit 1
+          fi
+          sudo chmod +x /usr/local/bin/devpod
+          devpod build --platform linux/amd64,linux/arm64 .

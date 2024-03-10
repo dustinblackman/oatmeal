@@ -1,0 +1,17 @@
+{
+  "name": "oatmeal",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "oatmeal",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": "/workspace/.devcontainer/start.sh",
+  "remoteUser": "oatmeal",
+  "features": {
+    "ghcr.io/dustinblackman/devcontainer-features/base:latest": {}
+  },
+  "customizations": {
+    "devpod": {
+      "prebuildRepository": "ghcr.io/dustinblackman/devcontainer-oatmeal"
+    }
+  }
+}

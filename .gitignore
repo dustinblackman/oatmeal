@@ -2,6 +2,7 @@ dist/
 dist-gh/
 target/
 .bin/
+.bin
 .gha/
 completions/
 manpages/
@@ -14,3 +15,4 @@ dhat-heap.json
 tools/thirdparty/.failed-lint
 ghrelease.md
 tools/node/node_modules/
+.devcontainer/.devpod-internal/

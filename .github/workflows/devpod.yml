@@ -18,4 +18,5 @@ jobs:
             exit 1
           fi
           sudo chmod +x /usr/local/bin/devpod
+          devpod provider add docker
           devpod build --platform linux/amd64,linux/arm64 .

@@ -194,6 +194,8 @@ Options:
           OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy. [default: https://api.openai.com] [env: OATMEAL_OPENAI_URL=]
       --open-ai-token <open-ai-token>
           OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
+      --claude-token <claude-token>
+          Anthropic's Claude API token when using the Claude backend [env: OATMEAL_CLAUDE_TOKEN=]
   -h, --help
           Print help
   -V, --version
@@ -261,6 +263,7 @@ The following model backends are supported:
 - [OpenAI](https://chat.openai.com) (Or any compatible proxy/API)
 - [Ollama](https://github.com/jmorganca/ollama)
 - [LangChain/LangServe](https://python.langchain.com/docs/langserve) (Experimental)
+- [Claude](https://claude.ai) (Experimental)
 
 ### Editors
 

@@ -2,7 +2,11 @@
 #[path = "githubcopilot_test.rs"]
 mod tests;
 
-use std::time::Duration;
+use rand::Rng;
+use std::io::Read;
+use std::iter;
+use std::path::Path;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use anyhow::bail;
 use anyhow::Result;
@@ -23,13 +27,48 @@ use crate::domain::models::BackendPrompt;
 use crate::domain::models::BackendResponse;
 use crate::domain::models::Event;
 
-use self::githubcopilot_auth::GithubAuth;
-
-pub mod githubcopilot_auth;
-
 fn convert_err(err: reqwest::Error) -> std::io::Error {
     let err_msg = err.to_string();
     return std::io::Error::new(std::io::ErrorKind::Interrupted, err_msg);
+}
+
+fn generate_hex_string(length: usize) -> String {
+    const CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let mut rng = rand::thread_rng();
+    let one_char = || CHARSET[rng.gen_range(0..CHARSET.len())] as char;
+    iter::repeat_with(one_char).take(length).collect()
+}
+
+fn get_cached_oauth_token() -> Result<String> {
+    let home_dir = std::env::var("HOME").expect("HOME environment variable is not set");
+    let file_path = Path::new(&home_dir).join(".config/github-copilot/hosts.json");
+    let mut file = std::fs::OpenOptions::new()
+        .read(true)
+        .open(file_path.clone())?;
+
+    let mut contents = String::new();
+    let _ = file.read_to_string(&mut contents);
+
+    let json_data: HostData = serde_json::from_str(&contents)?;
+
+    if let Some(github_com) = json_data.github_com {
+        if let Some(token) = github_com.oauth_token {
+            return Ok(token);
+        }
+    }
+    bail!("Github Copilot token not found")
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+struct HostData {
+    #[serde(rename(serialize = "github.com", deserialize = "github.com"))]
+    github_com: Option<GithubCom>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+struct GithubCom {
+    user: Option<String>,
+    oauth_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -75,13 +114,37 @@ struct CompletionResponse {
 pub struct GithubCopilot {
     url: String,
     timeout: String,
+    machine_id: String,
+    vscode_sessionid: String,
+    oauth_token: Option<String>,
+    token: Option<Token>,
+}
+
+pub struct Token {
+    token: String,
+    expires_at: u64,
 }
 
 impl Default for GithubCopilot {
     fn default() -> GithubCopilot {
+        let time = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_millis()
+            .to_string();
+
+        let oauth_token = match get_cached_oauth_token() {
+            Ok(token) => Some(token),
+            Err(_) => None,
+        };
+
         return GithubCopilot {
             url: "https://api.githubcopilot.com".to_string(),
             timeout: Config::get(ConfigKey::BackendHealthCheckTimeout),
+            vscode_sessionid: uuid::Uuid::new_v4().to_string() + &time,
+            machine_id: generate_hex_string(65),
+            oauth_token,
+            token: None,
         };
     }
 }
@@ -96,6 +159,10 @@ impl Backend for GithubCopilot {
     async fn health_check(&self) -> Result<()> {
         if self.url.is_empty() {
             bail!("GithubCopilot URL is not defined");
+        }
+
+        if self.oauth_token.is_none() {
+            bail!("GithubCopilot token not found. Please install copilot if needed: gh extension install github/gh-copilot and login using gh auth login");
         }
 
         // Same as with OpenAI backend
@@ -135,7 +202,7 @@ impl Backend for GithubCopilot {
         prompt: BackendPrompt,
         tx: &'a mpsc::UnboundedSender<Event>,
     ) -> Result<()> {
-        let auth = GithubAuth::new(tx).await?;
+        let token = self.get_copilot_token().await?;
 
         let mut messages: Vec<MessageRequest> = vec![];
         if !prompt.backend_context.is_empty() {
@@ -155,14 +222,11 @@ impl Backend for GithubCopilot {
 
         let res = reqwest::Client::new()
             .post(format!("{url}/chat/completions", url = self.url))
-            .header(
-                "Authorization",
-                format!("Bearer {token}", token = auth.token),
-            )
+            .header("Authorization", format!("Bearer {token}", token = token))
             .header("content-type", "application/json")
             .header("x-request-id", uuid::Uuid::new_v4().to_string())
-            .header("vscode-sessionid", auth.vscode_sessionid)
-            .header("machine-id", auth.machine_id)
+            .header("vscode-sessionid", &self.vscode_sessionid)
+            .header("machine-id", &self.machine_id)
             .header("user-agent", "GitHubCopilotChat/0.4.1")
             .header("editor-version", "vscode/1.85.1")
             .header("editor-plugin-version", "copilot-chat/0.4.1")
@@ -244,5 +308,67 @@ impl Backend for GithubCopilot {
         tx.send(Event::BackendPromptResponse(msg))?;
 
         return Ok(());
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+struct CopilotTokenResponse {
+    token: String,
+    expires_at: u64,
+    chat_enabled: bool,
+}
+
+impl GithubCopilot {
+    async fn get_copilot_token(&self) -> Result<String> {
+        // check lifetime and return saved token if it's still valid
+        match &self.token {
+            Some(token) => {
+                if token.token != ""
+                    && token.expires_at
+                        > SystemTime::now()
+                            .duration_since(UNIX_EPOCH)
+                            .unwrap()
+                            .as_secs()
+                {
+                    return Ok(token.token.clone());
+                }
+            }
+            None => {}
+        }
+        match self.create_new_token().await {
+            Ok(token) => {
+                // self.token = Some(Token {
+                //     token: token.token.clone(),
+                //     expires_at: token.expires_at,
+                // });
+                return Ok(token.token);
+            }
+            Err(err) => {
+                bail!(err);
+            }
+        }
+    }
+
+    async fn create_new_token(&self) -> Result<CopilotTokenResponse> {
+        let oauth_token = match &self.oauth_token {
+            Some(token) => token,
+            None => bail!("Github Copilot token not found"),
+        };
+
+        let res = reqwest::Client::new()
+            .get("https://api.github.com/copilot_internal/v2/token".to_string())
+            .header(
+                "Authorization",
+                format!("token {oauth_token}", oauth_token = oauth_token),
+            )
+            .header("editor-version", "vscode/1.85.1")
+            .header("editor-plugin-version", "copilot-chat/0.4.1")
+            .header("user-agent", "GitHubCopilotChat/0.4.1")
+            .send()
+            .await;
+
+        let text = res?.text().await?;
+        let token_result: CopilotTokenResponse = serde_json::from_str(&text)?;
+        return Ok(token_result);
     }
 }

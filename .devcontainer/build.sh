@@ -15,9 +15,9 @@ tools/node/node_modules/.bin/devcontainer build --workspace-folder . --config ./
 echo "[BUILD] Building amd64"
 tools/node/node_modules/.bin/devcontainer build --workspace-folder . --config ./.devcontainer/devcontainer-src.json --push --platform "linux/amd64" --image-name ghcr.io/dustinblackman/devcontainer-oatmeal:latest-amd64
 echo "[BUILD] Creating manifest"
-docker manifest create ghcr.io/dustinblackman/devcontainer-oatmeal:latest ghcr.io/dustinblackman/devcontainer-oatmeal:latest-arm64 ghcr.io/dustinblackman/devcontainer-oatmeal:latest-amd64
-echo "[BUILD] Pushing manifest"
-BUILD_SHA=$(docker manifest push ghcr.io/dustinblackman/devcontainer-oatmeal:latest)
+docker buildx imagetools create -t ghcr.io/dustinblackman/devcontainer-oatmeal:latest ghcr.io/dustinblackman/devcontainer-oatmeal:latest-arm64 ghcr.io/dustinblackman/devcontainer-oatmeal:latest-amd64
+BUILD_SHA=$(docker buildx imagetools inspect ghcr.io/dustinblackman/devcontainer-oatmeal:latest | grep 'Digest' | awk '{print $2}')
+echo "[BUILD] Manifest SHA: ${BUILD_SHA}"
 
 echo "[BUILD] Updating docker-compose.yml"
 DC_UPDATE=$(yq ".services.oatmeal.image = \"ghcr.io/dustinblackman/devcontainer-oatmeal@${BUILD_SHA}\"" ./.devcontainer/docker-compose.yml)

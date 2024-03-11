@@ -15,11 +15,12 @@ COPY .cargo/ /tmp/build-cache/.cargo
 
 # Only install what is needed for general development.
 WORKDIR /tmp/build-cache
-RUN cargo install cargo-run-bin
-RUN mkdir /tmp/build-cache/.bin
+RUN mkdir .bin
+# RUN cargo install cargo-run-bin
+# RUN mkdir /tmp/build-cache/.bin
 # RUN cargo bin committed --help
-RUN cargo bin mise --help
-RUN cargo cmd --help
+# RUN cargo bin mise --help
+# RUN cargo cmd --help
 # RUN cargo deny --help
 # RUN cargo insta --help
 # RUN cargo nextest --help
@@ -36,10 +37,10 @@ RUN groupadd --gid 1000 oatmeal && \
 
 USER oatmeal
 
-COPY --chown=1000:1000 --from=builder /usr/local/cargo/bin/cargo-bin /usr/local/cargo/bin/cargo-bin
+# COPY --chown=1000:1000 --from=builder /usr/local/cargo/bin/cargo-bin /usr/local/cargo/bin/cargo-bin
 COPY --chown=1000:1000 --from=builder /tmp/build-cache/ /tmp/build-cache
 
-RUN cd /tmp/build-cache/ && \
-    cargo --help && \
-    cargo cmd setup-nightly && \
-    cargo bin mise install
+# RUN cd /tmp/build-cache/ && \
+#     cargo --help && \
+#     cargo cmd setup-nightly && \
+#     cargo bin mise install

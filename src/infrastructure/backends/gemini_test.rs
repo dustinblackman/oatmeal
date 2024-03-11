@@ -121,26 +121,33 @@ async fn it_lists_models() -> Result<()> {
 #[tokio::test]
 async fn it_gets_completions() -> Result<()> {
     Config::set(ConfigKey::Model, "model-1");
-    let body = [
-        "[",
-        "\"contents\": [{",
-        "\"parts\": [{",
-        "\"text\": \"Hello \"",
-        "}]",
-        "},",
-        "{",
-        "\"parts\": [{",
-        "\"text\": \"World\"",
-        "}]",
-        "},",
-        "{",
-        "\"parts\": [{",
-        "\"text\": \"\"",
-        "}]",
-        "}]",
-        "]",
-    ]
-    .join("\n");
+    let body = r#"
+{
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "Hello "
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "text": "World"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "text": ""
+        }
+      ]
+    }
+  ]
+}
+        "#;
     let prompt = BackendPrompt {
         text: "Say hi to the world".to_string(),
         backend_context: serde_json::to_string(&vec![Content {

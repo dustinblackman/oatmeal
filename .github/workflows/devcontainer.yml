@@ -1,8 +1,14 @@
-# on: workflow_dispatch
-on: [push, pull_request]
-name: devpod
+on:
+  push:
+    branches:
+      - dev-container
+    paths:
+      - '.devcontainer/Dockerfile'
+      - '.devcontainer/devcontainer-src.json'
+      - '.devcontainer/build.sh'
+name: devcontainer
 jobs:
-  devpod:
+  devcontainer:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,7 +32,7 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
       - uses: actions/setup-node@v4
         with:
-          node-version: 18.16.0
+          node-version: 18.19.0
       - name: Build
         run: |
           sudo curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64 

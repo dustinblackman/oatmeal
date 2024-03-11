@@ -1,5 +1,6 @@
 use anyhow::bail;
 use anyhow::Result;
+use std::time::{SystemTime, UNIX_EPOCH};
 use test_utils::insta_snapshot;
 use tokio::sync::mpsc;
 
@@ -8,6 +9,7 @@ use super::CompletionDeltaResponse;
 use super::CompletionResponse;
 use super::GithubCopilot;
 use super::MessageRequest;
+use super::Token;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
 use crate::domain::models::BackendPrompt;
@@ -19,6 +21,17 @@ impl GithubCopilot {
         return GithubCopilot {
             url,
             timeout: "200".to_string(),
+            machine_id: "def".to_string(),
+            vscode_sessionid: "ghi".to_string(),
+            oauth_token: Some("skip".to_string()),
+            token: Some(Token {
+                token: "abc".to_string(),
+                expires_at: SystemTime::now()
+                    .duration_since(UNIX_EPOCH)
+                    .unwrap()
+                    .as_secs()
+                    + 1800,
+            }),
         };
     }
 }

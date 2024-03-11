@@ -19,6 +19,7 @@ pub enum BackendName {
     LangChain,
     Ollama,
     OpenAI,
+    Claude,
 }
 
 impl BackendName {

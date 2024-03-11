@@ -398,6 +398,14 @@ pub fn build() -> Command {
                 .num_args(1)
                 .help("OpenAI API token when using the OpenAI backend.")
                 .global(true),
+        )
+        .arg(
+            Arg::new(ConfigKey::ClaudeToken.to_string())
+                .long(ConfigKey::ClaudeToken.to_string())
+                .env("OATMEAL_CLAUDE_TOKEN")
+                .num_args(1)
+                .help("Anthropic's Claude API token when using the Claude backend.")
+                .global(true),
         );
 }
 
@@ -442,67 +450,63 @@ pub async fn parse() -> Result<bool> {
                 print_completions(completions, &mut app);
             }
         }
-        Some(("config", subcmd_matches)) => {
-            match subcmd_matches.subcommand() {
-                Some(("create", _)) => {
-                    create_config_file().await?;
-                    return Ok(false);
-                }
-                Some(("default", _)) => {
-                    println!("{}", Config::serialize_default(build()));
-                    return Ok(false);
-                }
-                Some(("path", _)) => {
-                    println!("{}", Config::default(ConfigKey::ConfigFile));
-                    return Ok(false);
-                }
-                _ => {
-                    subcommand_config().print_long_help()?;
-                    return Ok(false);
-                }
+        Some(("config", subcmd_matches)) => match subcmd_matches.subcommand() {
+            Some(("create", _)) => {
+                create_config_file().await?;
+                return Ok(false);
             }
-        }
+            Some(("default", _)) => {
+                println!("{}", Config::serialize_default(build()));
+                return Ok(false);
+            }
+            Some(("path", _)) => {
+                println!("{}", Config::default(ConfigKey::ConfigFile));
+                return Ok(false);
+            }
+            _ => {
+                subcommand_config().print_long_help()?;
+                return Ok(false);
+            }
+        },
         Some(("manpages", _)) => {
             clap_mangen::Man::new(build()).render(&mut io::stdout())?;
             return Ok(false);
         }
-        Some(("sessions", subcmd_matches)) => {
-            match subcmd_matches.subcommand() {
-                Some(("dir", _)) => {
-                    let dir = Sessions::default().cache_dir.to_string_lossy().to_string();
-                    println!("{dir}");
-                    return Ok(false);
-                }
-                Some(("list", _)) => {
-                    print_sessions_list().await?;
-                    return Ok(false);
-                }
-                Some(("open", open_matches)) => {
-                    Config::load(build(), vec![&matches, open_matches]).await?;
-                    if let Some(session_id) = open_matches.get_one::<String>("session-id") {
-                        load_config_from_session(session_id).await?;
-                    } else {
-                        load_config_from_session_interactive().await?;
-                    }
-                }
-                Some(("delete", delete_matches)) => {
-                    if let Some(session_id) = delete_matches.get_one::<String>("session-id") {
-                        Sessions::default().delete(session_id).await?;
-                        println!("Deleted session {session_id}");
-                    } else if delete_matches.get_one::<bool>("all").is_some() {
-                        Sessions::default().delete_all().await?;
-                        println!("Deleted all sessions");
-                    } else {
-                        subcommand_sessions_delete().print_long_help()?;
-                    }
-                    return Ok(false);
-                }
-                _ => {
-                    subcommand_sessions().print_long_help()?;
-                    return Ok(false);
+        Some(("sessions", subcmd_matches)) => match subcmd_matches.subcommand() {
+            Some(("dir", _)) => {
+                let dir = Sessions::default().cache_dir.to_string_lossy().to_string();
+                println!("{dir}");
+                return Ok(false);
+            }
+            Some(("list", _)) => {
+                print_sessions_list().await?;
+                return Ok(false);
+            }
+            Some(("open", open_matches)) => {
+                Config::load(build(), vec![&matches, open_matches]).await?;
+                if let Some(session_id) = open_matches.get_one::<String>("session-id") {
+                    load_config_from_session(session_id).await?;
+                } else {
+                    load_config_from_session_interactive().await?;
                 }
             }
-        }
+            Some(("delete", delete_matches)) => {
+                if let Some(session_id) = delete_matches.get_one::<String>("session-id") {
+                    Sessions::default().delete(session_id).await?;
+                    println!("Deleted session {session_id}");
+                } else if delete_matches.get_one::<bool>("all").is_some() {
+                    Sessions::default().delete_all().await?;
+                    println!("Deleted all sessions");
+                } else {
+                    subcommand_sessions_delete().print_long_help()?;
+                }
+                return Ok(false);
+            }
+            _ => {
+                subcommand_sessions().print_long_help()?;
+                return Ok(false);
+            }
+        },
         _ => {
             Config::load(build(), vec![&matches]).await?;
         }

@@ -1,3 +1,4 @@
+pub mod claude;
 pub mod langchain;
 pub mod ollama;
 pub mod openai;
@@ -23,6 +24,9 @@ impl BackendManager {
             return Ok(Box::<openai::OpenAI>::default());
         }
 
+        if name == BackendName::Claude {
+            return Ok(Box::<claude::Claude>::default());
+        }
         bail!(format!("No backend implemented for {name}"))
     }
 }

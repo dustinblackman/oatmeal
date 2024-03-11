@@ -8,7 +8,6 @@ use anyhow::bail;
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::stream::TryStreamExt;
-use futures::FutureExt;
 use serde::Deserialize;
 use serde::Serialize;
 use tokio::io::AsyncBufReadExt;

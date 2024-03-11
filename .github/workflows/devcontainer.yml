@@ -6,6 +6,7 @@ on:
       - '.devcontainer/Dockerfile'
       - '.devcontainer/devcontainer-src.json'
       - '.devcontainer/build.sh'
+      - '.github/workflows/devcontainer.yml'
 name: devcontainer
 jobs:
   devcontainer:
@@ -34,6 +35,8 @@ jobs:
         with:
           node-version: 18.19.0
       - name: Build
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           sudo curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64 
           if [[ "$(sha256sum /usr/local/bin/yq | awk '{print $1}')" != "1a95960dddd426321354d58d2beac457717f7c49a9ec0806749a5a9e400eb45e" ]]; then

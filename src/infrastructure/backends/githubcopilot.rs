@@ -2,16 +2,18 @@
 #[path = "githubcopilot_test.rs"]
 mod tests;
 
-use rand::Rng;
 use std::io::Read;
 use std::iter;
 use std::path::Path;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::Duration;
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
 
 use anyhow::bail;
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::stream::TryStreamExt;
+use rand::Rng;
 use serde::Deserialize;
 use serde::Serialize;
 use tokio::io::AsyncBufReadExt;
@@ -35,8 +37,8 @@ fn convert_err(err: reqwest::Error) -> std::io::Error {
 fn generate_hex_string(length: usize) -> String {
     const CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let mut rng = rand::thread_rng();
-    let one_char = || CHARSET[rng.gen_range(0..CHARSET.len())] as char;
-    iter::repeat_with(one_char).take(length).collect()
+    let one_char = || return CHARSET[rng.gen_range(0..CHARSET.len())] as char;
+    return iter::repeat_with(one_char).take(length).collect();
 }
 
 fn get_cached_oauth_token() -> Result<String> {
@@ -323,7 +325,7 @@ impl GithubCopilot {
         // check lifetime and return saved token if it's still valid
         match &self.token {
             Some(token) => {
-                if token.token != ""
+                if !token.token.is_empty()
                     && token.expires_at
                         > SystemTime::now()
                             .duration_since(UNIX_EPOCH)

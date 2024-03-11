@@ -1,6 +1,8 @@
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
+
 use anyhow::bail;
 use anyhow::Result;
-use std::time::{SystemTime, UNIX_EPOCH};
 use test_utils::insta_snapshot;
 use tokio::sync::mpsc;
 

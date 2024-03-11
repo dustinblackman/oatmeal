@@ -1,0 +1,11 @@
+{
+  "name": "oatmeal",
+  "build": {
+    "context": "..",
+    "dockerfile": "./Dockerfile"
+  },
+  "remoteUser": "oatmeal",
+  "features": {
+    "ghcr.io/dustinblackman/devcontainer-features/base:latest": {}
+  }
+}

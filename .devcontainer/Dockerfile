@@ -5,25 +5,19 @@ RUN apt-get update && \
     apt-get clean && \
     apt-get autoclean
 
-# TODO Devpod is overriding the context directory and won't allow me to copy in files from outside the .devcontainer
-# folder. Lazily download them from master instead.
-RUN mkdir -p /tmp/build-cache/.cargo && \
-    cd /tmp/build-cache && \
-    echo "Cargo.toml Cargo.lock .mise.toml .cargo/config.toml" | sed 's/ /\n/g' | while read f; do \
-      curl -L -o "/tmp/build-cache/$f" "https://raw.githubusercontent.com/dustinblackman/oatmeal/main/$f"; \
-    done; \
-    mkdir .bin
+COPY ./Cargo.lock ./Cargo.toml ./.mise.toml .cargo/ /tmp/build-cache/
 
 # Only install what is needed for general development.
 WORKDIR /tmp/build-cache
 RUN cargo install cargo-run-bin
-RUN cargo cmd setup-nightly
-RUN cargo bin committed --help
-RUN cargo bin mise --help
-RUN cargo deny --help
-RUN cargo insta --help
-RUN cargo nextest --help
-RUN cargo watch --help
+RUN mkdir /tmp/build-cache/.bin
+# RUN cargo cmd setup-nightly
+# RUN cargo bin committed --help
+# RUN cargo bin mise --help
+# RUN cargo deny --help
+# RUN cargo insta --help
+# RUN cargo nextest --help
+# RUN cargo watch --help
 
 FROM rust:1.74.0-slim-bookworm
 

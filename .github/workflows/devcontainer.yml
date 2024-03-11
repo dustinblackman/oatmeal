@@ -5,7 +5,7 @@ jobs:
   devpod:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - uses: actions/checkout@v2
@@ -24,13 +24,15 @@ jobs:
           registry: ghcr.io
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.16.0
       - name: Build
         run: |
-          sudo curl -L -o /usr/local/bin/devpod https://github.com/loft-sh/devpod/releases/download/v0.5.4/devpod-linux-amd64
-          if [[ "$(sha256sum /usr/local/bin/devpod | awk '{print $1}')" != "7a2043e8dcc035e26dba3c984ffb3db68894f5a2fcadf33c1de0b92b7069b634" ]]; then
-            echo "Devpod checksum failed"
+          sudo curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64 
+          if [[ "$(sha256sum /usr/local/bin/yq | awk '{print $1}')" != "1a95960dddd426321354d58d2beac457717f7c49a9ec0806749a5a9e400eb45e" ]]; then
+            echo "yq checksum failed"
             exit 1
           fi
-          sudo chmod +x /usr/local/bin/devpod
-          devpod provider add docker
-          devpod build --platform linux/amd64,linux/arm64 .
+          sudo chmod +x /usr/local/bin/yq
+          ./.devcontainer/build.sh

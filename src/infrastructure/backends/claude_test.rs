@@ -7,8 +7,6 @@ use super::Claude;
 use super::CompletionDeltaResponse;
 use super::CompletionResponse;
 use super::MessageRequest;
-use super::Model;
-use super::ModelListResponse;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
 use crate::domain::models::BackendPrompt;

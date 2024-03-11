@@ -2,7 +2,7 @@ version: "3"
 services:
   oatmeal:
     command: /bin/sh -c "trap :; TERM INT; sleep infinity & wait"
-    image: ghcr.io/dustinblackman/devcontainer-oatmeal:latest
+    image: ghcr.io/dustinblackman/devcontainer-oatmeal@sha256:98bd7feb9807d13fa3eefcd9fa8315c0bf2412d08483331419f53f9fec908d47
     environment:
       OATMEAL_OLLAMA_URL: http://host.docker.internal:11434
     volumes:

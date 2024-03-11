@@ -217,7 +217,7 @@ impl Backend for Gemini {
             let ores: GenerateContentResponse =
                 serde_json::from_str(&format!("{{ {text} }}", text = cleaned_line)).unwrap();
 
-            if ores.text.is_empty() || ores.text == "" || ores.text == "\n" {
+            if ores.text.is_empty() || ores.text.is_empty() || ores.text == "\n" {
                 break;
             }
 

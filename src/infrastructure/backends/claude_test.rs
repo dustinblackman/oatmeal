@@ -6,6 +6,7 @@ use tokio::sync::mpsc;
 use super::Claude;
 use super::CompletionDeltaResponse;
 use super::CompletionResponse;
+use super::Healthcheck;
 use super::MessageRequest;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
@@ -18,7 +19,7 @@ impl Claude {
         return Claude {
             url,
             token: "abc".to_string(),
-            timeout: "200".to_string(),
+            timeout: "400".to_string(),
         };
     }
 }
@@ -34,8 +35,17 @@ fn to_res(action: Option<Event>) -> Result<BackendResponse> {
 
 #[tokio::test]
 async fn it_successfully_health_checks() {
+    let body = serde_json::to_string(&Healthcheck {
+        message: "ok".to_string(),
+    })
+    .unwrap();
+
     let mut server = mockito::Server::new();
-    let mock = server.mock("GET", "/").with_status(200).create();
+    let mock = server
+        .mock("GET", "/healthcheck")
+        .with_status(200)
+        .with_body(body)
+        .create();
 
     let backend = Claude::with_url(server.url());
     let res = backend.health_check().await;
@@ -55,7 +65,7 @@ async fn it_successfully_health_checks_with_official_api() {
 #[tokio::test]
 async fn it_fails_health_checks() {
     let mut server = mockito::Server::new();
-    let mock = server.mock("GET", "/").with_status(500).create();
+    let mock = server.mock("GET", "/healthcheck").with_status(500).create();
 
     let backend = Claude::with_url(server.url());
     let res = backend.health_check().await;

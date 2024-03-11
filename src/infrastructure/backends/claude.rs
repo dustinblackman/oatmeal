@@ -8,6 +8,7 @@ use anyhow::bail;
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::stream::TryStreamExt;
+use futures::FutureExt;
 use serde::Deserialize;
 use serde::Serialize;
 use tokio::io::AsyncBufReadExt;
@@ -52,16 +53,10 @@ struct CompletionRequest {
     stream: bool,
 }
 
-// #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-// enum CompletionStreamType {
-//     message_start,
-//     content_block_start,
-//     ping,
-//     content_block_delta,
-//     content_block_stop,
-//     message_delta,
-//     message_stop,
-// }
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+struct Healthcheck {
+    message: String,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 struct CompletionDeltaResponse {
@@ -108,14 +103,8 @@ impl Backend for Claude {
             bail!("Claude token is not defined");
         }
 
-        // Claude are trolls with their API where the index either returns a 404 or a
-        // 418. If using the official API, don't bother health checking it.
-        if self.url == "https://api.anthropic.com" {
-            return Ok(());
-        }
-
         let res = reqwest::Client::new()
-            .get(&self.url)
+            .get(format!("{url}/healthcheck", url = self.url))
             .timeout(Duration::from_millis(self.timeout.parse::<u64>()?))
             .send()
             .await;
@@ -125,9 +114,15 @@ impl Backend for Claude {
             bail!("Claude is not reachable");
         }
 
-        let status = res.unwrap().status().as_u16();
+        let result = res.unwrap();
+        let status = result.status().as_u16();
         if status >= 400 {
             tracing::error!(status = status, "Claude health check failed");
+            bail!("Claude health check failed");
+        }
+
+        let json = result.json::<Healthcheck>().await?;
+        if !json.message.contains("ok") {
             bail!("Claude health check failed");
         }
 
@@ -142,24 +137,6 @@ impl Backend for Claude {
             "claude-2.1".to_string(),
             "claude-2.0".to_string(),
         ];
-        // let res = reqwest::Client::new()
-        //     .get(format!("{url}/v1/models", url = self.url))
-        //     .header("Authorization", format!("Bearer {}", self.token))
-        //     .send()
-        //     .await?
-        //     .json::<ModelListResponse>()
-        //     .await?;
-        //
-        // let mut models: Vec<String> = res
-        //     .data
-        //     .iter()
-        //     .map(|model| {
-        //         return model.id.to_string();
-        //     })
-        //     .collect();
-        //
-        // models.sort();
-
         return Ok(models);
     }
 

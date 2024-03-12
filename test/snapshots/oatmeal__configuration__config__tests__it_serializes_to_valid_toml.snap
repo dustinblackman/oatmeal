@@ -3,7 +3,7 @@ source: src/configuration/config_test.rs
 expression: res
 ---
 '''
-# The initial backend hosting a model to connect to. [possible values: langchain, ollama, openai, claude]
+# The initial backend hosting a model to connect to. [possible values: langchain, ollama, openai, gemini, claude]
 backend = "ollama"
 
 # Time to wait in milliseconds before timing out when doing a healthcheck for a backend.
@@ -27,8 +27,13 @@ ollama-url = "http://localhost:11434"
 # OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy.
 open-ai-url = "https://api.openai.com"
 
+
 # Anthropic's Claude API token when using the Claude backend.
 # claude-token = ""
+
+# Google Gemini API token when using the Gemini backend.
+# gemini-token = ""
+
 
 # Sets code syntax highlighting theme. [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
 theme = "base16-onedark"

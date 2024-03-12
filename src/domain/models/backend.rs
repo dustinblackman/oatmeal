@@ -20,6 +20,7 @@ pub enum BackendName {
     Ollama,
     OpenAI,
     Claude,
+    Gemini,
 }
 
 impl BackendName {

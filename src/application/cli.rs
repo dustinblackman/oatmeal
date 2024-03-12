@@ -406,6 +406,14 @@ pub fn build() -> Command {
                 .num_args(1)
                 .help("Anthropic's Claude API token when using the Claude backend.")
                 .global(true),
+        )
+        .arg(
+            Arg::new(ConfigKey::GeminiToken.to_string())
+                .long(ConfigKey::GeminiToken.to_string())
+                .env("OATMEAL_GEMINI_TOKEN")
+                .num_args(1)
+                .help("Google Gemini API token when using the Gemini backend.")
+                .global(true),
         );
 }
 

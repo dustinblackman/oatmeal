@@ -1,4 +1,5 @@
 pub mod claude;
+pub mod gemini;
 pub mod langchain;
 pub mod ollama;
 pub mod openai;
@@ -27,6 +28,11 @@ impl BackendManager {
         if name == BackendName::Claude {
             return Ok(Box::<claude::Claude>::default());
         }
+
+        if name == BackendName::Gemini {
+            return Ok(Box::<gemini::Gemini>::default());
+        }
+
         bail!(format!("No backend implemented for {name}"))
     }
 }

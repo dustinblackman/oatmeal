@@ -173,7 +173,7 @@ Commands:
 
 Options:
   -b, --backend <backend>
-          The initial backend hosting a model to connect to. [default: ollama] [env: OATMEAL_BACKEND=] [possible values: langchain, ollama, openai]
+          The initial backend hosting a model to connect to. [default: ollama] [env: OATMEAL_BACKEND=] [possible values: langchain, ollama, openai, gemini]
       --backend-health-check-timeout <backend-health-check-timeout>
           Time to wait in milliseconds before timing out when doing a healthcheck for a backend. [default: 1000] [env: OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT=]
   -m, --model <model>
@@ -196,6 +196,8 @@ Options:
           OpenAI API token when using the OpenAI backend. [env: OATMEAL_OPENAI_TOKEN=]
       --claude-token <claude-token>
           Anthropic's Claude API token when using the Claude backend [env: OATMEAL_CLAUDE_TOKEN=]
+      --gemini-token <gemini-token>
+          Gemini API token when using the Gemini backend. [env: OATMEAL_GEMINI_TOKEN=]
   -h, --help
           Print help
   -V, --version
@@ -264,6 +266,7 @@ The following model backends are supported:
 - [Ollama](https://github.com/jmorganca/ollama)
 - [LangChain/LangServe](https://python.langchain.com/docs/langserve) (Experimental)
 - [Claude](https://claude.ai) (Experimental)
+- [Gemini](https://gemini.google.com) (Experimental)
 
 ### Editors
 

@@ -5,9 +5,7 @@ mod tests;
 use std::io::Read;
 use std::iter;
 use std::path::Path;
-use std::time::Duration;
-use std::time::SystemTime;
-use std::time::UNIX_EPOCH;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use anyhow::bail;
 use anyhow::Result;
@@ -53,10 +51,8 @@ fn get_cached_oauth_token() -> Result<String> {
 
     let json_data: HostData = serde_json::from_str(&contents)?;
 
-    if let Some(github_com) = json_data.github_com {
-        if let Some(token) = github_com.oauth_token {
-            return Ok(token);
-        }
+    if let Some(token) = json_data.github_com.and_then(|x| return x.oauth_token) {
+        return Ok(token);
     }
     bail!("Github Copilot token not found")
 }
@@ -115,16 +111,11 @@ struct CompletionResponse {
 
 pub struct GithubCopilot {
     url: String,
+    auth_url: String,
     timeout: String,
     machine_id: String,
     vscode_sessionid: String,
     oauth_token: Option<String>,
-    token: Option<Token>,
-}
-
-pub struct Token {
-    token: String,
-    expires_at: u64,
 }
 
 impl Default for GithubCopilot {
@@ -135,18 +126,13 @@ impl Default for GithubCopilot {
             .as_millis()
             .to_string();
 
-        let oauth_token = match get_cached_oauth_token() {
-            Ok(token) => Some(token),
-            Err(_) => None,
-        };
-
         return GithubCopilot {
             url: "https://api.githubcopilot.com".to_string(),
+            auth_url: "https://api.github.com".to_string(),
             timeout: Config::get(ConfigKey::BackendHealthCheckTimeout),
             vscode_sessionid: uuid::Uuid::new_v4().to_string() + &time,
             machine_id: generate_hex_string(65),
-            oauth_token,
-            token: None,
+            oauth_token: get_cached_oauth_token().ok(),
         };
     }
 }
@@ -164,7 +150,7 @@ impl Backend for GithubCopilot {
         }
 
         if self.oauth_token.is_none() {
-            bail!("GithubCopilot token not found. Please install copilot if needed: gh extension install github/gh-copilot and login using gh auth login");
+            bail!("Github Copilot authorization not found.");
         }
 
         // Same as with OpenAI backend
@@ -204,12 +190,18 @@ impl Backend for GithubCopilot {
         prompt: BackendPrompt,
         tx: &'a mpsc::UnboundedSender<Event>,
     ) -> Result<()> {
-        let token = self.get_copilot_token().await?;
-
         let mut messages: Vec<MessageRequest> = vec![];
         if !prompt.backend_context.is_empty() {
             messages = serde_json::from_str(&prompt.backend_context)?;
         }
+
+        let mut token_message: Option<MessageRequest> = None;
+        let index = messages.iter().position(|value| value.role == *"__token");
+        if let Some(index) = index {
+            token_message = Some(messages.remove(index));
+        }
+        let token = self.get_copilot_token(token_message).await?;
+
         messages.push(MessageRequest {
             role: "user".to_string(),
             content: prompt.text,
@@ -224,7 +216,10 @@ impl Backend for GithubCopilot {
 
         let res = reqwest::Client::new()
             .post(format!("{url}/chat/completions", url = self.url))
-            .header("Authorization", format!("Bearer {token}", token = token))
+            .header(
+                "Authorization",
+                format!("Bearer {token}", token = token.token),
+            )
             .header("content-type", "application/json")
             .header("x-request-id", uuid::Uuid::new_v4().to_string())
             .header("vscode-sessionid", &self.vscode_sessionid)
@@ -301,6 +296,10 @@ impl Backend for GithubCopilot {
             content: last_message.to_string(),
         });
 
+        messages.push(MessageRequest {
+            role: "__token".to_string(),
+            content: serde_json::to_string(&token)?,
+        });
         let msg = BackendResponse {
             author: Author::Model,
             text: "".to_string(),
@@ -321,34 +320,23 @@ struct CopilotTokenResponse {
 }
 
 impl GithubCopilot {
-    async fn get_copilot_token(&self) -> Result<String> {
-        // check lifetime and return saved token if it's still valid
-        match &self.token {
-            Some(token) => {
-                if !token.token.is_empty()
-                    && token.expires_at
-                        > SystemTime::now()
-                            .duration_since(UNIX_EPOCH)
-                            .unwrap()
-                            .as_secs()
-                {
-                    return Ok(token.token.clone());
-                }
-            }
-            None => {}
-        }
-        match self.create_new_token().await {
-            Ok(token) => {
-                // self.token = Some(Token {
-                //     token: token.token.clone(),
-                //     expires_at: token.expires_at,
-                // });
-                return Ok(token.token);
-            }
-            Err(err) => {
-                bail!(err);
+    async fn get_copilot_token(
+        &self,
+        message: Option<MessageRequest>,
+    ) -> Result<CopilotTokenResponse> {
+        if let Some(msg) = message {
+            // check lifetime and return saved token if it's still valid
+            let expiration_limit = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_secs()
+                + 300; //5 minutes
+            let token: CopilotTokenResponse = serde_json::from_str(&msg.content)?;
+            if token.expires_at > expiration_limit {
+                return Ok(token.clone());
             }
         }
+        return self.create_new_token().await;
     }
 
     async fn create_new_token(&self) -> Result<CopilotTokenResponse> {
@@ -358,7 +346,10 @@ impl GithubCopilot {
         };
 
         let res = reqwest::Client::new()
-            .get("https://api.github.com/copilot_internal/v2/token".to_string())
+            .get(format!(
+                "{url}/copilot_internal/v2/token",
+                url = self.auth_url
+            ))
             .header(
                 "Authorization",
                 format!("token {oauth_token}", oauth_token = oauth_token),

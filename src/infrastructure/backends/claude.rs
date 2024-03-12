@@ -2,6 +2,8 @@
 #[path = "claude_test.rs"]
 mod tests;
 
+use std::time::Duration;
+
 use anyhow::bail;
 use anyhow::Result;
 use async_trait::async_trait;
@@ -10,7 +12,6 @@ use itertools::Itertools;
 use regex::Regex;
 use serde::Deserialize;
 use serde::Serialize;
-use std::time::Duration;
 use tokio::io::AsyncBufReadExt;
 use tokio::sync::mpsc;
 use tokio_util::io::StreamReader;

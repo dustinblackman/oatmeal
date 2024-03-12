@@ -23,7 +23,6 @@ ollama-url = "http://localhost:11434"
 # OpenAI API URL when using the OpenAI backend. Can be swapped to a compatible proxy.
 open-ai-url = "https://api.openai.com"
 
-
 # Claude API token when using the Claude backend.
 # claude-token = ""
 

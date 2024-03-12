@@ -79,7 +79,7 @@ async fn it_lists_models() -> Result<()> {
     let backend = Claude::with_url("https://api.anthropic.com".to_string());
     let res = backend.list_models().await?;
 
-    assert!(res.len() > 0);
+    assert!(!res.is_empty());
     return Ok(());
 }
 

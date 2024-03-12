@@ -2,14 +2,15 @@
 #[path = "claude_test.rs"]
 mod tests;
 
-use std::time::Duration;
-
 use anyhow::bail;
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::stream::TryStreamExt;
+use itertools::Itertools;
+use regex::Regex;
 use serde::Deserialize;
 use serde::Serialize;
+use std::time::Duration;
 use tokio::io::AsyncBufReadExt;
 use tokio::sync::mpsc;
 use tokio_util::io::StreamReader;
@@ -130,12 +131,37 @@ impl Backend for Claude {
 
     #[allow(clippy::implicit_return)]
     async fn list_models(&self) -> Result<Vec<String>> {
-        let models: Vec<String> = vec![
-            "claude-3-sonnet-20240229".to_string(),
-            "claude-3-opus-20240229".to_string(),
-            "claude-2.1".to_string(),
-            "claude-2.0".to_string(),
-        ];
+        let res = reqwest::Client::new()
+            .get("https://raw.githubusercontent.com/anthropics/anthropic-sdk-typescript/main/src/resources/messages.ts")
+            .send()
+            .await?
+            .text()
+            .await;
+
+        let models: Vec<String> = match res {
+            Ok(html) => {
+                let re = Regex::new(r#"['"](claude-.*)['"]"#).unwrap();
+                let mut results: Vec<String> = vec![];
+                for (_, [model]) in re.captures_iter(&html).map(|c| c.extract()) {
+                    let m = model.to_string();
+                    let cleaned = Regex::new(r"[^a-zA-Z0-9-\.]")
+                        .unwrap()
+                        .replace_all(&m, "")
+                        .to_string();
+                    results.push(cleaned);
+                }
+                results.into_iter().unique().collect()
+            }
+            Err(_) => {
+                vec![
+                    "claude-3-sonnet-20240229".to_string(),
+                    "claude-3-opus-20240229".to_string(),
+                    "claude-2.1".to_string(),
+                    "claude-2.0".to_string(),
+                ]
+            }
+        };
+
         return Ok(models);
     }
 

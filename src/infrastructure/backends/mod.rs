@@ -1,3 +1,4 @@
+pub mod gemini;
 pub mod langchain;
 pub mod ollama;
 pub mod openai;
@@ -21,6 +22,10 @@ impl BackendManager {
 
         if name == BackendName::OpenAI {
             return Ok(Box::<openai::OpenAI>::default());
+        }
+
+        if name == BackendName::Gemini {
+            return Ok(Box::<gemini::Gemini>::default());
         }
 
         bail!(format!("No backend implemented for {name}"))

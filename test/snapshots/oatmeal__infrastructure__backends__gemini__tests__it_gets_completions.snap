@@ -1,0 +1,5 @@
+---
+source: src/infrastructure/backends/gemini_test.rs
+expression: third_recv.context
+---
+'[{"role":"model","parts":[{"text":"Hello"}]},{"role":"user","parts":[{"text":"Say hi to the world"}]},{"role":"model","parts":[{"text":"Hello World"}]}]'

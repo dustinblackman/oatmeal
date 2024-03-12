@@ -33,6 +33,7 @@ pub enum ConfigKey {
     OllamaURL,
     OpenAiToken,
     OpenAiURL,
+    GeminiToken,
     SessionID,
     Theme,
     ThemeFile,
@@ -99,6 +100,7 @@ impl Config {
             ConfigKey::OllamaURL => "http://localhost:11434",
             ConfigKey::OpenAiToken => "",
             ConfigKey::OpenAiURL => "https://api.openai.com",
+            ConfigKey::GeminiToken => "",
             ConfigKey::Theme => "base16-onedark",
             ConfigKey::ThemeFile => "",
 

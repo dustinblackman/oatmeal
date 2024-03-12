@@ -180,10 +180,10 @@ lint = '''set -e
   cargo cmd setup-nightly
   cargo +oatmeal-nightly fmt -- --check
   cargo clippy
-  cargo deny check licenses -s
   cargo bin mise install
   cargo bin mise x -C tools/node -- npm ci
   cargo bin mise x -C tools/node -- npm run prettier-check
+  cargo deny check licenses -s
 '''
 
 lint-fix = '''set -e

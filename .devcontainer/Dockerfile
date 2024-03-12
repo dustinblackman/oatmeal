@@ -3,13 +3,6 @@ FROM rust:1.74.0-slim-bookworm as builder
 RUN apt-get update && \
     apt-get install -y curl libssl-dev pkg-config
 
-RUN mkdir -p -m 755 /etc/apt/keyrings && \
-    curl -L -o /etc/apt/keyrings/githubcli-archive-keyring.gpg https://cli.github.com/packages/githubcli-archive-keyring.gpg && \
-    chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
-    apt-get update && \
-    apt-get install gh -y
-
 COPY ./Cargo.lock ./Cargo.toml ./.mise.toml /tmp/build-cache/
 COPY .cargo/ /tmp/build-cache/.cargo
 
@@ -19,10 +12,10 @@ RUN cargo install cargo-run-bin
 RUN cargo bin committed --help
 RUN cargo bin mise --help
 RUN cargo cmd --help
-RUN cargo deny --help
-RUN cargo insta --help
 RUN cargo nextest --help
-RUN cargo watch --help
+# RUN cargo insta --help
+# RUN cargo deny --help
+# RUN cargo watch --help
 
 FROM rust:1.74.0-slim-bookworm
 

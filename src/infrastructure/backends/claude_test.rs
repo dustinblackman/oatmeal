@@ -19,7 +19,7 @@ impl Claude {
         return Claude {
             url,
             token: "abc".to_string(),
-            timeout: "400".to_string(),
+            timeout: "500".to_string(),
         };
     }
 }

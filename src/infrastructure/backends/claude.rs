@@ -132,14 +132,23 @@ impl Backend for Claude {
 
     #[allow(clippy::implicit_return)]
     async fn list_models(&self) -> Result<Vec<String>> {
+        let backup = vec![
+            "claude-3-sonnet-20240229".to_string(),
+            "claude-3-opus-20240229".to_string(),
+            "claude-2.1".to_string(),
+            "claude-2.0".to_string(),
+        ];
         let res = reqwest::Client::new()
             .get("https://raw.githubusercontent.com/anthropics/anthropic-sdk-typescript/main/src/resources/messages.ts")
             .send()
-            .await?
-            .text()
             .await;
 
-        let models: Vec<String> = match res {
+        let body = match res {
+            Ok(html) => html.text().await,
+            Err(_) => return Ok(backup),
+        };
+
+        match body {
             Ok(html) => {
                 let re = Regex::new(r#"['"](claude-.*)['"]"#).unwrap();
                 let mut results: Vec<String> = vec![];
@@ -151,19 +160,10 @@ impl Backend for Claude {
                         .to_string();
                     results.push(cleaned);
                 }
-                results.into_iter().unique().collect()
+                return Ok(results.into_iter().unique().collect());
             }
-            Err(_) => {
-                vec![
-                    "claude-3-sonnet-20240229".to_string(),
-                    "claude-3-opus-20240229".to_string(),
-                    "claude-2.1".to_string(),
-                    "claude-2.0".to_string(),
-                ]
-            }
+            Err(_) => return Ok(backup),
         };
-
-        return Ok(models);
     }
 
     #[allow(clippy::implicit_return)]

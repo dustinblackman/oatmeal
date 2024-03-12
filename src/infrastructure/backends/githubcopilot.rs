@@ -5,7 +5,9 @@ mod tests;
 use std::io::Read;
 use std::iter;
 use std::path::Path;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::Duration;
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
 
 use anyhow::bail;
 use anyhow::Result;
@@ -330,7 +332,7 @@ impl GithubCopilot {
                 .duration_since(UNIX_EPOCH)
                 .unwrap()
                 .as_secs()
-                + 300; //5 minutes
+                + 300; // 5 minutes
             let token: CopilotTokenResponse = serde_json::from_str(&msg.content)?;
             if token.expires_at > expiration_limit {
                 return Ok(token.clone());

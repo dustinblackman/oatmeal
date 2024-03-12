@@ -1,7 +1,8 @@
 use anyhow::bail;
 use anyhow::Result;
+use mockito::Matcher;
+use mockito::Mock;
 use mockito::ServerGuard;
-use mockito::{Matcher, Mock};
 use test_utils::insta_snapshot;
 use tokio::sync::mpsc;
 
@@ -160,7 +161,7 @@ async fn it_gets_completions_no_token() -> Result<()> {
     let context_messages: Vec<MessageRequest> = serde_json::from_str(&context)?;
     let index = context_messages
         .iter()
-        .position(|value| value.role == *"__token")
+        .position(|value| return value.role == *"__token")
         .expect("Token must be set");
 
     let msg = context_messages.get(index).expect("Token must be set");
@@ -233,7 +234,7 @@ async fn it_gets_completions_token_expired() -> Result<()> {
     let context_messages: Vec<MessageRequest> = serde_json::from_str(&context)?;
     let index = context_messages
         .iter()
-        .position(|value| value.role == *"__token")
+        .position(|value| return value.role == *"__token")
         .expect("Token must be set");
 
     let msg = context_messages.get(index).expect("Token must be set");

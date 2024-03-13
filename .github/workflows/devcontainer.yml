@@ -47,7 +47,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           sudo mkdir -p /usr/local/zig
-          curl -L https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz | tar -xvf --strip-components=1 -C /usr/local/zig
+          curl -L https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz | tar -xvf --strip-components=1 -C /usr/local/zig/
           export PATH="/usr/local/zig:$PATH"
           ./.devcontainer/build.sh ${{ matrix.arch }} ${{ secrets.EMPTY_GITHUB_TOKEN }}
 

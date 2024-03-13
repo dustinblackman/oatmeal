@@ -17,11 +17,13 @@ COPY .cargo/ /tmp/build-cache/.cargo
 
 # Only install what is needed for general development.
 WORKDIR /tmp/build-cache
-RUN cargo install cargo-run-bin
-RUN cargo bin committed --help
-RUN cargo bin mise --help
-RUN cargo cmd --help
-RUN cargo nextest --help
+COPY .bin/ /tmp/build-cache/
+RUN ls -lsa /tmp/build-cache
+RUN cargo install cargo-run-bin #bin
+RUN cargo bin committed --help #bin
+RUN cargo bin mise --help #bin
+RUN cargo cmd --help #bin
+RUN cargo nextest --help #bin
 # RUN cargo insta --help
 # RUN cargo deny --help
 # RUN cargo watch --help

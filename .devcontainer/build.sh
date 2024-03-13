@@ -27,6 +27,7 @@ cargo insta --help || echo ""
 cargo deny --helpA || echo ""
 cargo watch --help || echo ""
 rm -rf .bin/*/cargo-binstall
+echo 'FIND'
 find .bin
 
 echo "[BUILD] Building $BUILD_ARCH"

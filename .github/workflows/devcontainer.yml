@@ -12,7 +12,6 @@ name: devcontainer
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: devcontainer
     strategy:
       matrix:
         arch: ["arm64", "amd64"]
@@ -40,7 +39,7 @@ jobs:
           node-version: 18.19.0
       - name: Build
         run: |
-          ./.devcontainer/build.sh ${{ matrix.arch }} ${{ secrets.EMPTY_GITHUB_TOKEN }}
+          ./.devcontainer/build.sh ${{ matrix.arch }}
 
   release:
     runs-on: ubuntu-latest

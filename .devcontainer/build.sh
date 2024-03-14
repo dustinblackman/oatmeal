@@ -6,7 +6,6 @@ PROGDIR=$(dirname "$(readlink -f "$0")")
 cd "$PROGDIR/.."
 
 BUILD_ARCH="$1"
-export EMPTY_GITHUB_TOKEN="$2"
 
 (
 	cd tools/node

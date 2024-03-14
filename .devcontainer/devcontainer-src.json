@@ -2,10 +2,7 @@
   "name": "oatmeal",
   "build": {
     "context": "..",
-    "dockerfile": "./Dockerfile",
-    "args": {
-      "EMPTY_GITHUB_TOKEN": "${localEnv:EMPTY_GITHUB_TOKEN}"
-    }
+    "dockerfile": "./Dockerfile"
   },
   "remoteUser": "oatmeal",
   "features": {

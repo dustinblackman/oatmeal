@@ -24,7 +24,7 @@ cargo bin mise --help || echo ""
 cargo cmd --help || echo ""
 cargo nextest --help || echo ""
 cargo insta --help || echo ""
-cargo deny --helpA || echo ""
+cargo deny --help || echo ""
 cargo watch --help || echo ""
 rm -rf .bin/*/cargo-binstall
 echo 'FIND'

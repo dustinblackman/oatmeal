@@ -46,10 +46,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/zig
-          curl -s -L https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz | tar -xJ -C /tmp/zig/
-          export PATH="/tmp/zig:$PATH"
-          ./.devcontainer/build.sh ${{ matrix.arch }} ${{ secrets.EMPTY_GITHUB_TOKEN }}
+          ./.devcontainer/build.sh ${{ matrix.arch }}
 
   # release:
   #   runs-on: ubuntu-latest

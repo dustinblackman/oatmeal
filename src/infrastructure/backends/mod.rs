@@ -1,3 +1,4 @@
+pub mod claude;
 pub mod gemini;
 pub mod langchain;
 pub mod ollama;
@@ -22,6 +23,10 @@ impl BackendManager {
 
         if name == BackendName::OpenAI {
             return Ok(Box::<openai::OpenAI>::default());
+        }
+
+        if name == BackendName::Claude {
+            return Ok(Box::<claude::Claude>::default());
         }
 
         if name == BackendName::Gemini {

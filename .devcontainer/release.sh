@@ -11,7 +11,7 @@ cd "$PROGDIR/.."
 )
 
 echo "[BUILD] Pulling arm64"
-docker pull ghcr.io/dustinblackman/devcontainer-oatmeal:latest-arm64
+DOCKER_DEFAULT_PLATFORM=linux/arm64 docker pull ghcr.io/dustinblackman/devcontainer-oatmeal:latest-arm64
 echo "[BUILD] Pulling amd64"
 docker pull ghcr.io/dustinblackman/devcontainer-oatmeal:latest-amd64
 echo "[BUILD] Creating manifest"

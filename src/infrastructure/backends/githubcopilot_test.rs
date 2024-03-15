@@ -118,9 +118,9 @@ async fn it_gets_completions_no_oauth() -> Result<()> {
 async fn it_gets_completions_no_token() -> Result<()> {
     let new_token = "no_current_token".to_string();
     let MockGithubCopilot {
-        comp_server,
+        _comp_server,
         comp_mock,
-        auth_server,
+        _auth_server,
         auth_mock,
         backend,
     } = setup_get_completion("oauth-12345".to_string(), new_token.clone())?;
@@ -181,9 +181,9 @@ async fn it_gets_completions_token_expired() -> Result<()> {
     let new_token = "token_expired".to_string();
     let current_expires_at: u64 = 1577907680; // Expired in 2020
     let MockGithubCopilot {
-        comp_server,
+        _comp_server,
         comp_mock,
-        auth_server,
+        _auth_server,
         auth_mock,
         backend,
     } = setup_get_completion("oauth-12345".to_string(), new_token.clone())?;
@@ -253,9 +253,9 @@ async fn it_gets_completions_token_expired() -> Result<()> {
 async fn it_gets_completions() -> Result<()> {
     let token = "token_ok".to_string();
     let MockGithubCopilot {
-        comp_server,
+        _comp_server,
         comp_mock,
-        auth_server,
+        _auth_server,
         auth_mock,
         backend,
     } = setup_get_completion("oauth-12345".to_string(), token.clone())?;
@@ -309,8 +309,8 @@ async fn it_gets_completions() -> Result<()> {
 }
 
 struct MockGithubCopilot {
-    auth_server: mockito::ServerGuard,
-    comp_server: mockito::ServerGuard,
+    _auth_server: mockito::ServerGuard,
+    _comp_server: mockito::ServerGuard,
     auth_mock: Mock,
     comp_mock: Mock,
     backend: GithubCopilot,
@@ -396,8 +396,8 @@ fn setup_get_completion(oauth: String, token: String) -> Result<MockGithubCopilo
     );
 
     return Ok(MockGithubCopilot {
-        auth_server,
-        comp_server,
+        _auth_server: auth_server,
+        _comp_server: comp_server,
         auth_mock,
         comp_mock,
         backend,

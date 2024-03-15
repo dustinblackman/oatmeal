@@ -133,6 +133,7 @@ impl Backend for Claude {
     #[allow(clippy::implicit_return)]
     async fn list_models(&self) -> Result<Vec<String>> {
         let backup = vec![
+            "claude-3-haiku-20240307".to_string(),
             "claude-3-sonnet-20240229".to_string(),
             "claude-3-opus-20240229".to_string(),
             "claude-2.1".to_string(),

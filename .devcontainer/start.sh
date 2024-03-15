@@ -2,6 +2,6 @@
 
 set -e
 
-rm -rf /workspace/.bin
-ln -s /tmp/build-cache/.bin /workspace/.bin
+sudo chown -R oatmeal:oatmeal /workspace/.bin
+cp -fr /tmp/build-cache/.bin /workspace/
 ls /workspace/ | grep target | grep -q 'oatmeal' || sudo chown -R oatmeal:oatmeal /workspace/target

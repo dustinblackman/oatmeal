@@ -7,6 +7,8 @@ services:
       OATMEAL_OLLAMA_URL: http://host.docker.internal:11434
     volumes:
       - ..:/workspace
-      - cargo_target:/workspace/target
+      - cache_bin:/workspace/.bin
+      - cache_target:/workspace/target
 volumes:
-  cargo_target:
+  cache_bin:
+  cache_target:

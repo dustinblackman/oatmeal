@@ -3,15 +3,7 @@ FROM rust:1.74.0-slim-bookworm as builder
 RUN apt-get update && \
     apt-get install -y curl libssl-dev pkg-config
 
-ARG EMPTY_GITHUB_TOKEN
-RUN mkdir -p -m 755 /etc/apt/keyrings && \
-    curl -L -o /etc/apt/keyrings/githubcli-archive-keyring.gpg https://cli.github.com/packages/githubcli-archive-keyring.gpg && \
-    chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
-    apt-get update && \
-    apt-get install gh -y
-
-COPY ./Cargo.lock ./Cargo.toml ./.mise.toml /tmp/build-cache/
+COPY ./Cargo.lock ./Cargo.toml ./.mise.toml ./rust-toolchain.toml /tmp/build-cache/
 COPY .cargo/ /tmp/build-cache/.cargo
 
 # Only install what we can fit within an arm64 container within the Github Actions time limit. The rest will be done at
@@ -35,6 +27,5 @@ COPY --chown=1000:1000 --from=builder /usr/local/cargo/bin/cargo-bin /usr/local/
 COPY --chown=1000:1000 --from=builder /tmp/build-cache/ /tmp/build-cache
 
 RUN cd /tmp/build-cache/ && \
-    cargo --help && \
     cargo cmd setup-nightly && \
     cargo bin mise install

@@ -93,6 +93,13 @@ impl EventsService {
                         return Some(Event::KeyboardCTRLC());
                     }
                     Input {
+                        key: Key::Char('o'),
+                        ctrl: true,
+                        ..
+                    } => {
+                        return Some(Event::KeyboardCTRLO());
+                    }
+                    Input {
                         key: Key::Char('r'),
                         ctrl: true,
                         ..

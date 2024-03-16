@@ -37,6 +37,7 @@ HOTKEYS:
 - CTRL+U - Page up.
 - CTRL+D - Page down.
 - CTRL+C - Interrupt waiting for prompt response if in progress, otherwise exit.
+- CTRL+O - Insert a line break at the cursor position.
 - CTRL+R - Resubmit your last message to the backend.
 
 CODE ACTIONS:

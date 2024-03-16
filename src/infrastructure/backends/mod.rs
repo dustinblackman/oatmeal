@@ -1,3 +1,5 @@
+pub mod claude;
+pub mod gemini;
 pub mod githubcopilot;
 pub mod langchain;
 pub mod ollama;
@@ -24,8 +26,16 @@ impl BackendManager {
             return Ok(Box::<openai::OpenAI>::default());
         }
 
+
         if name == BackendName::GitHubCopilot {
             return Ok(Box::<githubcopilot::GithubCopilot>::default());
+
+        if name == BackendName::Claude {
+            return Ok(Box::<claude::Claude>::default());
+        }
+
+        if name == BackendName::Gemini {
+            return Ok(Box::<gemini::Gemini>::default());
         }
 
         bail!(format!("No backend implemented for {name}"))

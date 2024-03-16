@@ -8,6 +8,7 @@ pub enum Event {
     BackendPromptResponse(BackendResponse),
     KeyboardCharInput(Input),
     KeyboardCTRLC(),
+    KeyboardCTRLO(),
     KeyboardCTRLR(),
     KeyboardEnter(),
     KeyboardPaste(String),

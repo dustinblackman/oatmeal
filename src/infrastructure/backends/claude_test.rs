@@ -1,26 +1,25 @@
-use std::collections::HashMap;
-
 use anyhow::bail;
 use anyhow::Result;
+use test_utils::insta_snapshot;
 use tokio::sync::mpsc;
 
+use super::Claude;
+use super::CompletionDeltaResponse;
 use super::CompletionResponse;
-use super::LangChain;
-use crate::configuration::Config;
-use crate::configuration::ConfigKey;
+use super::Healthcheck;
+use super::MessageRequest;
 use crate::domain::models::Author;
 use crate::domain::models::Backend;
 use crate::domain::models::BackendPrompt;
 use crate::domain::models::BackendResponse;
 use crate::domain::models::Event;
-use crate::infrastructure::backends::langchain::Empty;
-use crate::infrastructure::backends::langchain::OpenAPIJSONResponse;
 
-impl LangChain {
-    fn with_url(url: String) -> LangChain {
-        return LangChain {
+impl Claude {
+    fn with_url(url: String) -> Claude {
+        return Claude {
             url,
-            timeout: "200".to_string(),
+            token: "abc".to_string(),
+            timeout: "500".to_string(),
         };
     }
 }
@@ -36,13 +35,19 @@ fn to_res(action: Option<Event>) -> Result<BackendResponse> {
 
 #[tokio::test]
 async fn it_successfully_health_checks() {
+    let body = serde_json::to_string(&Healthcheck {
+        message: "ok".to_string(),
+    })
+    .unwrap();
+
     let mut server = mockito::Server::new();
     let mock = server
-        .mock("GET", "/openapi.json")
+        .mock("GET", "/healthcheck")
         .with_status(200)
+        .with_body(body)
         .create();
 
-    let backend = LangChain::with_url(server.url());
+    let backend = Claude::with_url(server.url());
     let res = backend.health_check().await;
 
     assert!(res.is_ok());
@@ -50,14 +55,19 @@ async fn it_successfully_health_checks() {
 }
 
 #[tokio::test]
+async fn it_successfully_health_checks_with_official_api() {
+    let backend = Claude::with_url("https://api.anthropic.com".to_string());
+    let res = backend.health_check().await;
+
+    assert!(res.is_ok());
+}
+
+#[tokio::test]
 async fn it_fails_health_checks() {
     let mut server = mockito::Server::new();
-    let mock = server
-        .mock("GET", "/openapi.json")
-        .with_status(500)
-        .create();
+    let mock = server.mock("GET", "/healthcheck").with_status(500).create();
 
-    let backend = LangChain::with_url(server.url());
+    let backend = Claude::with_url(server.url());
     let res = backend.health_check().await;
 
     assert!(res.is_err());
@@ -66,69 +76,62 @@ async fn it_fails_health_checks() {
 
 #[tokio::test]
 async fn it_lists_models() -> Result<()> {
-    let mut paths = HashMap::new();
-    paths.insert("/model-1/stream".to_string(), Empty {});
-    paths.insert("/model-2/stream".to_string(), Empty {});
-    paths.insert("/model-2/{config_hash}/stream".to_string(), Empty {});
-    paths.insert("/other".to_string(), Empty {});
-    let body = serde_json::to_string(&OpenAPIJSONResponse { paths })?;
-
-    let mut server = mockito::Server::new();
-    let mock = server
-        .mock("GET", "/openapi.json")
-        .with_status(200)
-        .with_body(body)
-        .create();
-
-    let backend = LangChain::with_url(server.url());
+    let backend = Claude::with_url("https://api.anthropic.com".to_string());
     let res = backend.list_models().await?;
-    mock.assert();
 
-    assert_eq!(res, vec!["model-1".to_string(), "model-2".to_string()]);
-
+    assert!(!res.is_empty());
     return Ok(());
 }
 
 #[tokio::test]
 async fn it_gets_completions() -> Result<()> {
-    Config::set(ConfigKey::Model, "model-1");
-
     let first_line = serde_json::to_string(&CompletionResponse {
-        status_code: None,
-        message: None,
-        content: Some("Hello ".to_string()),
+        _type: "content_block_delta".to_string(),
+        delta: CompletionDeltaResponse {
+            _type: "text".to_string(),
+            text: "Hello ".to_string(),
+        },
     })?;
 
     let second_line = serde_json::to_string(&CompletionResponse {
-        status_code: None,
-        message: None,
-        content: Some("World".to_string()),
+        _type: "content_block_delta".to_string(),
+        delta: CompletionDeltaResponse {
+            _type: "text".to_string(),
+            text: "World".to_string(),
+        },
     })?;
 
-    let body = [
-        "event: garbage",
-        "",
-        &format!("data: {first_line}"),
-        "event: garbage",
-        &format!("data: {second_line}"),
-        "",
-    ]
-    .join("\n");
+    let third_line = serde_json::to_string(&CompletionResponse {
+        _type: "content_block_stop".to_string(),
+        delta: CompletionDeltaResponse {
+            _type: "end".to_string(),
+            text: "".to_string(),
+        },
+    })?;
+
+    let body = [first_line, second_line, third_line].join("\n");
     let prompt = BackendPrompt {
         text: "Say hi to the world".to_string(),
-        backend_context: "".to_string(),
+        backend_context: serde_json::to_string(&vec![MessageRequest {
+            role: "assistant".to_string(),
+            content: "How may I help you?".to_string(),
+        }])?,
     };
 
     let mut server = mockito::Server::new();
     let mock = server
-        .mock("POST", "/model-1/stream")
+        .mock("POST", "/v1/messages")
+        .match_header("x-api-key", "abc")
+        .match_header("content-type", "application/json")
+        .match_header("anthropic-version", "2023-06-01")
+        .match_header("anthropic-beta", "messages-2023-12-15")
         .with_status(200)
         .with_body(body)
         .create();
 
     let (tx, mut rx) = mpsc::unbounded_channel::<Event>();
 
-    let backend = LangChain::with_url(server.url());
+    let backend = Claude::with_url(server.url());
     backend.get_completion(prompt, &tx).await?;
 
     mock.assert();
@@ -150,7 +153,9 @@ async fn it_gets_completions() -> Result<()> {
     assert_eq!(third_recv.author, Author::Model);
     assert!(third_recv.text.is_empty());
     assert!(third_recv.done);
-    assert_eq!(third_recv.context, Some("not-supported".to_string()));
+    insta_snapshot(|| {
+        insta::assert_toml_snapshot!(third_recv.context);
+    });
 
     return Ok(());
 }

@@ -1,6 +1,6 @@
 [package]
 name = "oatmeal"
-version = "0.12.5"
+version = "0.13.0"
 authors = ["Dustin Blackman"]
 build = "build.rs"
 edition = "2021"
@@ -51,6 +51,7 @@ itertools = "=0.11.0"
 once_cell = "=1.18.0"
 rand = "0.8.5"
 ratatui = "=0.24.0"
+regex = "=1.10.3"
 reqwest = { version = "=0.11.22", default-features = false, features = [
   "stream",
   "json",
@@ -110,22 +111,22 @@ vergen = { version = "=8.2.5", features = ["build", "git", "gitcl"] }
 walkdir = { version = "=2.4.0" }
 
 [package.metadata.bin]
-cargo-about = { version = "0.6.0" }
+cargo-about = { version = "0.6.0", locked = true }
 cargo-binstall = { version = "1.4.9", git = "https://github.com/dustinblackman/cargo-binstall", rev = "ce72b764eeeceab8bce907cb3d4ffedff7e1e7e3" }
-cargo-cmd = { version = "0.3.1" }
-cargo-deny = { version = "0.14.2" }
-cargo-gha = { version = "1.0.2" }
-cargo-insta = { version = "1.34.0" }
-cargo-llvm-cov = { version = "0.5.25" }
+cargo-cmd = { version = "0.3.1", locked = true }
+cargo-deny = { version = "0.14.2", locked = true }
+cargo-gha = { version = "1.0.2", locked = true }
+cargo-insta = { version = "1.34.0", locked = true }
+cargo-llvm-cov = { version = "0.5.25", locked = true }
 cargo-nextest = { version = "0.9.59", locked = true }
-cargo-watch = { version = "8.4.0" }
-cargo-xwin = { version = "0.16.2" }
-cargo-zigbuild = { version = "0.18.1" }
-committed = { version = "1.0.20" }
-flamegraph = { version = "0.5.1", bins = ["cargo-flamegraph"] }
-git-cliff = { version = "1.3.1" }
-mise = { version = "2024.1.20" }
-samply = { version = "0.11.0" }
+cargo-watch = { version = "8.4.0", locked = true }
+cargo-xwin = { version = "0.16.2", locked = true }
+cargo-zigbuild = { version = "0.18.1", locked = true }
+committed = { version = "1.0.20", locked = true }
+flamegraph = { version = "0.5.1", bins = ["cargo-flamegraph"], locked = true }
+git-cliff = { version = "1.3.1", locked = true }
+mise = { version = "2024.1.20", locked = true }
+samply = { version = "0.11.0", locked = true }
 
 [profile.release]
 codegen-units = 1

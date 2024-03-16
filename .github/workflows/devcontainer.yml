@@ -3,11 +3,11 @@ on:
     branches:
       - dev-container
     paths:
-      - '.devcontainer/Dockerfile'
-      - '.devcontainer/devcontainer-src.json'
-      - '.devcontainer/build.sh'
-      - '.devcontainer/release.sh'
-      - '.github/workflows/devcontainer.yml'
+      - ".devcontainer/Dockerfile"
+      - ".devcontainer/devcontainer-src.json"
+      - ".devcontainer/build.sh"
+      - ".devcontainer/release.sh"
+      - ".github/workflows/devcontainer.yml"
 
 name: devcontainer
 jobs:

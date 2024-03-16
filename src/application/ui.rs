@@ -187,6 +187,13 @@ async fn start_loop<B: Backend>(
                     break;
                 }
             }
+            Event::KeyboardCTRLO() => {
+                if app_state.waiting_for_backend {
+                    continue;
+                }
+                app_state.exit_warning = false;
+                textarea.insert_newline();
+            }
             Event::KeyboardCTRLR() => {
                 let last_message = app_state
                     .messages

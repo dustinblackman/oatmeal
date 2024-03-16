@@ -59,6 +59,8 @@ brew install dustinblackman/tap/oatmeal
 
 ### Debian / Ubuntu
 
+Note: This method may have outdated releases.
+
 ```sh
 curl -s https://apt.dustinblackman.com/KEY.gpg | apt-key add -
 curl -s https://apt.dustinblackman.com/dustinblackman.list > /etc/apt/sources.list.d/dustinblackman.list
@@ -67,6 +69,8 @@ sudo apt-get install oatmeal
 ```
 
 ### Fedora / CentOS
+
+Note: This method may have outdated releases.
 
 ```sh
 dnf config-manager --add-repo https://yum.dustinblackman.com/config.repo

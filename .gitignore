@@ -14,3 +14,4 @@ dhat-heap.json
 tools/thirdparty/.failed-lint
 ghrelease.md
 tools/node/node_modules/
+.idea

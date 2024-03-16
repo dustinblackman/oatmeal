@@ -1,0 +1,82 @@
+on:
+  push:
+    branches:
+      - dev-container
+    paths:
+      - '.devcontainer/Dockerfile'
+      - '.devcontainer/devcontainer-src.json'
+      - '.devcontainer/build.sh'
+      - '.devcontainer/release.sh'
+      - '.github/workflows/devcontainer.yml'
+
+name: devcontainer
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: ["arm64", "amd64"]
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        # v3
+        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3
+        with:
+          image: tonistiigi/binfmt@sha256:6088cbd69c369178ffd6b68992f342c3a9d5c3cc619bbaa4bfe9a98cb23893d0
+      - name: Set up Docker Buildx
+        # v3.1.0
+        uses: docker/setup-buildx-action@0d103c3126aa41d772a8362f6aa67afac040f80c
+      - name: Login to GitHub Container Registry
+        # v3.0.0
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.19.0
+      - name: Build
+        run: |
+          ./.devcontainer/build.sh ${{ matrix.arch }}
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [build]
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        # v3
+        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3
+        with:
+          image: tonistiigi/binfmt@sha256:6088cbd69c369178ffd6b68992f342c3a9d5c3cc619bbaa4bfe9a98cb23893d0
+      - name: Set up Docker Buildx
+        # v3.1.0
+        uses: docker/setup-buildx-action@0d103c3126aa41d772a8362f6aa67afac040f80c
+      - name: Login to GitHub Container Registry
+        # v3.0.0
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.19.0
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sudo curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64 
+          if [[ "$(sha256sum /usr/local/bin/yq | awk '{print $1}')" != "1a95960dddd426321354d58d2beac457717f7c49a9ec0806749a5a9e400eb45e" ]]; then
+            echo "yq checksum failed"
+            exit 1
+          fi
+          sudo chmod +x /usr/local/bin/yq
+          ./.devcontainer/release.sh

@@ -1,0 +1,14 @@
+version: "3"
+services:
+  oatmeal:
+    command: /bin/sh -c "trap :; TERM INT; sleep infinity & wait"
+    image: ghcr.io/dustinblackman/devcontainer-oatmeal:latest
+    environment:
+      OATMEAL_OLLAMA_URL: http://host.docker.internal:11434
+    volumes:
+      - ..:/workspace
+      - cache_bin:/workspace/.bin
+      - cache_target:/workspace/target
+volumes:
+  cache_bin:
+  cache_target:

@@ -357,7 +357,9 @@ problem is! If you've run in to a problem, I'd really help appreciate solving it
 
 #### Setup
 
-The following will get you set up with all the necessary tooling to work on Oatmeal.
+[![Open in DevPod!](.github/devpod.svg)](https://devpod.sh/open#https://github.com/dustinblackman/oatmeal)
+
+Oatmeal comes with a ready made DevContainer with all the magic needed to work on the project. However if you wish to develop fully local, the following will get you set up with all the necessary tooling.
 
 ```sh
 cargo install cargo-run-bin

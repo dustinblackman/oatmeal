@@ -106,10 +106,10 @@ async fn it_gets_completions() -> Result<()> {
     })?;
 
     let body = [
-        "event: garbadge",
+        "event: garbage",
         "",
         &format!("data: {first_line}"),
-        "event: garbadge",
+        "event: garbage",
         &format!("data: {second_line}"),
         "",
     ]

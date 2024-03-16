@@ -2,9 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.13.0
+
+_2024-03-16_ - [v0.12.5...v0.13.0](https://github.com/dustinblackman/oatmeal/compare/v0.12.5...v0.13.0)
+
+### ⛰️ Features
+
+- _(dev)_ Add dev container - ([e8430d9](https://github.com/dustinblackman/oatmeal/commit/e8430d9950a9b0dbfe204e505236ba8b1699d4eb))
+- `ctrl + o` to insert a line break ([#62](https://github.com/dustinblackman/oatmeal/issues/62)) - ([893d4ad](https://github.com/dustinblackman/oatmeal/commit/893d4ad240471d17a4088d7f582b2fed19af1b99))
+- Add gemini backend ([#52](https://github.com/dustinblackman/oatmeal/issues/52)) - ([55f7e7d](https://github.com/dustinblackman/oatmeal/commit/55f7e7dbf57040a78aa410235b46577f60064533))
+
+### 🐛 Bug Fixes
+
+- Lint - ([6d76680](https://github.com/dustinblackman/oatmeal/commit/6d76680ba33bf9df398e95f473de0f796973677f))
+- Typos ([#61](https://github.com/dustinblackman/oatmeal/issues/61)) - ([016b417](https://github.com/dustinblackman/oatmeal/commit/016b417016897879ee5c5f60354fc22c43fa0280))
+- Config path default on non-supported OS - ([c404103](https://github.com/dustinblackman/oatmeal/commit/c4041032522fb12acdfce13391eaee2e9780b8f3))
+
+### ⚙️ Miscellaneous Tasks
+
+- Lock deps - ([06504e5](https://github.com/dustinblackman/oatmeal/commit/06504e52126b4fa94bd0a09b19d4afbbfd3a780c))
+- Update goreleaser signing key - ([f945c7a](https://github.com/dustinblackman/oatmeal/commit/f945c7af144946ddb0dbbf89a97725a090c13175))
+- Lock all binaries - ([99221b4](https://github.com/dustinblackman/oatmeal/commit/99221b4fe40a8734df48c632477006eed2fda452))
+- Bump `actions/checkout` to v4 ([#60](https://github.com/dustinblackman/oatmeal/issues/60)) - ([07a6b70](https://github.com/dustinblackman/oatmeal/commit/07a6b70b7ede7b2371d8849a3207a9bbd1a3a2fe))
+- Disable apt and yum for now - ([dc557d0](https://github.com/dustinblackman/oatmeal/commit/dc557d0565a5ce1578bad1a923443d8027437a50))
+
 ## 0.12.5
 
 _2024-03-02_ - [v0.12.4...v0.12.5](https://github.com/dustinblackman/oatmeal/compare/v0.12.4...v0.12.5)
+
+### ⛰️ Features
+
+- Release v0.12.5 - ([95134cc](https://github.com/dustinblackman/oatmeal/commit/95134cc80408601e4e2e7ea4b68f5fef7c936559))
 
 ### 🐛 Bug Fixes
 

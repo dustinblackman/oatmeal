@@ -1191,7 +1191,7 @@ dependencies = [
 
 [[package]]
 name = "oatmeal"
-version = "0.12.5"
+version = "0.13.0"
 dependencies = [
  "anyhow",
  "arboard",

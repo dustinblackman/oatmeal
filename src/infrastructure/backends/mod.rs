@@ -26,9 +26,9 @@ impl BackendManager {
             return Ok(Box::<openai::OpenAI>::default());
         }
 
-
         if name == BackendName::GitHubCopilot {
             return Ok(Box::<githubcopilot::GithubCopilot>::default());
+        }
 
         if name == BackendName::Claude {
             return Ok(Box::<claude::Claude>::default());

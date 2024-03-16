@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - dev-container
+      - main
     paths:
       - ".devcontainer/Dockerfile"
       - ".devcontainer/devcontainer-src.json"

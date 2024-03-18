@@ -547,14 +547,6 @@ pub async fn parse() -> Result<bool> {
             } else {
                 subcommand_auth().print_long_help()?;
             }
-
-            // let service = subcmd_matches.get_one::<AuthService>("service").unwrap();
-            // match service {
-            //     AuthService::GithubCopilot => {
-            //         let mut auth = AuthGithubCopilot::default();
-            //         auth.run_auth().await?;
-            //     }
-            // }
             return Ok(false);
         }
         _ => {

@@ -31,14 +31,13 @@ impl GithubCopilot {
     }
     fn with_data(
         url: String,
-        auth_url: String,
         machine_id: String,
         vscode_sessionid: String,
         oauth_token: String,
     ) -> GithubCopilot {
         return GithubCopilot {
-            url,
-            auth_url,
+            url: url.clone(),
+            auth_url: url.clone(),
             timeout: "200".to_string(),
             machine_id,
             vscode_sessionid,
@@ -118,9 +117,8 @@ async fn it_gets_completions_no_oauth() -> Result<()> {
 async fn it_gets_completions_no_token() -> Result<()> {
     let new_token = "no_current_token".to_string();
     let MockGithubCopilot {
-        _comp_server,
         comp_mock,
-        _auth_server,
+        _server,
         auth_mock,
         backend,
     } = setup_get_completion("oauth-12345".to_string(), new_token.clone())?;
@@ -181,9 +179,8 @@ async fn it_gets_completions_token_expired() -> Result<()> {
     let new_token = "token_expired".to_string();
     let current_expires_at: u64 = 1577907680; // Expired in 2020
     let MockGithubCopilot {
-        _comp_server,
         comp_mock,
-        _auth_server,
+        _server,
         auth_mock,
         backend,
     } = setup_get_completion("oauth-12345".to_string(), new_token.clone())?;
@@ -253,9 +250,8 @@ async fn it_gets_completions_token_expired() -> Result<()> {
 async fn it_gets_completions() -> Result<()> {
     let token = "token_ok".to_string();
     let MockGithubCopilot {
-        _comp_server,
         comp_mock,
-        _auth_server,
+        _server,
         auth_mock,
         backend,
     } = setup_get_completion("oauth-12345".to_string(), token.clone())?;
@@ -309,8 +305,7 @@ async fn it_gets_completions() -> Result<()> {
 }
 
 struct MockGithubCopilot {
-    _auth_server: mockito::ServerGuard,
-    _comp_server: mockito::ServerGuard,
+    _server: mockito::ServerGuard,
     auth_mock: Mock,
     comp_mock: Mock,
     backend: GithubCopilot,
@@ -368,8 +363,8 @@ fn setup_get_completion(oauth: String, token: String) -> Result<MockGithubCopilo
 
     let body = [first_line, second_line, third_line].join("\n");
 
-    let mut comp_server: ServerGuard = mockito::Server::new();
-    let comp_mock = comp_server
+    // let mut comp_server: ServerGuard = mockito::Server::new();
+    let comp_mock = auth_server
         .mock("POST", "/chat/completions")
         .match_header(
             "Authorization",
@@ -388,7 +383,6 @@ fn setup_get_completion(oauth: String, token: String) -> Result<MockGithubCopilo
         .create();
 
     let backend = GithubCopilot::with_data(
-        comp_server.url(),
         auth_server.url(),
         machine_id.to_string(),
         vscode_sessionid.to_string(),
@@ -396,8 +390,7 @@ fn setup_get_completion(oauth: String, token: String) -> Result<MockGithubCopilo
     );
 
     return Ok(MockGithubCopilot {
-        _auth_server: auth_server,
-        _comp_server: comp_server,
+        _server: auth_server,
         auth_mock,
         comp_mock,
         backend,

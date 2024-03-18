@@ -1,0 +1,5 @@
+---
+source: src/infrastructure/backends/githubcopilot_test.rs
+expression: third_recv.context
+---
+'[{"role":"system","content":"How may I help you?"},{"role":"user","content":"Say hi to the world"},{"role":"system","content":"Hello World"},{"role":"__token","content":"{\"token\":\"token_expired\",\"expires_at\":2025629947,\"chat_enabled\":true}"}]'

@@ -1,5 +1,6 @@
 pub mod actions;
 mod app_state;
+pub mod auth_services;
 mod bubble;
 mod bubble_list;
 pub mod clipboard;
@@ -11,6 +12,7 @@ mod syntaxes;
 mod themes;
 
 pub use app_state::*;
+pub use auth_services::*;
 pub use bubble::*;
 pub use bubble_list::*;
 pub use code_blocks::*;

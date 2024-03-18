@@ -1,20 +1,15 @@
 extern crate tempdir;
 
-use crate::domain::services::AuthGithubCopilot;
-use crate::domain::services::GithubAccessTokenRequest;
-use crate::domain::services::GithubAccessTokenResponse;
-use crate::domain::services::GithubDeviceCodeResponse;
-use anyhow::bail;
-use anyhow::Result;
-use std::io::Read;
-use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
+
+use anyhow::Result;
 use tempdir::TempDir;
-use test_utils::insta_snapshot;
-use tokio::sync::mpsc;
 
 use super::GithubUser;
+use crate::domain::services::AuthGithubCopilot;
+use crate::domain::services::GithubAccessTokenResponse;
+use crate::domain::services::GithubDeviceCodeResponse;
 
 impl AuthGithubCopilot {
     fn with_path(file_path: PathBuf, url: String) -> AuthGithubCopilot {

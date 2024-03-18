@@ -2,15 +2,17 @@
 #[path = "auth_services_test.rs"]
 mod tests;
 
-use anyhow::bail;
-use anyhow::Result;
-use serde::{Deserialize, Serialize};
 use std::io::Read;
 use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
+
+use anyhow::bail;
+use anyhow::Result;
+use serde::Deserialize;
+use serde::Serialize;
 use strum::EnumIter;
 use strum::EnumVariantNames;
 use strum::IntoEnumIterator;

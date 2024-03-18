@@ -2,7 +2,6 @@ use anyhow::bail;
 use anyhow::Result;
 use mockito::Matcher;
 use mockito::Mock;
-use mockito::ServerGuard;
 use test_utils::insta_snapshot;
 use tokio::sync::mpsc;
 

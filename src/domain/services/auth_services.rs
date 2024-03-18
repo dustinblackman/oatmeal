@@ -1,3 +1,7 @@
+#[cfg(test)]
+#[path = "auth_services_test.rs"]
+mod tests;
+
 use anyhow::bail;
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
@@ -26,6 +30,8 @@ impl AuthService {
 pub struct AuthGithubCopilot {
     pub device_code: Option<String>,
     pub file_path: PathBuf,
+    api_url: String,
+    login_url: String,
 }
 
 impl Default for AuthGithubCopilot {
@@ -35,6 +41,8 @@ impl Default for AuthGithubCopilot {
         return AuthGithubCopilot {
             device_code: None,
             file_path,
+            api_url: "https://api.github.com".to_string(),
+            login_url: "https://github.com".to_string(),
         };
     }
 }
@@ -72,6 +80,7 @@ impl AuthGithubCopilot {
             Err(_) => bail!("Failed to get oauth token"),
         };
     }
+
     pub fn get_cached_oauth_token(&self) -> Result<String> {
         let mut file = std::fs::OpenOptions::new()
             .read(true)
@@ -140,7 +149,7 @@ impl AuthGithubCopilot {
             scope: "read:user".to_string(),
         };
         let res = reqwest::Client::new()
-            .post("https://github.com/login/device/code".to_string())
+            .post(format!("{url}/login/device/code", url = self.login_url))
             .header("Accept", "application/json")
             .header("Content-Type", "application/json")
             .header("User-Agent", "GitHubCopilot/1.133.0")
@@ -167,7 +176,10 @@ impl AuthGithubCopilot {
         };
 
         let token_res = reqwest::Client::new()
-            .post("https://github.com/login/oauth/access_token".to_string())
+            .post(format!(
+                "{url}/login/oauth/access_token",
+                url = self.login_url,
+            ))
             .header("Accept", "application/json")
             .header("Content-Type", "application/json")
             .header("User-Agent", "GitHubCopilot/1.133.0")
@@ -181,7 +193,7 @@ impl AuthGithubCopilot {
         let oauth_token = token_result.access_token.clone();
 
         let user_res = reqwest::Client::new()
-            .get("https://api.github.com/user".to_string())
+            .get(format!("{url}/user", url = self.api_url))
             .header(
                 "Authorization",
                 format!(
@@ -209,7 +221,7 @@ struct GithubDeviceCodeRequest {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-struct GithubDeviceCodeResponse {
+pub struct GithubDeviceCodeResponse {
     device_code: String,
     user_code: String,
     verification_uri: String,
@@ -218,21 +230,21 @@ struct GithubDeviceCodeResponse {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-struct GithubAccessTokenRequest {
+pub struct GithubAccessTokenRequest {
     client_id: String,
     device_code: String,
     grant_type: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-struct GithubAccessTokenResponse {
+pub struct GithubAccessTokenResponse {
     access_token: String,
     token_type: String,
     scope: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-struct GithubUser {
+pub struct GithubUser {
     login: String,
 }
 

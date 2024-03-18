@@ -2,9 +2,9 @@
 #[path = "auth_services_test.rs"]
 mod tests;
 
+use std::env;
 use std::io::Read;
 use std::io::Write;
-use std::path::Path;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
@@ -38,8 +38,29 @@ pub struct AuthGithubCopilot {
 
 impl Default for AuthGithubCopilot {
     fn default() -> AuthGithubCopilot {
-        let home_dir = std::env::var("HOME").expect("HOME environment variable is not set");
-        let file_path = Path::new(&home_dir).join(".config/github-copilot/hosts.json");
+        let mut file_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
+
+        #[cfg(target_os = "macos")]
+        {
+            file_path =
+                PathBuf::from(env::var("HOME").unwrap()).join(".config/github-copilot/hosts.json");
+        }
+
+        #[cfg(target_os = "windows")]
+        {
+            file_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
+        }
+
+        #[cfg(target_os = "linux")]
+        {
+            file_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
+            if !file_path.exists() {
+                file_path = dirs::config_local_dir()
+                    .unwrap()
+                    .join("github-copilot/hosts.json");
+            }
+        }
+
         return AuthGithubCopilot {
             device_code: None,
             file_path,

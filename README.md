@@ -51,7 +51,7 @@ _Note:_ This project is still quite new, and LLM's can return unexpected answers
 
 ## Install
 
-### MacOS
+### macOS
 
 ```sh
 brew install dustinblackman/tap/oatmeal
@@ -400,7 +400,7 @@ The following steps should be completed to add an editor:
 Syntax highlighting language selection is a tad manual where several languages must be curated and then added to
 [`assets.toml`](./assets.toml).
 
-1. Google to find a `.sublime-syntax` project on Github for your language. [bat](https://github.com/sharkdp/bat/tree/master/assets/syntaxes/02_Extra) has many!
+1. Google to find a `.sublime-syntax` project on GitHub for your language. [bat](https://github.com/sharkdp/bat/tree/master/assets/syntaxes/02_Extra) has many!
 2. Update [`assets.toml`](./assets.toml) to include the new repo. Make sure to include the license in the files array.
    You can leave `nix-hash` as an empty string, and it'll be updated by a maintainer later. Or if you have docker
    installed, you can run `cargo xtask hash-assets`.

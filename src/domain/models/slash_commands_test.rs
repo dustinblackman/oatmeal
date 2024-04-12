@@ -165,3 +165,28 @@ fn it_is_not_copy_code() {
     let cmd = SlashCommand::parse("/copy").unwrap();
     assert!(!cmd.is_copy_code_block());
 }
+#[test]
+fn it_is_edit_prompt() {
+    let cmd = SlashCommand::parse("/edit").unwrap();
+    assert!(cmd.is_edit_prompt());
+}
+#[test]
+fn it_is_short_edit_prompt() {
+    let cmd = SlashCommand::parse("/e").unwrap();
+    assert!(cmd.is_edit_prompt());
+}
+#[test]
+fn it_is_not_edit_prompt() {
+    let cmd = SlashCommand::parse("/ml").unwrap();
+    assert!(!cmd.is_edit_prompt());
+}
+#[test]
+fn it_is_edit_prompt_with_text() {
+    let cmd = SlashCommand::parse("/edit some text").unwrap();
+    assert!(cmd.is_edit_prompt());
+}
+#[test]
+fn it_is_short_edit_prompt_with_text() {
+    let cmd = SlashCommand::parse("/e some text").unwrap();
+    assert!(cmd.is_edit_prompt());
+}

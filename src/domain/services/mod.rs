@@ -4,6 +4,7 @@ mod bubble;
 mod bubble_list;
 pub mod clipboard;
 mod code_blocks;
+pub mod edit_prompt;
 pub mod events;
 mod scroll;
 mod sessions;

@@ -3,6 +3,7 @@ use anyhow::Result;
 use ratatui::prelude::Rect;
 use tokio::sync::mpsc;
 
+use super::edit_prompt;
 use super::BubbleList;
 use super::CodeBlocks;
 use super::Scroll;
@@ -48,6 +49,7 @@ pub struct AppState<'a> {
     pub session_id: String,
     pub sessions_service: Sessions,
     pub waiting_for_backend: bool,
+    pub edit_prompt_service: Option<edit_prompt::ActiveService>,
 }
 
 impl<'a> AppState<'a> {
@@ -76,6 +78,7 @@ impl<'a> AppState<'a> {
             session_id: Sessions::create_id(),
             sessions_service: props.sessions_service,
             waiting_for_backend: false,
+            edit_prompt_service: None,
         };
 
         let backend_name = props.backend.name();
@@ -133,6 +136,7 @@ impl<'a> AppState<'a> {
             session_id,
             sessions_service: props.sessions_service,
             waiting_for_backend: false,
+            edit_prompt_service: None,
         };
 
         app_state
@@ -269,6 +273,11 @@ impl<'a> AppState<'a> {
             // Reset backend context on model switch.
             if command.is_model_set() {
                 self.backend_context = "".to_string();
+            }
+
+            if command.is_edit_prompt() {
+                tx.send(Action::EditPromptBegin())?;
+                should_continue = true;
             }
         }
 

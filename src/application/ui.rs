@@ -31,6 +31,7 @@ use crate::domain::models::Loading;
 use crate::domain::models::Message;
 use crate::domain::models::SlashCommand;
 use crate::domain::models::TextArea;
+use crate::domain::services::edit_prompt;
 use crate::domain::services::events::EventsService;
 use crate::domain::services::AppState;
 use crate::domain::services::AppStateProps;
@@ -113,6 +114,8 @@ async fn start_loop<B: Backend>(
 
             if app_state.waiting_for_backend {
                 loading.render(frame, layout[1]);
+            } else if let Some(service) = &app_state.edit_prompt_service {
+                frame.render_widget(service.widget(), layout[1]);
             } else {
                 frame.render_widget(textarea.widget(), layout[1]);
             }
@@ -161,11 +164,35 @@ async fn start_loop<B: Backend>(
                     app_state.save_session().await?;
                 }
             }
+            Event::EditPromptMessage(msg) => {
+                app_state.add_message(msg);
+            }
+            Event::EditPrompt(event_tx) => {
+                // UI Loop blocks here
+                let opt_service = edit_prompt::ActiveService::build()
+                    .event_tx(&event_tx)
+                    .prompt(&textarea.lines().join("\n"))
+                    .messages(&app_state.messages)
+                    .start()
+                    .await;
+                app_state.edit_prompt_service = opt_service;
+                // Need to force redraw afterwards
+                terminal.clear()?;
+            }
+            Event::NewPrompt(prompt) => {
+                let mut new_textarea = tui_textarea::TextArea::from(prompt.lines());
+                new_textarea.set_style(textarea.style());
+                if let Some(block) = textarea.block() {
+                    new_textarea.set_block(block.clone());
+                }
+                textarea = new_textarea;
+                textarea.move_cursor(tui_textarea::CursorMove::Bottom);
+                textarea.move_cursor(tui_textarea::CursorMove::End);
+            }
             Event::KeyboardCharInput(input) => {
                 if app_state.waiting_for_backend {
                     continue;
                 }
-
                 // Windows submits a null event right after CTRL+C. Ignore it.
                 if input.key != tui_textarea::Key::Null {
                     app_state.exit_warning = false;
@@ -177,7 +204,13 @@ async fn start_loop<B: Backend>(
                 if app_state.waiting_for_backend {
                     app_state.waiting_for_backend = false;
                     tx.send(Action::BackendAbort())?;
-                } else if !app_state.exit_warning {
+                    continue;
+                }
+                if app_state.edit_prompt_service.is_some() {
+                    app_state.edit_prompt_service = None;
+                    continue;
+                }
+                if !app_state.exit_warning {
                     app_state.add_message(Message::new(
                         Author::Oatmeal,
                         "If you wish to quit, hit CTRL+C one more time, or use /quit",
@@ -186,6 +219,12 @@ async fn start_loop<B: Backend>(
                 } else {
                     break;
                 }
+            }
+            Event::KeyboardCTRLE() => {
+                if app_state.edit_prompt_service.is_some() {
+                    continue;
+                }
+                tx.send(Action::EditPromptBegin())?;
             }
             Event::KeyboardCTRLO() => {
                 if app_state.waiting_for_backend {
@@ -209,6 +248,10 @@ async fn start_loop<B: Backend>(
             }
             Event::KeyboardEnter() => {
                 if app_state.waiting_for_backend {
+                    continue;
+                }
+                if let Some(service) = app_state.edit_prompt_service {
+                    app_state.edit_prompt_service = service.finish();
                     continue;
                 }
                 let input_str = &textarea.lines().join("\n");

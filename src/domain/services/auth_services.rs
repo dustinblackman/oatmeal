@@ -38,6 +38,7 @@ pub struct AuthGithubCopilot {
 
 impl Default for AuthGithubCopilot {
     fn default() -> AuthGithubCopilot {
+        // maybe we can change to let file_path;
         let mut file_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
 
         #[cfg(target_os = "macos")]
@@ -71,6 +72,13 @@ impl Default for AuthGithubCopilot {
 }
 
 impl AuthGithubCopilot {
+    pub fn with_path(path: String) -> AuthGithubCopilot {
+        return AuthGithubCopilot {
+            file_path: PathBuf::from(path),
+            ..Default::default()
+        };
+    }
+
     pub async fn run_auth(&mut self) -> Result<String> {
         let mut oauth_token = self.get_cached_oauth_token();
         if oauth_token.is_err() {

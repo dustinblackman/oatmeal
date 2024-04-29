@@ -12,7 +12,7 @@ use crate::domain::services::GithubAccessTokenResponse;
 use crate::domain::services::GithubDeviceCodeResponse;
 
 impl AuthGithubCopilot {
-    fn with_path(file_path: PathBuf, url: String) -> AuthGithubCopilot {
+    fn with_path_and_url(file_path: PathBuf, url: String) -> AuthGithubCopilot {
         return AuthGithubCopilot {
             device_code: None,
             file_path,
@@ -25,7 +25,7 @@ impl AuthGithubCopilot {
 #[tokio::test]
 async fn it_loads_good_githubcopilot_file() -> Result<()> {
     let file_path = Path::new("./test").join("githubcopilot-host.json");
-    let mut auth = AuthGithubCopilot::with_path(file_path, "".to_string());
+    let mut auth = AuthGithubCopilot::with_path_and_url(file_path, "".to_string());
     let res = auth.run_auth().await?;
     assert_eq!(res, "Authorization complete");
     return Ok(());
@@ -81,7 +81,7 @@ async fn it_no_githubcopilot_file() -> Result<()> {
         .with_body(user)
         .create();
 
-    let mut auth = AuthGithubCopilot::with_path(file_path, server.url());
+    let mut auth = AuthGithubCopilot::with_path_and_url(file_path, server.url());
     let res = auth.run_auth().await?;
 
     device_code_mock.assert();

@@ -296,6 +296,14 @@ fn subcommand_auth() -> Command {
                 .help("The service to authenticate with.")
                 .required(true)
                 .value_parser(PossibleValuesParser::new(AuthService::VARIANTS)),
+        )
+        .arg(
+            Arg::new("path")
+                .short('p')
+                .long("path")
+                .help("Override the default path for the service")
+                .num_args(1)
+                .required(false),
         );
 }
 
@@ -537,10 +545,15 @@ pub async fn parse() -> Result<bool> {
             }
         }
         Some(("auth", argument_matches)) => {
+            let path = argument_matches.get_one::<String>("path");
             if let Some(service) = argument_matches.get_one::<String>("service") {
                 match AuthService::parse(service.clone()) {
                     Some(AuthService::GithubCopilot) => {
-                        let mut auth = AuthGithubCopilot::default();
+                        let mut auth = match path {
+                            Some(path) => AuthGithubCopilot::with_path(path.clone()),
+                            _ => AuthGithubCopilot::default(),
+                        };
+
                         let res = auth.run_auth().await?;
                         println!("{res}");
                     }

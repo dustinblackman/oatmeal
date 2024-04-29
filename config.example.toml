@@ -28,6 +28,9 @@ open-ai-url = "https://api.openai.com"
 # Google Gemini API token when using the Gemini backend.
 # gemini-token = ""
 
+# Path to use for the Github Copilot OAuth token. Prefer the use absolute paths. Can use relative to home "~/". Relative paths are not handled.
+# githubcopilot-auth-file = "/Users/<username>/.config/github-copilot/hosts.json"
+
 # Sets code syntax highlighting theme. [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
 theme = "base16-onedark"
 
@@ -36,6 +39,3 @@ theme = "base16-onedark"
 
 # Your user name displayed in all chat bubbles.
 # username = ""
-
-# Absolute path to use for the Github Copilot OAuth token. Do not use relative paths.
-# githubcopilot-auth-file = "/Users/<username>/.config/github-copilot/hosts.json"

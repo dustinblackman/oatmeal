@@ -36,3 +36,6 @@ theme = "base16-onedark"
 
 # Your user name displayed in all chat bubbles.
 # username = ""
+
+# Absolute path to use for the Github Copilot OAuth token. Do not use relative paths.
+# githubcopilot-auth-file = "/Users/<username>/.config/github-copilot/hosts.json"

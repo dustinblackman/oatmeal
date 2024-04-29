@@ -168,6 +168,7 @@ Commit: v0.13.0
 Usage: oatmeal [OPTIONS] [COMMAND]
 
 Commands:
+  auth         Authenticate with a service.
   chat         Start a new chat session.
   completions  Generates shell completions.
   config       Configuration file options.
@@ -202,6 +203,8 @@ Options:
           Anthropic's Claude API token when using the Claude backend. [env: OATMEAL_CLAUDE_TOKEN=]
       --gemini-token <gemini-token>
           Google Gemini API token when using the Gemini backend. [env: OATMEAL_GEMINI_TOKEN=]
+      --githubcopilot-auth-file <githubcopilot-auth-file>
+          Path to GitHub Copilot auth file. [default: ~/.config/github-copilot/hosts.json] [env: OATMEAL_GITHUBCOPilot_AUTH_FILE=]
   -h, --help
           Print help
   -V, --version
@@ -288,6 +291,26 @@ to use!
 
 A handful of themes are embedded in the application for code syntax highlighting, defaulting to [OneDark](https://github.com/atom/one-dark-ui). If none suits your needs, Oatmeal supports any Sublime Text/Text Mate
 `.tmTheme` file with the `theme-file` configuration option. [base16-textmate](https://github.com/chriskempson/base16-textmate) has plenty to pick from!
+
+### Authentication with Services
+
+Oatmeal provides a simple authentication service for select backeds that require an authentication flow instead of an API TOKEN.
+
+<!-- command-help-auth start -->
+
+```
+Manage past chat sessions.
+
+Usage: oatmeal auth --service <service> [OPTIONS]
+
+Services:
+  githubcopilot (Experimental)
+
+Options:
+  githubcopilot-auth-file     Path to the Github Copilot auth file. [default: ~/.config/github-copilot/hosts.json] [env: OATMEAL_GITHUBCOPILOT_AUTH_FILE=]
+```
+
+<!-- command-help-auth end -->
 
 ### Sessions
 

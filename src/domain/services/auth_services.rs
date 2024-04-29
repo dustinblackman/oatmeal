@@ -2,7 +2,9 @@
 #[path = "auth_services_test.rs"]
 mod tests;
 
-use std::env;
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
+use std::fs;
 use std::io::Read;
 use std::io::Write;
 use std::path::PathBuf;
@@ -38,33 +40,13 @@ pub struct AuthGithubCopilot {
 
 impl Default for AuthGithubCopilot {
     fn default() -> AuthGithubCopilot {
-        // maybe we can change to let file_path;
-        let mut file_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
-
-        #[cfg(target_os = "macos")]
-        {
-            file_path =
-                PathBuf::from(env::var("HOME").unwrap()).join(".config/github-copilot/hosts.json");
-        }
-
-        #[cfg(target_os = "windows")]
-        {
-            file_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
-        }
-
-        #[cfg(target_os = "linux")]
-        {
-            file_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
-            if !file_path.exists() {
-                file_path = dirs::config_local_dir()
-                    .unwrap()
-                    .join("github-copilot/hosts.json");
-            }
-        }
+        // let path = Config::get(ConfigKey::GithubcopilotAuthFile);
+        // let file_path = fs::canonicalize(PathBuf::from(path)).unwrap();
+        // println!("Path {}", file_path.to_str().unwrap());
 
         return AuthGithubCopilot {
             device_code: None,
-            file_path,
+            file_path: PathBuf::from(Config::get(ConfigKey::GithubcopilotAuthFile)),
             api_url: "https://api.github.com".to_string(),
             login_url: "https://github.com".to_string(),
         };
@@ -72,13 +54,6 @@ impl Default for AuthGithubCopilot {
 }
 
 impl AuthGithubCopilot {
-    pub fn with_path(path: String) -> AuthGithubCopilot {
-        return AuthGithubCopilot {
-            file_path: PathBuf::from(path),
-            ..Default::default()
-        };
-    }
-
     pub async fn run_auth(&mut self) -> Result<String> {
         let mut oauth_token = self.get_cached_oauth_token();
         if oauth_token.is_err() {

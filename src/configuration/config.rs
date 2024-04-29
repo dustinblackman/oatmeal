@@ -71,20 +71,16 @@ impl Config {
         let default_editor = EditorName::Clipboard.to_string();
 
         let mut config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
-        let mut githubcopilot_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
 
         #[cfg(target_os = "macos")]
         {
             config_path =
                 path::PathBuf::from(env::var("HOME").unwrap()).join(".config/oatmeal/config.toml");
-            githubcopilot_path = path::PathBuf::from(env::var("HOME").unwrap())
-                .join(".config/github-copilot/hosts.json");
         }
 
         #[cfg(target_os = "windows")]
         {
             config_path = dirs::cache_dir().unwrap().join("oatmeal/config.toml");
-            githubcopilot_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
         }
 
         #[cfg(target_os = "linux")]
@@ -94,13 +90,6 @@ impl Config {
                 config_path = dirs::config_local_dir()
                     .unwrap()
                     .join("oatmeal/config.toml");
-            }
-
-            githubcopilot_path = dirs::cache_dir().unwrap().join("github-copilot/hosts.json");
-            if !githubcopilot_path.exists() {
-                githubcopilot_path = dirs::config_local_dir()
-                    .unwrap()
-                    .join("github-copilot/hosts.json");
             }
         }
 
@@ -115,7 +104,7 @@ impl Config {
             ConfigKey::OpenAiURL => "https://api.openai.com",
             ConfigKey::ClaudeToken => "",
             ConfigKey::GeminiToken => "",
-            ConfigKey::GithubcopilotAuthFile => githubcopilot_path.to_str().unwrap(),
+            ConfigKey::GithubcopilotAuthFile => "", // githubcopilot_path.to_str().unwrap(),
             ConfigKey::Theme => "base16-onedark",
             ConfigKey::ThemeFile => "",
 

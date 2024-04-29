@@ -2,9 +2,7 @@
 #[path = "auth_services_test.rs"]
 mod tests;
 
-use crate::configuration::Config;
-use crate::configuration::ConfigKey;
-use std::fs;
+use std::env;
 use std::io::Read;
 use std::io::Write;
 use std::path::PathBuf;
@@ -18,6 +16,9 @@ use serde::Serialize;
 use strum::EnumIter;
 use strum::EnumVariantNames;
 use strum::IntoEnumIterator;
+
+use crate::configuration::Config;
+use crate::configuration::ConfigKey;
 
 #[derive(Clone, Debug, PartialEq, Eq, EnumIter, EnumVariantNames, strum::Display)]
 #[strum(serialize_all = "lowercase")]
@@ -38,15 +39,47 @@ pub struct AuthGithubCopilot {
     login_url: String,
 }
 
+fn build_default_path(path: &str) -> PathBuf {
+    let mut default_path = dirs::cache_dir().unwrap().join(path);
+
+    #[cfg(target_os = "macos")]
+    {
+        default_path = PathBuf::from(env::var("HOME").unwrap())
+            .join(".config")
+            .join(path);
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        default_path = dirs::cache_dir().unwrap().join(path);
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        default_path = dirs::cache_dir().unwrap().join(path);
+        if !default_path.exists() {
+            default_path = dirs::config_local_dir().unwrap().join(path);
+        }
+    }
+    return default_path;
+}
+
 impl Default for AuthGithubCopilot {
     fn default() -> AuthGithubCopilot {
-        // let path = Config::get(ConfigKey::GithubcopilotAuthFile);
-        // let file_path = fs::canonicalize(PathBuf::from(path)).unwrap();
-        // println!("Path {}", file_path.to_str().unwrap());
+        let config_path = Config::get(ConfigKey::GithubcopilotAuthFile);
+
+        let file_path = match config_path.as_str() {
+            "" => build_default_path("github-copilot/hosts.json"),
+            s if s.starts_with("~/") => {
+                let path = &s[2..]; // Remove the "~/" prefix
+                PathBuf::from(env::var("HOME").unwrap()).join(path)
+            }
+            path => PathBuf::from(path),
+        };
 
         return AuthGithubCopilot {
             device_code: None,
-            file_path: PathBuf::from(Config::get(ConfigKey::GithubcopilotAuthFile)),
+            file_path,
             api_url: "https://api.github.com".to_string(),
             login_url: "https://github.com".to_string(),
         };

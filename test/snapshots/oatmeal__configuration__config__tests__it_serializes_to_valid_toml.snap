@@ -33,6 +33,9 @@ open-ai-url = "https://api.openai.com"
 # Google Gemini API token when using the Gemini backend.
 # gemini-token = ""
 
+# Path to Github Copilot Auth Token file
+# githubcopilot-auth-file = ""
+
 # Sets code syntax highlighting theme. [possible values: base16-github, base16-monokai, base16-one-light, base16-onedark, base16-seti]
 theme = "base16-onedark"
 

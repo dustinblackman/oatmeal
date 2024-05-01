@@ -204,7 +204,7 @@ Options:
       --gemini-token <gemini-token>
           Google Gemini API token when using the Gemini backend. [env: OATMEAL_GEMINI_TOKEN=]
       --githubcopilot-auth-file <githubcopilot-auth-file>
-          Path to GitHub Copilot auth file. [default: $XDG_CONFIG/github-copilot/hosts.json] [env: OATMEAL_GITHUBCOPilot_AUTH_FILE=]
+          Path to GitHub Copilot auth file. [default: $XDG_CONFIG/github-copilot/hosts.json] [env: OATMEAL_GITHUBCOPILOT_AUTH_FILE=]
   -h, --help
           Print help
   -V, --version
@@ -299,7 +299,7 @@ Oatmeal provides a simple authentication service for select backeds that require
 <!-- command-help-auth start -->
 
 ```
-Manage past chat sessions.
+Authenticate with services that do not support API Tokens.
 
 Usage: oatmeal auth --service <service> [OPTIONS]
 

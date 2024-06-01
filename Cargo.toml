@@ -244,24 +244,6 @@ thirdparty = '''set -e
   ./tools/thirdparty/run.sh
 '''
 
-profile = '''set -e
-  cargo build --release --features dev
-  cargo bin samply record ./target/release/oatmeal --model codellama:latest
-'''
-
-profile-heap = '''set -e
-  cargo run --features dhat-heap --features dev --release -- --model codellama:latest
-  if [ ! -d ".cache/valgrind" ]; then
-    git clone git://sourceware.org/git/valgrind.git .cache/valgrind
-    (cd .cache/valgrind && git checkout 8a4b233e1da5991893de1cbe072dee40cf793c39)
-  fi
-  open .cache/valgrind/dhat/dh_view.html
-'''
-
-profile-flamegraph = '''set -e
-  sudo cargo flamegraph --bin=oatmeal --features dev -- --model codellama:latest
-'''
-
 top = '''
   top -pid $(ps aux | grep 'target\/release\/oatmeal' | awk '{print $2}')
 '''

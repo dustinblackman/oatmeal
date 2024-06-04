@@ -35,6 +35,7 @@ pub enum ConfigKey {
     OpenAiURL,
     ClaudeToken,
     GeminiToken,
+    GithubcopilotAuthFile,
     SessionID,
     Theme,
     ThemeFile,
@@ -103,6 +104,7 @@ impl Config {
             ConfigKey::OpenAiURL => "https://api.openai.com",
             ConfigKey::ClaudeToken => "",
             ConfigKey::GeminiToken => "",
+            ConfigKey::GithubcopilotAuthFile => "", // githubcopilot_path.to_str().unwrap(),
             ConfigKey::Theme => "base16-onedark",
             ConfigKey::ThemeFile => "",
 

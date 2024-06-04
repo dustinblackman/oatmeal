@@ -168,6 +168,7 @@ Commit: v0.13.0
 Usage: oatmeal [OPTIONS] [COMMAND]
 
 Commands:
+  auth         Authenticate with a service.
   chat         Start a new chat session.
   completions  Generates shell completions.
   config       Configuration file options.
@@ -177,7 +178,7 @@ Commands:
 
 Options:
   -b, --backend <backend>
-          The initial backend hosting a model to connect to. [default: ollama] [env: OATMEAL_BACKEND=] [possible values: langchain, ollama, openai, claude, gemini]
+          The initial backend hosting a model to connect to. [default: ollama] [env: OATMEAL_BACKEND=] [possible values: langchain, ollama, openai, claude, gemini, githubcopilot]
       --backend-health-check-timeout <backend-health-check-timeout>
           Time to wait in milliseconds before timing out when doing a healthcheck for a backend. [default: 1000] [env: OATMEAL_BACKEND_HEALTH_CHECK_TIMEOUT=]
   -m, --model <model>
@@ -202,6 +203,8 @@ Options:
           Anthropic's Claude API token when using the Claude backend. [env: OATMEAL_CLAUDE_TOKEN=]
       --gemini-token <gemini-token>
           Google Gemini API token when using the Gemini backend. [env: OATMEAL_GEMINI_TOKEN=]
+      --githubcopilot-auth-file <githubcopilot-auth-file>
+          Path to GitHub Copilot auth file. [default: $XDG_CONFIG/github-copilot/hosts.json] [env: OATMEAL_GITHUBCOPILOT_AUTH_FILE=]
   -h, --help
           Print help
   -V, --version
@@ -270,6 +273,7 @@ The following model backends are supported:
 - [OpenAI](https://chat.openai.com) (Or any compatible proxy/API)
 - [Ollama](https://github.com/jmorganca/ollama)
 - [LangChain/LangServe](https://python.langchain.com/docs/langserve) (Experimental)
+- [Github Copilot Chat](https://github.com/features/copilot) (Experimental)
 - [Claude](https://claude.ai) (Experimental)
 - [Gemini](https://gemini.google.com) (Experimental)
 
@@ -287,6 +291,26 @@ to use!
 
 A handful of themes are embedded in the application for code syntax highlighting, defaulting to [OneDark](https://github.com/atom/one-dark-ui). If none suits your needs, Oatmeal supports any Sublime Text/Text Mate
 `.tmTheme` file with the `theme-file` configuration option. [base16-textmate](https://github.com/chriskempson/base16-textmate) has plenty to pick from!
+
+### Authentication with Services
+
+Oatmeal provides a simple authentication service for select backeds that require an authentication flow instead of an API TOKEN.
+
+<!-- command-help-auth start -->
+
+```
+Authenticate with services that do not support API Tokens.
+
+Usage: oatmeal auth --service <service> [OPTIONS]
+
+Services:
+  githubcopilot (Experimental)
+
+Options:
+  githubcopilot-auth-file     Path to the Github Copilot auth file. [default: $XDG_CONFIG/github-copilot/hosts.json] [env: OATMEAL_GITHUBCOPILOT_AUTH_FILE=]
+```
+
+<!-- command-help-auth end -->
 
 ### Sessions
 

@@ -26,6 +26,8 @@ use crate::domain::models::BackendName;
 use crate::domain::models::EditorName;
 use crate::domain::models::Session;
 use crate::domain::services::actions::help_text;
+use crate::domain::services::AuthGithubCopilot;
+use crate::domain::services::AuthService;
 use crate::domain::services::Sessions;
 use crate::domain::services::Syntaxes;
 use crate::domain::services::Themes;
@@ -283,6 +285,20 @@ fn subcommand_sessions() -> Command {
         .subcommand(subcommand_sessions_delete());
 }
 
+fn subcommand_auth() -> Command {
+    return Command::new("auth")
+        .about("Authenticate with a service.")
+        .arg_required_else_help(true)
+        .arg(
+            Arg::new("service")
+                .short('s')
+                .long("service")
+                .help("The service to authenticate with.")
+                .required(true)
+                .value_parser(PossibleValuesParser::new(AuthService::VARIANTS)),
+        );
+}
+
 pub fn build() -> Command {
     let commands_text = help_text()
         .split('\n')
@@ -319,6 +335,7 @@ pub fn build() -> Command {
         .version(env!("CARGO_PKG_VERSION"))
         .after_help(commands_text)
         .arg_required_else_help(false)
+        .subcommand(subcommand_auth())
         .subcommand(subcommand_chat())
         .subcommand(subcommand_completions())
         .subcommand(subcommand_config())
@@ -414,7 +431,16 @@ pub fn build() -> Command {
                 .num_args(1)
                 .help("Google Gemini API token when using the Gemini backend.")
                 .global(true),
-        );
+            )
+        .arg(
+            Arg::new(ConfigKey::GithubcopilotAuthFile.to_string())
+                .long(ConfigKey::GithubcopilotAuthFile.to_string())
+                .env("OATMEAL_GITHUBCOPILOT_AUTH_FILE")
+                .num_args(1)
+                .help(format!("Path to Github Copilot Auth Token file [default: {}]", Config::default(ConfigKey::GithubcopilotAuthFile)))
+                .global(true),
+            )
+        ;
 }
 
 pub async fn parse() -> Result<bool> {
@@ -518,6 +544,24 @@ pub async fn parse() -> Result<bool> {
                     return Ok(false);
                 }
             }
+        }
+        Some(("auth", subcmd_matches)) => {
+            Config::load(build(), vec![&matches, subcmd_matches]).await?;
+            if let Some(service) = subcmd_matches.get_one::<String>("service") {
+                match AuthService::parse(service.clone()) {
+                    Some(AuthService::GithubCopilot) => {
+                        let mut auth = AuthGithubCopilot::default();
+                        let res = auth.run_auth().await?;
+                        println!("{res}");
+                    }
+                    _ => {
+                        bail!("Unknown service {service}");
+                    }
+                }
+            } else {
+                subcommand_auth().print_long_help()?;
+            }
+            return Ok(false);
         }
         _ => {
             Config::load(build(), vec![&matches]).await?;

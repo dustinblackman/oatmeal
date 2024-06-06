@@ -213,6 +213,7 @@ CHAT COMMANDS:
   - /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
   - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
   - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a `CODE_BLOCK_NUMBER` is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
+  - /edit (/e) - Opens the prompt in an editor.
   - /quit /exit (/q) - Exit Oatmeal.
   - /help (/h) - Provides this help menu.
 

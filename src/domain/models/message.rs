@@ -12,7 +12,7 @@ pub enum MessageType {
     Error,
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Message {
     pub author: Author,
     pub text: String,

@@ -100,6 +100,21 @@ pub trait Editor {
         codeblock: String,
         accept_type: AcceptType,
     ) -> Result<()>;
+
+    /// Opens the prompt in the editor.
+    /// Default implementation:
+    ///     - Uses the $EDITOR environment variable to get the executable and launches that in a
+    ///     new process.
+    ///     - Blocks the thread.
+    #[allow(clippy::implicit_return)]
+    async fn edit_prompt(&self, temp_file_path: &std::path::Path) -> Result<()> {
+        let editor = std::env::var("EDITOR")?;
+        let _status = std::process::Command::new(editor)
+            .arg(temp_file_path)
+            // Blocking method
+            .status()?;
+        return Ok(());
+    }
 }
 
 pub type EditorBox = Box<dyn Editor + Send + Sync>;

@@ -28,6 +28,7 @@ COMMANDS:
 - /append (/a) [CODE_BLOCK_NUMBER?] - Appends code blocks to an editor. See Code Actions for more details.
 - /replace (/r) [CODE_BLOCK_NUMBER?] - Replaces selections with code blocks in an editor. See Code Actions for more details.
 - /copy (/c) [CODE_BLOCK_NUMBER?] - Copies the entire chat history to your clipboard. When a `CODE_BLOCK_NUMBER` is used, only the specified copy blocks are copied to clipboard. See Code Actions for more details.
+- /edit (/e) - Opens the prompt in an editor.
 - /quit /exit (/q) - Exit Oatmeal.
 - /help (/h) - Provides this help menu.
 
@@ -156,7 +157,7 @@ async fn accept_codeblock(
             tx.send(Event::BackendMessage(Message::new_with_type(
                 Author::Oatmeal,
                 MessageType::Error,
-                &format!("Failed to commuicate with editor:\n\n{err}"),
+                &format!("Failed to communicate with editor:\n\n{err}"),
             )))?;
         }
     }
@@ -177,7 +178,7 @@ fn copy_messages(messages: Vec<Message>, tx: &mpsc::UnboundedSender<Event>) -> R
         payload = messages
             .iter()
             .map(|message| {
-                return format!("{}: {}", message.author.to_string(), message.text);
+                return format!("{}: {}", message.author, message.text);
             })
             .collect::<Vec<String>>()
             .join("\n\n");
@@ -289,6 +290,9 @@ impl ActionsService {
                         }
                         return Ok(());
                     });
+                }
+                Action::EditPromptBegin() => {
+                    tx.send(Event::EditPrompt(tx.clone()))?;
                 }
             }
         }

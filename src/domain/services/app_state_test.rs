@@ -38,6 +38,7 @@ impl Default for AppState<'static> {
             scroll: Scroll::default(),
             sessions_service: Sessions::default(),
             waiting_for_backend: false,
+            edit_prompt_service: None,
         };
     }
 }
